@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useState } from "react";
@@ -49,6 +50,9 @@ const initialResumeData: ResumeData = {
   skills: ["JavaScript", "React", "Node.js", "TypeScript", "Next.js", "GraphQL", "Docker"],
 };
 
+// Helper to generate unique IDs on the client
+const generateUniqueId = () => `id-${Date.now()}-${Math.random()}`;
+
 export default function Home() {
   const [resumeData, setResumeData] = useState<ResumeData>(initialResumeData);
   const [loadingStates, setLoadingStates] = useState({
@@ -85,7 +89,7 @@ export default function Home() {
       experience: [
         ...prev.experience,
         {
-          id: crypto.randomUUID(),
+          id: generateUniqueId(),
           role: "",
           company: "",
           date: "",
@@ -107,7 +111,7 @@ export default function Home() {
       ...prev,
       education: [
         ...prev.education,
-        { id: crypto.randomUUID(), school: "", degree: "", date: "" },
+        { id: generateUniqueId(), school: "", degree: "", date: "" },
       ],
     }));
   };
