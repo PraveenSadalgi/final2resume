@@ -1,7 +1,7 @@
 
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { generateExperience } from "@/ai/flows/generate-experience";
 import { generateProfessionalSummary } from "@/ai/flows/generate-summary";
 import { suggestRelevantSkills } from "@/ai/flows/suggest-skills";
@@ -51,15 +51,20 @@ const initialResumeData: ResumeData = {
 };
 
 // Helper to generate unique IDs on the client
-const generateUniqueId = () => `id-${Date.now()}-${Math.random()}`;
+const generateUniqueId = () => `id-${Date.now()}-${Math.random().toString(36).substring(2, 9)}`;
 
 export default function Home() {
   const [resumeData, setResumeData] = useState<ResumeData>(initialResumeData);
+  const [isClient, setIsClient] = useState(false);
   const [loadingStates, setLoadingStates] = useState({
     summary: false,
     experience: null as string | null,
     skills: false,
   });
+
+  useEffect(() => {
+    setIsClient(true);
+  }, []);
 
   const { toast } = useToast();
 
@@ -179,23 +184,31 @@ export default function Home() {
       <Header />
       <main className="flex-1 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-[1fr_1.2fr] overflow-hidden">
         <div className="no-print overflow-y-auto">
-          <ResumeEditor
-            resumeData={resumeData}
-            onFieldChange={handleFieldChange}
-            onNestedFieldChange={handleNestedFieldChange}
-            onAddExperience={addExperience}
-            onRemoveExperience={removeExperience}
-            onAddEducation={addEducation}
-            onRemoveEducation={removeEducation}
-            onGenerateSummary={generateSummary}
-            onGenerateExperience={generateExp}
-            onSuggestSkills={suggestSkills}
-            loadingStates={loadingStates}
-            onSetTemplate={setTemplate}
-          />
+          {isClient ? (
+            <ResumeEditor
+              resumeData={resumeData}
+              onFieldChange={handleFieldChange}
+              onNestedFieldChange={handleNestedFieldChange}
+              onAddExperience={addExperience}
+              onRemoveExperience={removeExperience}
+              onAddEducation={addEducation}
+              onRemoveEducation={removeEducation}
+              onGenerateSummary={generateSummary}
+              onGenerateExperience={generateExp}
+              onSuggestSkills={suggestSkills}
+              loadingStates={loadingStates}
+              onSetTemplate={setTemplate}
+            />
+          ) : (
+            <div className="p-4">Loading editor...</div>
+          )}
         </div>
         <div className="bg-muted/30 p-4 lg:p-8 overflow-y-auto flex justify-center">
-          <ResumePreview resumeData={resumeData} />
+          {isClient ? (
+            <ResumePreview resumeData={resumeData} />
+          ) : (
+            <div className="p-4">Loading preview...</div>
+          )}
         </div>
       </main>
     </div>

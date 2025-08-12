@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useEffect, useState } from "react";
@@ -6,26 +7,35 @@ import type { ResumeData } from "@/lib/types";
 import { Button } from "@/components/ui/button";
 import { Printer } from "lucide-react";
 
-const emptyResumeData: ResumeData = {
-  template: "one-column",
-  name: "", email: "", phone: "", location: "", website: "", linkedin: "",
-  summary: "", experience: [], education: [], skills: [],
-};
-
 export default function PreviewPage() {
   const [resumeData, setResumeData] = useState<ResumeData | null>(null);
+  const [isClient, setIsClient] = useState(false);
 
   useEffect(() => {
+    setIsClient(true);
     const data = localStorage.getItem("resumeDataForPreview");
     if (data) {
-      setResumeData(JSON.parse(data));
+      try {
+        setResumeData(JSON.parse(data));
+      } catch (error) {
+        console.error("Failed to parse resume data from localStorage", error);
+        setResumeData(null);
+      }
     }
   }, []);
+
+  if (!isClient) {
+    return (
+      <div className="flex items-center justify-center h-screen text-gray-500">
+        Loading Preview...
+      </div>
+    );
+  }
 
   if (!resumeData) {
     return (
       <div className="flex items-center justify-center h-screen text-gray-500">
-        Loading Preview...
+        Could not load resume data for preview.
       </div>
     );
   }
