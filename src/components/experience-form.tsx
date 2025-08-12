@@ -18,7 +18,10 @@ import {
 
 interface ExperienceFormProps {
   experience: Experience[];
-  loadingStates: { experience: string | null };
+  loadingStates: {
+    experience: string | null;
+    workProject: string | null;
+  };
   onNestedFieldChange: (
     section: "experience",
     index: number,
@@ -36,6 +39,7 @@ interface ExperienceFormProps {
     field: keyof WorkProject,
     value: string
   ) => void;
+  onGenerateWorkProjectDescription: (experienceIndex: number, projectIndex: number) => void;
 }
 
 export default function ExperienceForm({
@@ -48,6 +52,7 @@ export default function ExperienceForm({
   onAddWorkProject,
   onRemoveWorkProject,
   onWorkProjectChange,
+  onGenerateWorkProjectDescription,
 }: ExperienceFormProps) {
   return (
     <div className="space-y-4">
@@ -165,7 +170,23 @@ export default function ExperienceForm({
                             </div>
                           </div>
                           <div className="space-y-1.5">
-                            <Label htmlFor={`wp-desc-${workProject.id}`}>Short Description</Label>
+                            <Label htmlFor={`wp-desc-${workProject.id}`} className="flex items-center justify-between">
+                              Short Description
+                              <Button
+                                variant="ghost"
+                                size="sm"
+                                onClick={() => onGenerateWorkProjectDescription(index, projIndex)}
+                                disabled={loadingStates.workProject === workProject.id}
+                                className="text-accent hover:text-accent h-auto py-0 px-2"
+                              >
+                                {loadingStates.workProject === workProject.id ? (
+                                  <LoadingSpinner className="mr-2" />
+                                ) : (
+                                  <Sparkles className="h-4 w-4 mr-2" />
+                                )}
+                                Improve with AI
+                              </Button>
+                            </Label>
                             <Textarea
                               id={`wp-desc-${workProject.id}`}
                               value={workProject.description}
@@ -212,3 +233,5 @@ export default function ExperienceForm({
     </div>
   );
 }
+
+    

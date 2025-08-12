@@ -5,6 +5,7 @@ import { useState, useEffect } from "react";
 import { generateExperience } from "@/ai/flows/generate-experience";
 import { generateProfessionalSummary } from "@/ai/flows/generate-summary";
 import { generateProjectDescription } from "@/ai/flows/generate-project-description";
+import { generateWorkProjectDescription } from "@/ai/flows/generate-work-project-description";
 import { suggestRelevantSkills } from "@/ai/flows/suggest-skills";
 import { Header } from "@/components/header";
 import ResumeEditor from "@/components/resume-editor";
@@ -71,6 +72,7 @@ export default function Home() {
     experience: null as string | null,
     skills: false,
     project: null as string | null,
+    workProject: null as string | null,
   });
 
   useEffect(() => {
@@ -239,6 +241,26 @@ export default function Home() {
       setLoadingStates(prev => ({ ...prev, project: null }));
     }
   };
+
+  const generateWorkProjDescription = async (experienceIndex: number, projectIndex: number) => {
+    const workProject = resumeData.experience[experienceIndex]?.projects?.[projectIndex];
+    if (!workProject) return;
+
+    setLoadingStates(prev => ({ ...prev, workProject: workProject.id }));
+    try {
+      const result = await generateWorkProjectDescription({
+        projectName: workProject.name,
+        role: workProject.role,
+        projectDescription: workProject.description,
+      });
+      handleWorkProjectChange(experienceIndex, projectIndex, 'description', result.description);
+    } catch (error) {
+      console.error("Error generating work project description:", error);
+      toast({ title: "Error", description: "Failed to generate work project description.", variant: "destructive" });
+    } finally {
+      setLoadingStates(prev => ({ ...prev, workProject: null }));
+    }
+  };
   
   const suggestSkills = async () => {
     setLoadingStates((prev) => ({ ...prev, skills: true }));
@@ -278,6 +300,7 @@ export default function Home() {
               onGenerateSummary={generateSummary}
               onGenerateExperience={generateExp}
               onGenerateProjectDescription={generateProjDescription}
+              onGenerateWorkProjectDescription={generateWorkProjDescription}
               onSuggestSkills={suggestSkills}
               loadingStates={loadingStates}
               onSetTemplate={setTemplate}
@@ -300,3 +323,5 @@ export default function Home() {
     </div>
   );
 }
+
+    

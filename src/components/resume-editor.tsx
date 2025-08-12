@@ -43,12 +43,14 @@ interface ResumeEditorProps {
   onGenerateSummary: () => void;
   onGenerateExperience: (index: number) => void;
   onGenerateProjectDescription: (index: number) => void;
+  onGenerateWorkProjectDescription: (experienceIndex: number, projectIndex: number) => void;
   onSuggestSkills: () => void;
   loadingStates: {
     summary: boolean;
     experience: string | null;
     skills: boolean;
     project: string | null;
+    workProject: string | null;
   };
   onSetTemplate: (template: 'one-column' | 'two-column') => void;
   onAddWorkProject: (experienceIndex: number) => void;
@@ -74,6 +76,7 @@ export default function ResumeEditor({
   onGenerateSummary,
   onGenerateExperience,
   onGenerateProjectDescription,
+  onGenerateWorkProjectDescription,
   onSuggestSkills,
   loadingStates,
   onSetTemplate,
@@ -107,7 +110,10 @@ export default function ResumeEditor({
       Component: ExperienceForm,
       props: {
         experience: resumeData.experience,
-        loadingStates: { experience: loadingStates.experience },
+        loadingStates: { 
+          experience: loadingStates.experience,
+          workProject: loadingStates.workProject,
+        },
         onNestedFieldChange,
         onAddExperience,
         onRemoveExperience,
@@ -115,6 +121,7 @@ export default function ResumeEditor({
         onAddWorkProject,
         onRemoveWorkProject,
         onWorkProjectChange,
+        onGenerateWorkProjectDescription,
       },
     },
     {
@@ -180,3 +187,5 @@ export default function ResumeEditor({
     </div>
   );
 }
+
+    
