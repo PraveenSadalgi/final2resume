@@ -4,7 +4,7 @@ import type { ResumeData } from '@/lib/types';
 import { z } from 'zod';
 
 const API_KEY = '5a95420550040c1608d253e5dbb5cff8244608e3d0fd9b0b448b993111f6b8f2';
-const API_URL = 'https://app.apijobs.dev/api/jobs/search';
+const API_URL = 'https://api.apijobs.dev/v1/job/search';
 
 const JobPreferencesSchema = z.object({
     keywords: z.string(),
@@ -28,23 +28,28 @@ export async function POST(request: Request) {
     
     const { resumeData, preferences } = validation.data;
     
-    // In a real app, we'd do more sophisticated keyword extraction from resumeData
     const keywords = preferences.keywords;
 
     if (!keywords) {
       return NextResponse.json({ error: 'Keywords are required for job search.' }, { status: 400 });
     }
 
-    const apiParams = new URLSearchParams({
-      query: keywords,
-      'api-key': API_KEY,
-    });
+    const apiRequestBody: { q: string, l?: string } = {
+        q: keywords
+    };
 
     if (preferences.location) {
-      apiParams.append('l', preferences.location);
+        apiRequestBody.l = preferences.location;
     }
     
-    const response = await fetch(`${API_URL}?${apiParams.toString()}`);
+    const response = await fetch(API_URL, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'apikey': API_KEY,
+        },
+        body: JSON.stringify(apiRequestBody)
+    });
 
     if (!response.ok) {
       const errorData = await response.text();
@@ -75,3 +80,4 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: 'An internal server error occurred' }, { status: 500 });
   }
 }
+
