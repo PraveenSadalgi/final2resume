@@ -19,7 +19,7 @@ export interface ResumeData {
   email: string;
   phone: string;
   location: string;
-  website: string;
+  github: string;
   linkedin: string;
   summary: string;
   experience: Experience[];

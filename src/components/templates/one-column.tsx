@@ -23,7 +23,7 @@ export default function OneColumnTemplate({ resumeData }: TemplateProps) {
     email,
     phone,
     location,
-    website,
+    github,
     linkedin,
     summary,
     experience,
@@ -57,7 +57,7 @@ export default function OneColumnTemplate({ resumeData }: TemplateProps) {
           {location && <span className="flex items-center gap-1.5"><MapPin size={12} /> {location}</span>}
           {email && <span className="flex items-center gap-1.5"><Mail size={12} /> {email}</span>}
           {phone && <span className="flex items-center gap-1.5"><Phone size={12} /> {phone}</span>}
-          {website && <span className="flex items-center gap-1.5"><Globe size={12} /> {website}</span>}
+          {github && <span className="flex items-center gap-1.5"><Globe size={12} /> {github}</span>}
           {linkedin && <span className="flex items-center gap-1.5"><Linkedin size={12} /> {linkedin}</span>}
         </div>
       </header>

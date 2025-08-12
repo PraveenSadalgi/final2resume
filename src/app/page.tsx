@@ -17,7 +17,7 @@ const initialResumeData: ResumeData = {
   email: "john.doe@example.com",
   phone: "123-456-7890",
   location: "San Francisco, CA",
-  website: "johndoe.dev",
+  github: "github.com/johndoe",
   linkedin: "linkedin.com/in/johndoe",
   summary:
     "Innovative and results-driven Software Engineer with 5+ years of experience in developing and scaling web applications. Proficient in JavaScript, React, and Node.js. Passionate about building user-friendly interfaces and solving complex problems.",

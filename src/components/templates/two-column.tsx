@@ -23,7 +23,7 @@ export default function TwoColumnTemplate({ resumeData }: TemplateProps) {
     email,
     phone,
     location,
-    website,
+    github,
     linkedin,
     summary,
     experience,
@@ -81,7 +81,7 @@ export default function TwoColumnTemplate({ resumeData }: TemplateProps) {
                 {location && <li className="flex items-start gap-2"><MapPin size={12} className="mt-0.5 shrink-0"/> {location}</li>}
                 {email && <li className="flex items-start gap-2"><Mail size={12} className="mt-0.5 shrink-0"/> {email}</li>}
                 {phone && <li className="flex items-start gap-2"><Phone size={12} className="mt-0.5 shrink-0"/> {phone}</li>}
-                {website && <li className="flex items-start gap-2"><Globe size={12} className="mt-0.5 shrink-0"/> {website}</li>}
+                {github && <li className="flex items-start gap-2"><Globe size={12} className="mt-0.5 shrink-0"/> {github}</li>}
                 {linkedin && <li className="flex items-start gap-2"><Linkedin size={12} className="mt-0.5 shrink-0"/> {linkedin}</li>}
             </ul>
         </SidebarSection>

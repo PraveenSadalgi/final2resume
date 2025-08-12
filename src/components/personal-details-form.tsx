@@ -56,12 +56,12 @@ export default function PersonalDetailsForm({
           />
         </div>
          <div className="space-y-2">
-          <Label htmlFor="website">Website</Label>
+          <Label htmlFor="github">GitHub</Label>
           <Input
-            id="website"
-            value={resumeData.website}
-            onChange={(e) => onFieldChange("website", e.target.value)}
-            placeholder="e.g., johndoe.dev"
+            id="github"
+            value={resumeData.github}
+            onChange={(e) => onFieldChange("github", e.target.value)}
+            placeholder="e.g., github.com/johndoe"
           />
         </div>
       </div>
