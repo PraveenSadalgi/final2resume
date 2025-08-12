@@ -36,7 +36,7 @@ export async function POST(request: Request) {
     }
 
     const apiParams = new URLSearchParams({
-      q: keywords,
+      query: keywords,
       'api-key': API_KEY,
     });
 
