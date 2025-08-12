@@ -87,16 +87,17 @@ export default function JobRecommendationsPage() {
       });
 
       if (!response.ok) {
-        throw new Error(`Error: ${response.statusText}`);
+        const errorData = await response.json().catch(() => ({ error: "An unknown error occurred" }));
+        throw new Error(errorData.error || `Request failed with status: ${response.statusText}`);
       }
 
       const data = await response.json();
       setJobs(data.jobs);
-    } catch (error) {
+    } catch (error: any) {
       console.error("Error fetching job recommendations:", error);
       toast({
         title: "Error",
-        description: "Failed to fetch job recommendations.",
+        description: error.message || "Failed to fetch job recommendations.",
         variant: "destructive",
       });
       setJobs([]); // Set to empty array on error
