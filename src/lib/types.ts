@@ -1,3 +1,4 @@
+
 export interface Experience {
   id: string;
   role: string;
@@ -13,6 +14,12 @@ export interface Education {
   date: string;
 }
 
+export interface Project {
+  id: string;
+  name: string;
+  description: string;
+}
+
 export interface ResumeData {
   template: 'one-column' | 'two-column';
   name: string;
@@ -25,4 +32,5 @@ export interface ResumeData {
   experience: Experience[];
   education: Education[];
   skills: string[];
+  projects: Project[];
 }

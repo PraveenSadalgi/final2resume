@@ -1,3 +1,4 @@
+
 "use client";
 
 import {
@@ -7,13 +8,14 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import type { Education, Experience, ResumeData } from "@/lib/types";
+import type { Education, Experience, Project, ResumeData } from "@/lib/types";
 import {
   Briefcase,
   GraduationCap,
   Lightbulb,
   User,
   FileText,
+  FolderKanban,
 } from "lucide-react";
 import PersonalDetailsForm from "./personal-details-form";
 import SummaryForm from "./summary-form";
@@ -21,27 +23,32 @@ import ExperienceForm from "./experience-form";
 import EducationForm from "./education-form";
 import SkillsForm from "./skills-form";
 import Controls from "./controls";
+import ProjectsForm from "./projects-form";
 
 interface ResumeEditorProps {
   resumeData: ResumeData;
   onFieldChange: (field: keyof ResumeData, value: string | string[]) => void;
   onNestedFieldChange: (
-    section: "experience" | "education",
+    section: "experience" | "education" | "projects",
     index: number,
-    field: keyof Experience | keyof Education,
+    field: keyof Experience | keyof Education | keyof Project,
     value: string
   ) => void;
   onAddExperience: () => void;
   onRemoveExperience: (index: number) => void;
   onAddEducation: () => void;
   onRemoveEducation: (index: number) => void;
+  onAddProject: () => void;
+  onRemoveProject: (index: number) => void;
   onGenerateSummary: () => void;
   onGenerateExperience: (index: number) => void;
+  onGenerateProjectDescription: (index: number) => void;
   onSuggestSkills: () => void;
   loadingStates: {
     summary: boolean;
     experience: string | null;
     skills: boolean;
+    project: string | null;
   };
   onSetTemplate: (template: 'one-column' | 'two-column') => void;
 }
@@ -54,8 +61,11 @@ export default function ResumeEditor({
   onRemoveExperience,
   onAddEducation,
   onRemoveEducation,
+  onAddProject,
+  onRemoveProject,
   onGenerateSummary,
   onGenerateExperience,
+  onGenerateProjectDescription,
   onSuggestSkills,
   loadingStates,
   onSetTemplate,
@@ -91,6 +101,20 @@ export default function ResumeEditor({
         onAddExperience,
         onRemoveExperience,
         onGenerateExperience,
+      },
+    },
+    {
+      value: "projects",
+      title: "Projects",
+      Icon: FolderKanban,
+      Component: ProjectsForm,
+      props: {
+        projects: resumeData.projects,
+        loadingStates: { project: loadingStates.project },
+        onNestedFieldChange,
+        onAddProject,
+        onRemoveProject,
+        onGenerateProjectDescription,
       },
     },
     {

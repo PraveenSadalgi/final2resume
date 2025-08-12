@@ -4,12 +4,13 @@
 import { useState, useEffect } from "react";
 import { generateExperience } from "@/ai/flows/generate-experience";
 import { generateProfessionalSummary } from "@/ai/flows/generate-summary";
+import { generateProjectDescription } from "@/ai/flows/generate-project-description";
 import { suggestRelevantSkills } from "@/ai/flows/suggest-skills";
 import { Header } from "@/components/header";
 import ResumeEditor from "@/components/resume-editor";
 import ResumePreview from "@/components/resume-preview";
 import { useToast } from "@/hooks/use-toast";
-import type { Education, Experience, ResumeData } from "@/lib/types";
+import type { Education, Experience, Project, ResumeData } from "@/lib/types";
 
 const initialResumeData: ResumeData = {
   template: "two-column",
@@ -48,6 +49,13 @@ const initialResumeData: ResumeData = {
     },
   ],
   skills: ["JavaScript", "React", "Node.js", "TypeScript", "Next.js", "GraphQL", "Docker"],
+  projects: [
+    {
+      id: "proj1",
+      name: "AI-Powered Resume Builder",
+      description: "• Developed a full-stack web application using Next.js and Genkit to help users create professional resumes with AI-powered suggestions.",
+    },
+  ],
 };
 
 // Helper to generate unique IDs on the client
@@ -60,6 +68,7 @@ export default function Home() {
     summary: false,
     experience: null as string | null,
     skills: false,
+    project: null as string | null,
   });
 
   useEffect(() => {
@@ -76,9 +85,9 @@ export default function Home() {
   };
 
   const handleNestedFieldChange = (
-    section: "experience" | "education",
+    section: "experience" | "education" | "projects",
     index: number,
-    field: keyof Experience | keyof Education,
+    field: keyof Experience | keyof Education | keyof Project,
     value: string
   ) => {
     setResumeData((prev) => {
@@ -128,6 +137,23 @@ export default function Home() {
     }));
   };
   
+  const addProject = () => {
+    setResumeData((prev) => ({
+      ...prev,
+      projects: [
+        ...prev.projects,
+        { id: generateUniqueId(), name: "", description: "" },
+      ],
+    }));
+  };
+
+  const removeProject = (index: number) => {
+    setResumeData((prev) => ({
+      ...prev,
+      projects: prev.projects.filter((_, i) => i !== index),
+    }));
+  };
+
   const generateSummary = async () => {
     setLoadingStates((prev) => ({ ...prev, summary: true }));
     try {
@@ -160,6 +186,23 @@ export default function Home() {
     }
   };
 
+  const generateProjDescription = async (index: number) => {
+    setLoadingStates(prev => ({ ...prev, project: resumeData.projects[index].id }));
+    try {
+      const project = resumeData.projects[index];
+      const result = await generateProjectDescription({
+        projectName: project.name,
+        projectDescription: project.description
+      });
+      handleNestedFieldChange('projects', index, 'description', result.description);
+    } catch (error) {
+      console.error("Error generating project description:", error);
+      toast({ title: "Error", description: "Failed to generate project description.", variant: "destructive" });
+    } finally {
+      setLoadingStates(prev => ({ ...prev, project: null }));
+    }
+  };
+  
   const suggestSkills = async () => {
     setLoadingStates((prev) => ({ ...prev, skills: true }));
     try {
@@ -193,8 +236,11 @@ export default function Home() {
               onRemoveExperience={removeExperience}
               onAddEducation={addEducation}
               onRemoveEducation={removeEducation}
+              onAddProject={addProject}
+              onRemoveProject={removeProject}
               onGenerateSummary={generateSummary}
               onGenerateExperience={generateExp}
+              onGenerateProjectDescription={generateProjDescription}
               onSuggestSkills={suggestSkills}
               loadingStates={loadingStates}
               onSetTemplate={setTemplate}

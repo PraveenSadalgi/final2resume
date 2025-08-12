@@ -1,3 +1,4 @@
+
 "use client";
 
 import type { ResumeData } from "@/lib/types";
@@ -10,6 +11,7 @@ import {
   Globe,
   Linkedin,
   MapPin,
+  FolderKanban,
 } from "lucide-react";
 import { Badge } from "../ui/badge";
 
@@ -29,6 +31,7 @@ export default function TwoColumnTemplate({ resumeData }: TemplateProps) {
     experience,
     education,
     skills,
+    projects,
   } = resumeData;
 
   const SidebarSection = ({
@@ -126,6 +129,20 @@ export default function TwoColumnTemplate({ resumeData }: TemplateProps) {
                         style={{ whiteSpace: "pre-wrap" }}
                         >
                         {exp.description}
+                    </div>
+                </div>
+            ))}
+        </MainSection>
+        
+        <MainSection title="Projects" Icon={FolderKanban}>
+            {projects.map(proj => (
+                <div key={proj.id} className="mb-4 last:mb-0">
+                    <h3 className="font-bold text-base">{proj.name}</h3>
+                    <div
+                        className="text-xs prose prose-sm max-w-none text-gray-600"
+                        style={{ whiteSpace: "pre-wrap" }}
+                        >
+                        {proj.description}
                     </div>
                 </div>
             ))}
