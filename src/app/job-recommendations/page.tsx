@@ -32,7 +32,7 @@ export default function JobRecommendationsPage() {
     keywords: "",
     location: "",
   });
-  const [jobs, setJobs] = useState<Job[]>([]);
+  const [jobs, setJobs] = useState<Job[] | null>(null);
   const [loading, setLoading] = useState(false);
   const [isClient, setIsClient] = useState(false);
   const { toast } = useToast();
@@ -75,7 +75,7 @@ export default function JobRecommendationsPage() {
         return;
     }
     setLoading(true);
-    setJobs([]);
+    setJobs(null);
     try {
       const response = await fetch("/api/jobs/recommendations", {
         method: "POST",
@@ -99,6 +99,7 @@ export default function JobRecommendationsPage() {
         description: "Failed to fetch job recommendations.",
         variant: "destructive",
       });
+      setJobs([]); // Set to empty array on error
     } finally {
       setLoading(false);
     }
@@ -187,17 +188,25 @@ export default function JobRecommendationsPage() {
                     </div>
                 )}
 
-                {!loading && jobs.length > 0 && (
+                {!loading && jobs && jobs.length > 0 && (
                     <div className="space-y-4">
                         {jobs.map(job => <JobCard key={job.id} job={job} />)}
                     </div>
                 )}
                 
-                {!loading && jobs.length === 0 && (
+                {!loading && jobs && jobs.length === 0 && (
                      <div className="text-center py-20">
                         <Briefcase className="mx-auto h-12 w-12 text-muted-foreground" />
                         <h2 className="mt-4 text-xl font-semibold">No jobs found</h2>
                         <p className="mt-2 text-sm text-muted-foreground">Try adjusting your search criteria to find job recommendations.</p>
+                    </div>
+                )}
+
+                {!loading && jobs === null && (
+                    <div className="text-center py-20">
+                        <Briefcase className="mx-auto h-12 w-12 text-muted-foreground" />
+                        <h2 className="mt-4 text-xl font-semibold">Find your next opportunity</h2>
+                        <p className="mt-2 text-sm text-muted-foreground">Enter your preferences above and click "Find Jobs" to start.</p>
                     </div>
                 )}
             </div>
