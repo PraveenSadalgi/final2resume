@@ -8,7 +8,7 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import type { Education, Experience, Project, ResumeData, WorkProject, CoverLetterData } from "@/lib/types";
+import type { Education, Experience, Project, ResumeData, WorkProject } from "@/lib/types";
 import {
   Briefcase,
   GraduationCap,
@@ -16,7 +16,6 @@ import {
   User,
   FileText,
   FolderKanban,
-  MailCheck,
 } from "lucide-react";
 import PersonalDetailsForm from "./personal-details-form";
 import SummaryForm from "./summary-form";
@@ -25,11 +24,10 @@ import EducationForm from "./education-form";
 import SkillsForm from "./skills-form";
 import Controls from "./controls";
 import ProjectsForm from "./projects-form";
-import CoverLetterForm from "./cover-letter-form";
 
 interface ResumeEditorProps {
   resumeData: ResumeData;
-  onFieldChange: (field: keyof ResumeData, value: string | string[]) => void;
+  onFieldChange: (field: keyof Omit<ResumeData, 'coverLetter'>, value: string | string[]) => void;
   onNestedFieldChange: (
     section: "experience" | "education" | "projects",
     index: number,
@@ -53,7 +51,6 @@ interface ResumeEditorProps {
     skills: boolean;
     project: string | null;
     workProject: string | null;
-    coverLetter: boolean;
   };
   onSetTemplate: (template: 'one-column' | 'two-column') => void;
   onAddWorkProject: (experienceIndex: number) => void;
@@ -64,8 +61,6 @@ interface ResumeEditorProps {
     field: keyof WorkProject,
     value: string
   ) => void;
-  onCoverLetterChange: (field: keyof CoverLetterData, value: string) => void;
-  onGenerateCoverLetter: () => void;
 }
 
 export default function ResumeEditor({
@@ -88,8 +83,6 @@ export default function ResumeEditor({
   onAddWorkProject,
   onRemoveWorkProject,
   onWorkProjectChange,
-  onCoverLetterChange,
-  onGenerateCoverLetter,
 }: ResumeEditorProps) {
   const sections = [
     {
@@ -167,18 +160,6 @@ export default function ResumeEditor({
         onFieldChange,
         onSuggestSkills,
         loading: loadingStates.skills,
-      },
-    },
-    {
-      value: "cover-letter",
-      title: "Cover Letter",
-      Icon: MailCheck,
-      Component: CoverLetterForm,
-      props: {
-        coverLetterData: resumeData.coverLetter,
-        onCoverLetterChange,
-        onGenerateCoverLetter,
-        loading: loadingStates.coverLetter,
       },
     },
   ];

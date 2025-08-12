@@ -47,5 +47,4 @@ export interface ResumeData {
   education: Education[];
   skills: string[];
   projects: Project[];
-  coverLetter: CoverLetterData;
 }

@@ -7,12 +7,11 @@ import { generateProfessionalSummary } from "@/ai/flows/generate-summary";
 import { generateProjectDescription } from "@/ai/flows/generate-project-description";
 import { generateWorkProjectDescription } from "@/ai/flows/generate-work-project-description";
 import { suggestRelevantSkills } from "@/ai/flows/suggest-skills";
-import { generateCoverLetter } from "@/ai/flows/generate-cover-letter";
 import { Header } from "@/components/header";
 import ResumeEditor from "@/components/resume-editor";
 import ResumePreview from "@/components/resume-preview";
 import { useToast } from "@/hooks/use-toast";
-import type { Education, Experience, Project, ResumeData, WorkProject, CoverLetterData } from "@/lib/types";
+import type { Education, Experience, Project, ResumeData, WorkProject } from "@/lib/types";
 
 const initialResumeData: ResumeData = {
   template: "two-column",
@@ -60,11 +59,6 @@ const initialResumeData: ResumeData = {
       description: "• Developed a full-stack web application using Next.js and Genkit to help users create professional resumes with AI-powered suggestions.",
     },
   ],
-  coverLetter: {
-    jobDescription: "",
-    tone: "Professional",
-    generatedLetter: "",
-  },
 };
 
 // Helper to generate unique IDs on the client
@@ -79,7 +73,6 @@ export default function Home() {
     skills: false,
     project: null as string | null,
     workProject: null as string | null,
-    coverLetter: false,
   });
 
   useEffect(() => {
@@ -89,7 +82,7 @@ export default function Home() {
   const { toast } = useToast();
 
   const handleFieldChange = (
-    field: keyof ResumeData,
+    field: keyof Omit<ResumeData, 'coverLetter'>,
     value: string | string[]
   ) => {
     setResumeData((prev) => ({ ...prev, [field]: value }));
@@ -107,19 +100,6 @@ export default function Home() {
       return { ...prev, [section]: newSection };
     });
   };
-
-  const handleCoverLetterChange = (
-    field: keyof CoverLetterData,
-    value: string
-  ) => {
-     setResumeData(prev => ({
-      ...prev,
-      coverLetter: {
-        ...prev.coverLetter,
-        [field]: value
-      }
-    }));
-  }
 
   const addExperience = () => {
     setResumeData((prev) => ({
@@ -218,7 +198,7 @@ export default function Home() {
     try {
       const profession = resumeData.experience[0]?.role || "a professional";
       const result = await generateProfessionalSummary({ profession });
-      setResumeData((prev) => ({ ...prev, summary: result.summary }));
+      handleFieldChange("summary", result.summary);
     } catch (error) {
       console.error("Error generating summary:", error);
       toast({ title: "Error", description: "Failed to generate summary.", variant: "destructive" });
@@ -288,7 +268,7 @@ export default function Home() {
       const profession = resumeData.experience[0]?.role || "a professional";
       const chosenRoles = resumeData.experience.map(e => e.role).join(', ');
       const result = await suggestRelevantSkills({ profession, chosenRoles });
-      setResumeData(prev => ({...prev, skills: [...new Set([...prev.skills, ...result.skills])]}));
+      handleFieldChange("skills", [...new Set([...resumeData.skills, ...result.skills])]);
     } catch (error) {
       console.error("Error suggesting skills:", error);
       toast({ title: "Error", description: "Failed to suggest skills.", variant: "destructive" });
@@ -297,31 +277,17 @@ export default function Home() {
     }
   };
 
-  const generateLetter = async () => {
-    setLoadingStates(prev => ({ ...prev, coverLetter: true }));
-    try {
-      const { coverLetter, ...resume } = resumeData;
-      const result = await generateCoverLetter({
-        resumeData: JSON.stringify(resume),
-        jobDescription: coverLetter.jobDescription,
-        tone: coverLetter.tone,
-      });
-      handleCoverLetterChange('generatedLetter', result.coverLetter);
-    } catch (error) {
-      console.error("Error generating cover letter:", error);
-      toast({ title: "Error", description: "Failed to generate cover letter.", variant: "destructive" });
-    } finally {
-      setLoadingStates(prev => ({ ...prev, coverLetter: false }));
-    }
-  };
-  
   const setTemplate = (template: 'one-column' | 'two-column') => {
     setResumeData(prev => ({...prev, template}));
   };
 
   return (
     <div className="flex flex-col h-screen bg-background">
-      <Header onSetTemplate={setTemplate} currentTemplate={resumeData.template} />
+      <Header 
+        onSetTemplate={setTemplate} 
+        currentTemplate={resumeData.template} 
+        resumeData={resumeData}
+      />
       <main className="flex-1 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-[1fr_1.2fr] overflow-hidden">
         <div className="no-print overflow-y-auto">
           {isClient ? (
@@ -345,8 +311,6 @@ export default function Home() {
               onAddWorkProject={addWorkProject}
               onRemoveWorkProject={removeWorkProject}
               onWorkProjectChange={handleWorkProjectChange}
-              onCoverLetterChange={handleCoverLetterChange}
-              onGenerateCoverLetter={generateLetter}
             />
           ) : (
             <div className="p-4">Loading editor...</div>
