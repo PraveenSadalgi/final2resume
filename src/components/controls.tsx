@@ -1,3 +1,4 @@
+
 "use client";
 
 import { cn } from "@/lib/utils";
@@ -5,8 +6,6 @@ import { Button } from "./ui/button";
 import {
   Download,
   Share2,
-  Columns,
-  PanelTop,
 } from "lucide-react";
 import type { ResumeData } from "@/lib/types";
 import {
@@ -38,24 +37,7 @@ export default function Controls({ resumeData, onSetTemplate }: ControlsProps) {
     <div className="p-4 bg-card border-b">
       <div className="flex flex-wrap items-center justify-between gap-2">
         <div className="flex items-center gap-2">
-          <Button
-            variant="outline"
-            className={cn(resumeData.template === "one-column" && "bg-accent/20 border-accent")}
-            onClick={() => onSetTemplate("one-column")}
-            aria-label="One Column Template"
-          >
-            <PanelTop className="h-4 w-4 mr-2" />
-            1-Column
-          </Button>
-          <Button
-            variant="outline"
-            className={cn(resumeData.template === "two-column" && "bg-accent/20 border-accent")}
-            onClick={() => onSetTemplate("two-column")}
-            aria-label="Two Column Template"
-          >
-            <Columns className="h-4 w-4 mr-2" />
-            2-Column
-          </Button>
+           {/* Template buttons removed from here */}
         </div>
         <div className="flex items-center gap-2">
           <Button variant="ghost" size="icon" onClick={handleShare} aria-label="Share">

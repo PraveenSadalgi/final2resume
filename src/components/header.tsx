@@ -1,13 +1,51 @@
+
 "use client";
 
-import { FileText } from "lucide-react";
+import { FileText, Columns, PanelTop } from "lucide-react";
+import { Button } from "./ui/button";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "./ui/dropdown-menu";
+import { cn } from "@/lib/utils";
 
-export function Header() {
+interface HeaderProps {
+  onSetTemplate: (template: "one-column" | "two-column") => void;
+  currentTemplate: "one-column" | "two-column";
+}
+
+export function Header({ onSetTemplate, currentTemplate }: HeaderProps) {
   return (
     <header className="no-print bg-card border-b p-4">
-      <div className="flex items-center gap-2">
-        <FileText className="h-6 w-6 text-primary" />
-        <h1 className="text-xl font-bold text-foreground">ResuAI</h1>
+      <div className="flex items-center justify-between gap-2">
+        <div className="flex items-center gap-2">
+          <FileText className="h-6 w-6 text-primary" />
+          <h1 className="text-xl font-bold text-foreground">ResuAI</h1>
+        </div>
+        
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button variant="outline">Templates</Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align="end">
+            <DropdownMenuItem
+              onClick={() => onSetTemplate("one-column")}
+              className={cn(currentTemplate === "one-column" && "bg-accent/20")}
+            >
+              <PanelTop className="h-4 w-4 mr-2" />
+              1-Column
+            </DropdownMenuItem>
+            <DropdownMenuItem
+              onClick={() => onSetTemplate("two-column")}
+              className={cn(currentTemplate === "two-column" && "bg-accent/20")}
+            >
+              <Columns className="h-4 w-4 mr-2" />
+              2-Column
+            </DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
       </div>
     </header>
   );

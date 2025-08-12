@@ -28,6 +28,12 @@ export interface Project {
   description: string;
 }
 
+export interface CoverLetterData {
+  jobDescription: string;
+  tone: 'Professional' | 'Creative' | 'Enthusiastic';
+  generatedLetter: string;
+}
+
 export interface ResumeData {
   template: 'one-column' | 'two-column';
   name: string;
@@ -41,4 +47,5 @@ export interface ResumeData {
   education: Education[];
   skills: string[];
   projects: Project[];
+  coverLetter: CoverLetterData;
 }
