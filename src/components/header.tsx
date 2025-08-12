@@ -1,7 +1,7 @@
 
 "use client";
 
-import { FileText, LayoutTemplate, MailCheck } from "lucide-react";
+import { FileText, LayoutTemplate, MailCheck, Briefcase } from "lucide-react";
 import { Button } from "./ui/button";
 import Link from "next/link";
 import type { ResumeData } from "@/lib/types";
@@ -14,6 +14,12 @@ export function Header({ resumeData }: HeaderProps) {
   const handleCoverLetterClick = () => {
     if (typeof window !== "undefined" && resumeData) {
       localStorage.setItem("resumeDataForCoverLetter", JSON.stringify(resumeData));
+    }
+  };
+
+  const handleJobSearchClick = () => {
+    if (typeof window !== "undefined" && resumeData) {
+      localStorage.setItem("resumeDataForJobs", JSON.stringify(resumeData));
     }
   };
 
@@ -39,6 +45,13 @@ export function Header({ resumeData }: HeaderProps) {
             <Link href="/cover-letter">
               <MailCheck className="h-4 w-4 mr-2" />
               Cover Letter
+            </Link>
+          </Button>
+
+          <Button asChild variant="default" onClick={handleJobSearchClick}>
+            <Link href="/job-recommendations">
+              <Briefcase className="h-4 w-4 mr-2" />
+              Find Jobs
             </Link>
           </Button>
         </div>
