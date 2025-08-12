@@ -31,6 +31,10 @@ export async function POST(request: Request) {
     // In a real app, we'd do more sophisticated keyword extraction from resumeData
     const keywords = preferences.keywords;
 
+    if (!keywords) {
+      return NextResponse.json({ error: 'Keywords are required for job search.' }, { status: 400 });
+    }
+
     const apiParams = new URLSearchParams({
       q: keywords,
       'api-key': API_KEY,
