@@ -38,7 +38,7 @@ export async function POST(request: Request) {
         q: keywords
     };
 
-    if (preferences.location) {
+    if (preferences.location && preferences.location.trim() !== '') {
         apiRequestBody.l = preferences.location;
     }
     
