@@ -26,7 +26,7 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: 'Invalid request body', details: validation.error.flatten() }, { status: 400 });
     }
     
-    const { resumeData, preferences } = validation.data;
+    const { preferences } = validation.data;
     
     const keywords = preferences.keywords;
 
@@ -80,4 +80,3 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: 'An internal server error occurred' }, { status: 500 });
   }
 }
-
