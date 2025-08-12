@@ -52,7 +52,6 @@ interface ResumeEditorProps {
     project: string | null;
     workProject: string | null;
   };
-  onSetTemplate: (template: 'one-column' | 'two-column') => void;
   onAddWorkProject: (experienceIndex: number) => void;
   onRemoveWorkProject: (experienceIndex: number, projectIndex: number) => void;
   onWorkProjectChange: (
@@ -79,7 +78,6 @@ export default function ResumeEditor({
   onGenerateWorkProjectDescription,
   onSuggestSkills,
   loadingStates,
-  onSetTemplate,
   onAddWorkProject,
   onRemoveWorkProject,
   onWorkProjectChange,
@@ -166,7 +164,7 @@ export default function ResumeEditor({
 
   return (
     <div className="h-full flex flex-col">
-      <Controls resumeData={resumeData} onSetTemplate={onSetTemplate}/>
+      <Controls resumeData={resumeData} />
       <ScrollArea className="flex-1">
         <Accordion type="multiple" defaultValue={["personal"]} className="p-4">
           {sections.map(({ value, title, Icon, Component, props }) => (

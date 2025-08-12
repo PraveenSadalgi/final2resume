@@ -2,6 +2,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
 import { generateExperience } from "@/ai/flows/generate-experience";
 import { generateProfessionalSummary } from "@/ai/flows/generate-summary";
 import { generateProjectDescription } from "@/ai/flows/generate-project-description";
@@ -12,60 +13,13 @@ import ResumeEditor from "@/components/resume-editor";
 import ResumePreview from "@/components/resume-preview";
 import { useToast } from "@/hooks/use-toast";
 import type { Education, Experience, Project, ResumeData, WorkProject } from "@/lib/types";
-
-const initialResumeData: ResumeData = {
-  template: "two-column",
-  name: "John Doe",
-  email: "john.doe@example.com",
-  phone: "123-456-7890",
-  location: "San Francisco, CA",
-  github: "github.com/johndoe",
-  linkedin: "linkedin.com/in/johndoe",
-  summary:
-    "Innovative and results-driven Software Engineer with 5+ years of experience in developing and scaling web applications. Proficient in JavaScript, React, and Node.js. Passionate about building user-friendly interfaces and solving complex problems.",
-  experience: [
-    {
-      id: "exp1",
-      role: "Senior Software Engineer",
-      company: "Tech Solutions Inc.",
-      date: "Jan 2021 - Present",
-      description:
-        "• Led the development of a new microservices architecture, improving system scalability by 40%.\n• Mentored junior engineers, fostering a culture of growth and knowledge sharing.",
-      projects: [],
-    },
-    {
-      id: "exp2",
-      role: "Software Engineer",
-      company: "Web Innovators",
-      date: "Jun 2018 - Dec 2020",
-      description:
-        "• Developed and maintained client-side features for a high-traffic e-commerce platform using React and Redux.\n• Collaborated with UX/UI designers to implement responsive and accessible user interfaces.",
-      projects: [],
-    },
-  ],
-  education: [
-    {
-      id: "edu1",
-      school: "University of Technology",
-      degree: "B.S. in Computer Science",
-      date: "2014 - 2018",
-    },
-  ],
-  skills: ["JavaScript", "React", "Node.js", "TypeScript", "Next.js", "GraphQL", "Docker"],
-  projects: [
-    {
-      id: "proj1",
-      name: "AI-Powered Resume Builder",
-      description: "• Developed a full-stack web application using Next.js and Genkit to help users create professional resumes with AI-powered suggestions.",
-    },
-  ],
-};
+import { classicTemplate } from "@/lib/mock-data";
 
 // Helper to generate unique IDs on the client
 const generateUniqueId = () => `id-${Date.now()}-${Math.random().toString(36).substring(2, 9)}`;
 
 export default function Home() {
-  const [resumeData, setResumeData] = useState<ResumeData>(initialResumeData);
+  const [resumeData, setResumeData] = useState<ResumeData>(classicTemplate);
   const [isClient, setIsClient] = useState(false);
   const [loadingStates, setLoadingStates] = useState({
     summary: false,
@@ -75,9 +29,24 @@ export default function Home() {
     workProject: null as string | null,
   });
 
+  const router = useRouter();
+  const searchParams = useSearchParams();
+
   useEffect(() => {
     setIsClient(true);
-  }, []);
+    const templateData = localStorage.getItem("selectedTemplate");
+    if (templateData) {
+      try {
+        setResumeData(JSON.parse(templateData));
+        // Clear the item from localStorage after using it
+        localStorage.removeItem("selectedTemplate");
+        // Update URL to remove query param
+        router.replace('/', { scroll: false });
+      } catch (error) {
+        console.error("Failed to parse template data from localStorage", error);
+      }
+    }
+  }, [router, searchParams]);
 
   const { toast } = useToast();
 
@@ -277,15 +246,13 @@ export default function Home() {
     }
   };
 
-  const setTemplate = (template: 'one-column' | 'two-column') => {
+  const setTemplate = (template: 'one-column' | 'two-column' | 'modern' | 'creative' | 'minimalist') => {
     setResumeData(prev => ({...prev, template}));
   };
 
   return (
     <div className="flex flex-col h-screen bg-background">
       <Header 
-        onSetTemplate={setTemplate} 
-        currentTemplate={resumeData.template} 
         resumeData={resumeData}
       />
       <main className="flex-1 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-[1fr_1.2fr] overflow-hidden">
@@ -307,7 +274,6 @@ export default function Home() {
               onGenerateWorkProjectDescription={generateWorkProjDescription}
               onSuggestSkills={suggestSkills}
               loadingStates={loadingStates}
-              onSetTemplate={setTemplate}
               onAddWorkProject={addWorkProject}
               onRemoveWorkProject={removeWorkProject}
               onWorkProjectChange={handleWorkProjectChange}

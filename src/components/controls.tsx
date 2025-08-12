@@ -1,7 +1,6 @@
 
 "use client";
 
-import { cn } from "@/lib/utils";
 import { Button } from "./ui/button";
 import {
   Download,
@@ -17,10 +16,9 @@ import {
 
 interface ControlsProps {
   resumeData: ResumeData;
-  onSetTemplate: (template: "one-column" | "two-column") => void;
 }
 
-export default function Controls({ resumeData, onSetTemplate }: ControlsProps) {
+export default function Controls({ resumeData }: ControlsProps) {
   const handlePrint = () => {
     window.print();
   };

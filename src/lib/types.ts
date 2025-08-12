@@ -34,8 +34,10 @@ export interface CoverLetterData {
   generatedLetter: string;
 }
 
+export type Template = 'one-column' | 'two-column' | 'modern' | 'creative' | 'minimalist';
+
 export interface ResumeData {
-  template: 'one-column' | 'two-column';
+  template: Template;
   name: string;
   email: string;
   phone: string;

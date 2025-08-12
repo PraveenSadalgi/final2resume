@@ -4,18 +4,28 @@
 import type { ResumeData } from "@/lib/types";
 import OneColumnTemplate from "./templates/one-column";
 import TwoColumnTemplate from "./templates/two-column";
+import ModernTemplate from "./templates/modern";
+import CreativeTemplate from "./templates/creative";
+import MinimalistTemplate from "./templates/minimalist";
 
 interface ResumePreviewProps {
   resumeData: ResumeData;
   isPrintMode?: boolean;
 }
 
+const templateComponents = {
+  'one-column': OneColumnTemplate,
+  'two-column': TwoColumnTemplate,
+  'modern': ModernTemplate,
+  'creative': CreativeTemplate,
+  'minimalist': MinimalistTemplate,
+};
+
 export default function ResumePreview({
   resumeData,
   isPrintMode = false,
 }: ResumePreviewProps) {
-  const TemplateComponent =
-    resumeData.template === "one-column" ? OneColumnTemplate : TwoColumnTemplate;
+  const TemplateComponent = templateComponents[resumeData.template] || OneColumnTemplate;
 
   return (
     <div
