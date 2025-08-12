@@ -1,14 +1,22 @@
 
+export interface WorkProject {
+  id: string;
+  name: string;
+  role: string;
+  description: string;
+}
+
 export interface Experience {
   id: string;
   role: string;
   company: string;
   date: string;
   description: string;
+  projects?: WorkProject[];
 }
 
 export interface Education {
-  id: string;
+  id:string;
   school: string;
   degree: string;
   date: string;

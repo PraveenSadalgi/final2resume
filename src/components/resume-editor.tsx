@@ -8,7 +8,7 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import type { Education, Experience, Project, ResumeData } from "@/lib/types";
+import type { Education, Experience, Project, ResumeData, WorkProject } from "@/lib/types";
 import {
   Briefcase,
   GraduationCap,
@@ -51,6 +51,14 @@ interface ResumeEditorProps {
     project: string | null;
   };
   onSetTemplate: (template: 'one-column' | 'two-column') => void;
+  onAddWorkProject: (experienceIndex: number) => void;
+  onRemoveWorkProject: (experienceIndex: number, projectIndex: number) => void;
+  onWorkProjectChange: (
+    experienceIndex: number,
+    projectIndex: number,
+    field: keyof WorkProject,
+    value: string
+  ) => void;
 }
 
 export default function ResumeEditor({
@@ -69,6 +77,9 @@ export default function ResumeEditor({
   onSuggestSkills,
   loadingStates,
   onSetTemplate,
+  onAddWorkProject,
+  onRemoveWorkProject,
+  onWorkProjectChange,
 }: ResumeEditorProps) {
   const sections = [
     {
@@ -101,6 +112,9 @@ export default function ResumeEditor({
         onAddExperience,
         onRemoveExperience,
         onGenerateExperience,
+        onAddWorkProject,
+        onRemoveWorkProject,
+        onWorkProjectChange,
       },
     },
     {

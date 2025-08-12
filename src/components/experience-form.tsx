@@ -1,13 +1,20 @@
+
 "use client";
 
-import type { Experience } from "@/lib/types";
+import type { Experience, WorkProject } from "@/lib/types";
 import { Button } from "./ui/button";
 import { Card, CardContent } from "./ui/card";
 import { Input } from "./ui/input";
 import { Label } from "./ui/label";
 import { Textarea } from "./ui/textarea";
-import { PlusCircle, Sparkles, Trash2 } from "lucide-react";
+import { PlusCircle, Sparkles, Trash2, FolderGit2 } from "lucide-react";
 import LoadingSpinner from "./ui/loading-spinner";
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "./ui/accordion";
 
 interface ExperienceFormProps {
   experience: Experience[];
@@ -21,6 +28,14 @@ interface ExperienceFormProps {
   onAddExperience: () => void;
   onRemoveExperience: (index: number) => void;
   onGenerateExperience: (index: number) => void;
+  onAddWorkProject: (experienceIndex: number) => void;
+  onRemoveWorkProject: (experienceIndex: number, projectIndex: number) => void;
+  onWorkProjectChange: (
+    experienceIndex: number,
+    projectIndex: number,
+    field: keyof WorkProject,
+    value: string
+  ) => void;
 }
 
 export default function ExperienceForm({
@@ -30,6 +45,9 @@ export default function ExperienceForm({
   onAddExperience,
   onRemoveExperience,
   onGenerateExperience,
+  onAddWorkProject,
+  onRemoveWorkProject,
+  onWorkProjectChange,
 }: ExperienceFormProps) {
   return (
     <div className="space-y-4">
@@ -112,6 +130,70 @@ export default function ExperienceForm({
                 rows={4}
               />
             </div>
+
+            <Accordion type="single" collapsible className="w-full">
+              <AccordionItem value="projects-at-work">
+                <AccordionTrigger>
+                  <h4 className="font-semibold flex items-center gap-2">
+                    <FolderGit2 className="h-4 w-4" />
+                    Projects at Work
+                  </h4>
+                </AccordionTrigger>
+                <AccordionContent className="pt-2">
+                  <div className="space-y-3">
+                    {(exp.projects || []).map((workProject, projIndex) => (
+                      <Card key={workProject.id} className="bg-muted/50 relative p-3">
+                        <CardContent className="p-0 space-y-3">
+                           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                            <div className="space-y-1.5">
+                              <Label htmlFor={`wp-name-${workProject.id}`}>Project Name</Label>
+                              <Input
+                                id={`wp-name-${workProject.id}`}
+                                value={workProject.name}
+                                onChange={(e) => onWorkProjectChange(index, projIndex, "name", e.target.value)}
+                                placeholder="e.g., Internal Dashboard"
+                              />
+                            </div>
+                            <div className="space-y-1.5">
+                              <Label htmlFor={`wp-role-${workProject.id}`}>Your Role</Label>
+                              <Input
+                                id={`wp-role-${workProject.id}`}
+                                value={workProject.role}
+                                onChange={(e) => onWorkProjectChange(index, projIndex, "role", e.target.value)}
+                                placeholder="e.g., Lead Developer"
+                              />
+                            </div>
+                          </div>
+                          <div className="space-y-1.5">
+                            <Label htmlFor={`wp-desc-${workProject.id}`}>Short Description</Label>
+                            <Textarea
+                              id={`wp-desc-${workProject.id}`}
+                              value={workProject.description}
+                              onChange={(e) => onWorkProjectChange(index, projIndex, "description", e.target.value)}
+                              placeholder="e.g., Built a reporting tool..."
+                              rows={2}
+                              className="text-sm"
+                            />
+                          </div>
+                        </CardContent>
+                         <Button
+                          variant="ghost"
+                          size="icon"
+                          className="absolute top-1 right-1 text-muted-foreground hover:text-destructive h-6 w-6"
+                          onClick={() => onRemoveWorkProject(index, projIndex)}
+                        >
+                          <Trash2 className="h-3.5 w-3.5" />
+                        </Button>
+                      </Card>
+                    ))}
+                    <Button variant="outline" size="sm" onClick={() => onAddWorkProject(index)} className="w-full">
+                      <PlusCircle className="h-4 w-4 mr-2" />
+                      Add Project
+                    </Button>
+                  </div>
+                </AccordionContent>
+              </AccordionItem>
+            </Accordion>
           </CardContent>
           <Button
             variant="ghost"

@@ -12,6 +12,7 @@ import {
   Linkedin,
   MapPin,
   FolderKanban,
+  FolderGit2,
 } from "lucide-react";
 import { Badge } from "../ui/badge";
 
@@ -130,6 +131,23 @@ export default function TwoColumnTemplate({ resumeData }: TemplateProps) {
                         >
                         {exp.description}
                     </div>
+
+                    {exp.projects && exp.projects.length > 0 && (
+                      <div className="mt-2 pl-4">
+                        <h4 className="font-semibold text-xs flex items-center gap-2 mb-1 text-primary/90">
+                           <FolderGit2 className="h-3.5 w-3.5"/>
+                           Key Projects
+                        </h4>
+                         <div className="space-y-1.5">
+                          {exp.projects.map(p => (
+                            <div key={p.id} className="pl-4">
+                              <p className="font-semibold text-xs text-gray-800">{p.name} <span className="font-normal text-gray-500">- {p.role}</span></p>
+                              <p className="text-xs text-gray-600">{p.description}</p>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    )}
                 </div>
             ))}
         </MainSection>

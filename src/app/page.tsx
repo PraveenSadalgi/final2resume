@@ -10,7 +10,7 @@ import { Header } from "@/components/header";
 import ResumeEditor from "@/components/resume-editor";
 import ResumePreview from "@/components/resume-preview";
 import { useToast } from "@/hooks/use-toast";
-import type { Education, Experience, Project, ResumeData } from "@/lib/types";
+import type { Education, Experience, Project, ResumeData, WorkProject } from "@/lib/types";
 
 const initialResumeData: ResumeData = {
   template: "two-column",
@@ -30,6 +30,7 @@ const initialResumeData: ResumeData = {
       date: "Jan 2021 - Present",
       description:
         "• Led the development of a new microservices architecture, improving system scalability by 40%.\n• Mentored junior engineers, fostering a culture of growth and knowledge sharing.",
+      projects: [],
     },
     {
       id: "exp2",
@@ -38,6 +39,7 @@ const initialResumeData: ResumeData = {
       date: "Jun 2018 - Dec 2020",
       description:
         "• Developed and maintained client-side features for a high-traffic e-commerce platform using React and Redux.\n• Collaborated with UX/UI designers to implement responsive and accessible user interfaces.",
+      projects: [],
     },
   ],
   education: [
@@ -108,6 +110,7 @@ export default function Home() {
           company: "",
           date: "",
           description: "",
+          projects: [],
         },
       ],
     }));
@@ -152,6 +155,40 @@ export default function Home() {
       ...prev,
       projects: prev.projects.filter((_, i) => i !== index),
     }));
+  };
+
+  const addWorkProject = (experienceIndex: number) => {
+    setResumeData(prev => {
+      const newExperience = [...prev.experience];
+      const projects = newExperience[experienceIndex].projects || [];
+      projects.push({ id: generateUniqueId(), name: "", role: "", description: "" });
+      newExperience[experienceIndex].projects = projects;
+      return { ...prev, experience: newExperience };
+    });
+  };
+
+  const removeWorkProject = (experienceIndex: number, projectIndex: number) => {
+    setResumeData(prev => {
+      const newExperience = [...prev.experience];
+      const projects = newExperience[experienceIndex].projects || [];
+      newExperience[experienceIndex].projects = projects.filter((_, i) => i !== projectIndex);
+      return { ...prev, experience: newExperience };
+    });
+  };
+
+  const handleWorkProjectChange = (
+    experienceIndex: number,
+    projectIndex: number,
+    field: keyof WorkProject,
+    value: string
+  ) => {
+    setResumeData(prev => {
+      const newExperience = [...prev.experience];
+      const projects = newExperience[experienceIndex].projects || [];
+      (projects[projectIndex] as any)[field] = value;
+      newExperience[experienceIndex].projects = projects;
+      return { ...prev, experience: newExperience };
+    });
   };
 
   const generateSummary = async () => {
@@ -244,6 +281,9 @@ export default function Home() {
               onSuggestSkills={suggestSkills}
               loadingStates={loadingStates}
               onSetTemplate={setTemplate}
+              onAddWorkProject={addWorkProject}
+              onRemoveWorkProject={removeWorkProject}
+              onWorkProjectChange={handleWorkProjectChange}
             />
           ) : (
             <div className="p-4">Loading editor...</div>
