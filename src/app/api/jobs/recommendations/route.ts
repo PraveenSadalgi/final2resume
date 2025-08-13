@@ -53,10 +53,10 @@ export async function POST(request: Request) {
     const jobs = data.jobs.map((job: any, index: number) => ({
       id: job.id || `job-${index}`, // The API doesn't seem to provide a stable ID, so we generate one.
       title: job.title,
-      company: job.company.name,
-      location: [job.location?.city, job.location?.country].filter(Boolean).join(', ') || 'N/A',
+      company: job.company?.name || 'N/A',
+      location: job.location ? [job.location.city, job.location.country].filter(Boolean).join(', ') : 'N/A',
       description: job.description,
-      url: job.url || '#', // The API doesn't seem to provide a URL for the job post.
+      url: job.url || '#',
       posted_at: job.posted_date || 'N/A',
     }));
     
