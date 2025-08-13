@@ -3,7 +3,7 @@ import { NextResponse } from 'next/server';
 import type { ResumeData } from '@/lib/types';
 import { z } from 'zod';
 
-const API_KEY = '76e6ff15684e2b9a4b61a73a01b7d95fdc6071f88c15d0e04bfedba3ec63e1dc';
+const API_KEY = '738e36a228b0573aedee77bf750d25457b5e72f3e0e7641063c60cd5dbe19d21';
 const API_URL = 'https://api.apijobs.dev/v1/job/search';
 
 const JobPreferencesSchema = z.object({
