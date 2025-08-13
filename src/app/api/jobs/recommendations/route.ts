@@ -51,7 +51,7 @@ export async function POST(request: Request) {
 
     // Normalize the data for the frontend
     const jobs = data.jobs.map((job: any, index: number) => ({
-      id: job.id || `job-${index}`, // The API doesn't seem to provide a stable ID, so we generate one.
+      id: job.id || `job-${Date.now()}-${index}`, // The API doesn't seem to provide a stable ID, so we generate one.
       title: job.title,
       company: job.company?.name || 'N/A',
       location: job.location ? [job.location.city, job.location.country].filter(Boolean).join(', ') : 'N/A',
