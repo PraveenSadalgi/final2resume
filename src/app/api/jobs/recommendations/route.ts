@@ -60,14 +60,14 @@ export async function POST(request: Request) {
     const data = await response.json();
 
     // Normalize the data for the frontend
-    const jobs = data.jobs.map((job: any) => ({
-      id: job.id,
+    const jobs = data.jobs.map((job: any, index: number) => ({
+      id: job.id || `job-${index}`, // The API doesn't seem to provide a stable ID, so we generate one.
       title: job.title,
       company: job.company.name,
-      location: job.location,
+      location: [job.location?.city, job.location?.country].filter(Boolean).join(', ') || 'N/A',
       description: job.description,
-      url: job.url,
-      posted_at: job.posted_at,
+      url: job.url || '#', // The API doesn't seem to provide a URL for the job post.
+      posted_at: job.posted_date || 'N/A',
     }));
     
     return NextResponse.json({ jobs });
