@@ -1,21 +1,17 @@
 
 import { NextResponse } from 'next/server';
-import type { ResumeData } from '@/lib/types';
 import { z } from 'zod';
 
 const API_KEY = '738e36a228b0573aedee77bf750d25457b5e72f3e0e7641063c60cd5dbe19d21';
 const API_URL = 'https://api.apijobs.dev/v1/job/search';
 
-const JobPreferencesSchema = z.object({
-    keywords: z.string(),
-    location: z.string().optional(),
-});
-
 const RequestBodySchema = z.object({
     resumeData: z.any().optional(),
-    preferences: JobPreferencesSchema,
+    preferences: z.object({
+        keywords: z.string().min(1, 'Keywords are required for job search.'),
+        location: z.string().optional(),
+    }),
 });
-
 
 export async function POST(request: Request) {
   try {
@@ -28,14 +24,8 @@ export async function POST(request: Request) {
     
     const { preferences } = validation.data;
     
-    const keywords = preferences.keywords;
-
-    if (!keywords) {
-      return NextResponse.json({ error: 'Keywords are required for job search.' }, { status: 400 });
-    }
-
-    const apiRequestBody: { q: string, l?: string } = {
-        q: keywords
+    const apiRequestBody: { q: string; l?: string } = {
+        q: preferences.keywords
     };
 
     if (preferences.location && preferences.location.trim() !== '') {
