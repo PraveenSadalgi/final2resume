@@ -40,14 +40,14 @@ export async function POST(request: Request) {
         body: JSON.stringify(apiRequestBody)
     });
 
-    if (!response.ok) {
-      const errorData = await response.json().catch(() => ({ message: `API Error: ${response.statusText}` }));
-      console.error('API Error:', errorData);
-      return NextResponse.json({ error: errorData.message || 'Failed to fetch jobs from external API' }, { status: response.status });
-    }
-
     const data = await response.json();
 
+    if (!response.ok) {
+      console.error('API Error:', data);
+      const errorMessage = data?.message || `API Error: ${response.statusText}`;
+      return NextResponse.json({ error: errorMessage }, { status: response.status });
+    }
+    
     if (!data.jobs) {
         return NextResponse.json({ jobs: [] });
     }
