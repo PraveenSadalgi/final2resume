@@ -81,7 +81,6 @@ export default function JobRecommendationsPage() {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          resumeData: resumeData,
           preferences: preferences,
         }),
       });
@@ -111,7 +110,7 @@ export default function JobRecommendationsPage() {
       <CardHeader>
         <CardTitle className="flex justify-between items-start">
             <span className="text-lg">{job.title}</span>
-            <Button asChild variant="ghost" size="icon" className="h-8 w-8 shrink-0">
+             <Button asChild variant="ghost" size="icon" className="h-8 w-8 shrink-0" disabled={!job.url || job.url === '#'}>
                 <a href={job.url} target="_blank" rel="noopener noreferrer">
                     <ExternalLink className="h-4 w-4" />
                 </a>

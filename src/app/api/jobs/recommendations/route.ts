@@ -2,9 +2,8 @@
 import { NextResponse } from 'next/server';
 import { z } from 'zod';
 
-const API_KEY = 'bffb377124msh112b4f93a104b76p17117bjsnbacec6472843';
-const API_URL = 'https://active-jobs-db.p.rapidapi.com/search';
-const API_HOST = 'active-jobs-db.p.rapidapi.com';
+const API_KEY = '738e36a228b0573aedee77bf750d25457b5e72f3e0e7641063c60cd5dbe19d21';
+const API_URL = 'https://api.apijobs.dev/v1/job/search';
 
 const RequestBodySchema = z.object({
     preferences: z.object({
@@ -24,18 +23,21 @@ export async function POST(request: Request) {
     
     const { preferences } = validation.data;
     
-    const searchParams = new URLSearchParams({
-        query: preferences.keywords,
-        location: preferences.location || 'United States',
-        limit: '20'
-    });
+    const apiRequestBody: { q: string; l?: string } = {
+        q: preferences.keywords,
+    };
 
-    const response = await fetch(`${API_URL}?${searchParams.toString()}`, {
-        method: 'GET',
+    if (preferences.location) {
+        apiRequestBody.l = preferences.location;
+    }
+
+    const response = await fetch(API_URL, {
+        method: 'POST',
         headers: {
-            'x-rapidapi-key': API_KEY,
-            'x-rapidapi-host': API_HOST,
+            'apikey': API_KEY,
+            'Content-Type': 'application/json',
         },
+        body: JSON.stringify(apiRequestBody)
     });
 
     if (!response.ok) {
@@ -46,18 +48,18 @@ export async function POST(request: Request) {
 
     const data = await response.json();
 
-    if (data.status !== 'OK') {
-        return NextResponse.json({ error: 'Failed to fetch jobs: API returned an error.' }, { status: 500 });
+    if (!data.jobs) {
+        return NextResponse.json({ jobs: [] });
     }
 
-    const jobs = data.data.map((job: any, index: number) => ({
-      id: job.job_id || `job-${Date.now()}-${index}`,
-      title: job.job_title,
-      company: job.employer_name || 'N/A',
-      location: [job.job_city, job.job_state, job.job_country].filter(Boolean).join(', ') || 'N/A',
-      description: job.job_description,
-      url: job.job_apply_link || '#',
-      posted_at: new Date(job.job_posted_at_timestamp * 1000).toLocaleDateString(),
+    const jobs = data.jobs.map((job: any, index: number) => ({
+      id: job.id || `job-${Date.now()}-${index}`,
+      title: job.title,
+      company: job.company?.name || 'N/A',
+      location: [job.location?.city, job.location?.country].filter(Boolean).join(', ') || 'N/A',
+      description: job.description,
+      url: job.url || '#',
+      posted_at: job.posted_date || 'N/A',
     }));
     
     return NextResponse.json({ jobs });
