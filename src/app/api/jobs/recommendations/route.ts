@@ -42,9 +42,9 @@ export async function POST(request: Request) {
     });
 
     if (!response.ok) {
-      const errorData = await response.text();
+      const errorData = await response.json().catch(() => ({ message: `API Error: ${response.statusText}` }));
       console.error('API Error:', errorData);
-      return NextResponse.json({ error: 'Failed to fetch jobs from external API' }, { status: response.status });
+      return NextResponse.json({ error: errorData.message || 'Failed to fetch jobs from external API' }, { status: response.status });
     }
 
     const data = await response.json();
