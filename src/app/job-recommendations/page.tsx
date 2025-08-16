@@ -50,7 +50,7 @@ export default function JobRecommendationsPage() {
           parsedData.experience?.[0]?.role,
           ...parsedData.skills.slice(0, 2)
         ].filter(Boolean).join(', ');
-        setPreferences(prev => ({ ...prev, keywords: initialKeywords }));
+        setPreferences(prev => ({ ...prev, keywords: initialKeywords, location: parsedData.location || "" }));
       } catch (error) {
         console.error("Failed to parse resume data from localStorage", error);
         setResumeData(null);
@@ -133,7 +133,7 @@ export default function JobRecommendationsPage() {
         </div>
       </CardHeader>
       <CardContent>
-        <p className="text-sm text-gray-600 line-clamp-3">{job.description}</p>
+        <p className="text-sm text-muted-foreground line-clamp-4" dangerouslySetInnerHTML={{ __html: job.description }}></p>
       </CardContent>
     </Card>
   );
