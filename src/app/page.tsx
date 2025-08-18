@@ -106,7 +106,7 @@ const Hero: React.FC = () => {
                         <Wand2 className="h-4 w-4" /> Try: “Boosted checkout conversion by 18% using A/B tests.”
                       </div>
                       <div className="h-9 w-full rounded-md border bg-background/60" />
-                       <Button size="sm" className="w-full">
+                       <Button size="sm" className="w-full" asChild>
                          <Link href="/editor">Generate bullet with AI</Link>
                        </Button>
                     </div>
@@ -350,5 +350,3 @@ export default function ResuAIHome() {
     </main>
   );
 }
-
-    
