@@ -43,7 +43,7 @@ interface ResumeEditorProps {
  onGenerateSummary: () => Promise<void>;
   onGenerateExperience: (id: string) => Promise<void>;
   onGenerateProject: (id: string) => Promise<void>;
- onGenerateWorkProject: (id: string) => Promise<void>;
+ onGenerateWorkProjectDescription: (experienceIndex: number, projectIndex: number) => Promise<void>;
   onSuggestSkills: () => void;
   loadingStates: {
     summary: boolean;
@@ -74,10 +74,10 @@ export default function ResumeEditor({
   onAddEducation,
   onRemoveEducation,
   onAddProject,
-  onRemoveProject, // This prop seems unused in the component's current logic
+  onRemoveProject,
  onGenerateSummary,
   onGenerateExperience,
-  onGenerateProjectDescription,
+  onGenerateProject,
   onGenerateWorkProjectDescription,
   onSuggestSkills,
   loadingStates,
@@ -105,9 +105,10 @@ export default function ResumeEditor({
       Icon: FileText,
       Component: SummaryForm,
       props: {
+        summary: resumeData.summary,
         onFieldChange,
         onGenerateSummary,
- isLoading: loadingStates.summary,
+        loading: loadingStates.summary,
         activeSpeechField,
         setActiveSpeechField,
       },
@@ -130,9 +131,7 @@ export default function ResumeEditor({
         onAddWorkProject,
         onRemoveWorkProject,
         onWorkProjectChange,
- // Pass the correct generate experience handler
- onGenerateExperience,
-        // onGenerateWorkProjectDescription, // This seems to be a mismatch with the desired flow
+        onGenerateWorkProjectDescription,
       },
     },
     {
@@ -146,8 +145,7 @@ export default function ResumeEditor({
         onNestedFieldChange,
         onAddProject,
         onRemoveProject,
- // Pass the correct generate project handler and loading state
- onGenerateProject,
+        onGenerateProjectDescription: onGenerateProject,
       },
     },
     {

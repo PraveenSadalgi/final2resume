@@ -2,12 +2,10 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { useParams, useRouter, useSearchParams } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { motion } from "framer-motion";
 import { generateExperience } from "@/ai/flows/generate-experience";
 import { generateProfessionalSummary } from "@/ai/flows/generate-summary";
-import { Button } from "@/components/ui/button";
-import { LoadingSpinner } from "@/components/ui/loading-spinner";
 import { generateProjectDescription } from "@/ai/flows/generate-project-description";
 import { generateWorkProjectDescription } from "@/ai/flows/generate-work-project-description";
 import { suggestRelevantSkills } from "@/ai/flows/suggest-skills";
@@ -166,18 +164,16 @@ export default function EditorPage() {
     });
   };
 
-  // Function to handle professional summary generation
   const handleGenerateSummary = async () => {
     setLoadingStates((prev) => ({ ...prev, summary: true }));
     try {
       const profession = resumeData.experience[0]?.role || "a professional";
-      const generatedSummary = await generateProfessionalSummary({
+      const result = await generateProfessionalSummary({
         profession,
         summary: resumeData.summary,
       });
-      setResumeData((prev) => ({ ...prev, summary: generatedSummary.summary }));
+      handleFieldChange("summary", result.summary);
     } catch (error) {
-      // console.error("Error generating summary:", error);
       console.error("Error generating summary:", error);
       toast({ title: "Error", description: "Failed to generate summary.", variant: "destructive" });
     } finally {
@@ -185,7 +181,6 @@ export default function EditorPage() {
     }
   };
 
-  // Function to handle experience description generation
   const handleGenerateExperience = async (experienceId: string) => {
     const index = resumeData.experience.findIndex(exp => exp.id === experienceId);
     if (index === -1) {
@@ -196,12 +191,12 @@ export default function EditorPage() {
     setLoadingStates((prev) => ({ ...prev, experience: resumeData.experience[index].id }));
     try {
       const exp = resumeData.experience[index];
-      const generatedDescription = await generateExperience({
+      const result = await generateExperience({
         profession: exp.role || "a professional",
         role: exp.role,
         desiredExperience: exp.description,
       });
-      handleNestedFieldChange( "experience", index, "description", generatedDescription.experiences );
+      handleNestedFieldChange( "experience", index, "description", result.experiences );
     } catch (error) {
       console.error("Error generating experience:", error);
       toast({ title: "Error", description: "Failed to generate experience.", variant: "destructive" });
@@ -210,8 +205,7 @@ export default function EditorPage() {
     }
   };
 
-  // Function to handle personal project description generation
-  const handleGenerateProject = async (projectId: string) => {
+  const handleGenerateProjectDescription = async (projectId: string) => {
     const index = resumeData.projects.findIndex(p => p.id === projectId);
     if (index === -1) {
       toast({ title: "Error", description: "Personal project not found.", variant: "destructive" });
@@ -221,25 +215,26 @@ export default function EditorPage() {
     setLoadingStates(prev => ({ ...prev, project: resumeData.projects[index]?.id || null }));
     try {
       const project = resumeData.projects[index];
-      const generatedDescription = await generateProjectDescription({
+      const result = await generateProjectDescription({
         projectName: project.name,
         projectDescription: project.description
       });
-      handleNestedFieldChange('projects', index, 'description', generatedDescription.description);
+      handleNestedFieldChange('projects', index, 'description', result.description);
     } catch (error) {
-      // console.error("Error generating personal project description:", error);
       console.error("Error generating project description:", error);
       toast({ title: "Error", description: "Failed to generate project description.", variant: "destructive" });
+    } finally {
+      setLoadingStates(prev => ({ ...prev, project: null }));
     }
   };
 
-  const generateWorkProjDescription = async (experienceIndex: number, projectIndex: number) => {
+  const handleGenerateWorkProjectDescription = async (experienceIndex: number, projectIndex: number) => {
     const workProject = resumeData.experience[experienceIndex]?.projects?.[projectIndex];
     if (!workProject) return;
 
     setLoadingStates(prev => ({ ...prev, workProject: workProject.id }));
     try {
-      const generatedDescription = await generateWorkProjectDescription({
+      const result = await generateWorkProjectDescription({
         projectName: workProject.name,
         role: workProject.role,
         projectDescription: workProject.description,
@@ -248,8 +243,9 @@ export default function EditorPage() {
     } catch (error) {
       console.error("Error generating work project description:", error);
       toast({ title: "Error", description: "Failed to generate work project description.", variant: "destructive" });
+    } finally {
+      setLoadingStates(prev => ({ ...prev, workProject: null }));
     }
-     // Reset loading state after successful generation or error
   };
   
   const suggestSkills = async () => {
@@ -301,8 +297,8 @@ export default function EditorPage() {
                 onRemoveProject={removeProject}
                 onGenerateSummary={handleGenerateSummary}
                 onGenerateExperience={handleGenerateExperience}
-                onGenerateProject={handleGenerateProject}
-                onGenerateWorkProjectDescription={generateWorkProjDescription}
+                onGenerateProject={handleGenerateProjectDescription}
+                onGenerateWorkProjectDescription={handleGenerateWorkProjectDescription}
                 onSuggestSkills={suggestSkills}
                 loadingStates={{...loadingStates, speech: false}}
                 onAddWorkProject={addWorkProject}

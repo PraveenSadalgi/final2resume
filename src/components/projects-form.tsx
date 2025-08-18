@@ -1,7 +1,7 @@
 
 "use client";
 
-import type { Project, WorkProject } from "@/lib/types";
+import type { Project } from "@/lib/types";
 import { Button } from "./ui/button";
 import { Card, CardContent } from "./ui/card";
 import { Input } from "./ui/input";
@@ -21,7 +21,7 @@ interface ProjectsFormProps {
   ) => void;
   onAddProject: () => void;
   onRemoveProject: (index: number) => void;
-  onGenerateProjectDescription: (index: number) => void;
+  onGenerateProjectDescription: (id: string) => void;
 }
 
 export default function ProjectsForm({
@@ -57,7 +57,7 @@ export default function ProjectsForm({
                 <Button
                   variant="ghost"
                   size="sm"
-                  onClick={() => onGenerateProjectDescription(index)}
+                  onClick={() => onGenerateProjectDescription(proj.id)}
                   disabled={loadingStates.project === proj.id}
                   className="text-accent hover:text-accent"
                 >
