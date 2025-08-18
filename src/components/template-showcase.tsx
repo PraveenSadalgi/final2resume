@@ -54,18 +54,18 @@ export const TemplateShowcase: React.FC = () => {
             <h2 className="text-3xl font-bold tracking-tight md:text-4xl">Templates that pass ATS</h2>
             <p className="mt-2 max-w-2xl text-muted-foreground">Pick from elegant, readable templates that keep parsing systems happy.</p>
           </div>
-          <Button asChild variant="outline">
+           <Button asChild variant="outline">
             <Link href="/templates">Browse all templates</Link>
           </Button>
         </div>
       </div>
-      <div className="relative h-[450px]">
+      <div className="relative h-[600px]">
         <div className="pointer-events-none absolute inset-y-0 left-0 z-10 w-24 bg-gradient-to-r from-background to-transparent" />
         <div className="pointer-events-none absolute inset-y-0 right-0 z-10 w-24 bg-gradient-to-l from-background to-transparent" />
         <div className="absolute top-0 left-0 flex w-max" ref={trackRef}>
             {allTemplates.map((template, i) => (
-                <div key={i} className="mx-4 w-[320px] shrink-0">
-                    <div className="transform scale-[0.35] origin-top-left rounded-lg overflow-hidden border bg-background p-1 shadow-sm">
+                <div key={i} className="mx-4 w-[400px] shrink-0">
+                    <div className="transform scale-[0.5] origin-top-left rounded-lg overflow-hidden border bg-background p-1 shadow-sm">
                         <ResumePreview resumeData={template} />
                     </div>
                 </div>
