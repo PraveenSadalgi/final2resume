@@ -103,7 +103,6 @@ export const modernTemplate: ResumeData = {
   ],
 };
 
-
 export const creativeTemplate: ResumeData = {
   template: "creative",
   name: "Samantha Bee",
@@ -188,6 +187,96 @@ export const minimalistTemplate: ResumeData = {
   ],
 };
 
+export const technicalTemplate: ResumeData = {
+  template: "technical",
+  name: "Maria Garcia",
+  email: "maria.garcia@cloud.dev",
+  phone: "444-555-6666",
+  location: "Raleigh, NC",
+  github: "github.com/mgarcia",
+  linkedin: "linkedin.com/in/mariagarcia",
+  summary:
+    "Site Reliability Engineer (SRE) with a strong background in automating, scaling, and securing cloud infrastructure. Proven ability to reduce downtime and improve system performance through proactive monitoring and incident response. Expert in containerization and orchestration technologies.",
+  experience: [
+    {
+      id: "exp1",
+      role: "Site Reliability Engineer",
+      company: "DataStax",
+      date: "2019 - Present",
+      description:
+        "• Developed and managed Kubernetes operators for automated database cluster management, reducing manual intervention by 80%.\n• Implemented a centralized logging and monitoring stack using Prometheus and Grafana, providing real-time insights into system health.",
+       projects: [],
+    },
+     {
+      id: "exp2",
+      role: "DevOps Engineer",
+      company: "Appify",
+      date: "2017 - 2019",
+      description:
+        "• Built and maintained CI/CD pipelines for a suite of microservices, enabling developers to deploy code multiple times a day.\n• Managed AWS infrastructure using Terraform, ensuring consistent and repeatable environments.",
+       projects: [],
+    },
+  ],
+  education: [
+    {
+      id: "edu1",
+      school: "State College of Engineering",
+      degree: "B.S. in Information Technology",
+      date: "2013 - 2017",
+    },
+  ],
+  skills: ["Kubernetes", "Terraform", "Ansible", "Prometheus", "Grafana", "CI/CD", "AWS", "GCP", "Python", "Bash"],
+  projects: [],
+};
+
+export const executiveTemplate: ResumeData = {
+  template: "executive",
+  name: "James Maxwell",
+  email: "j.maxwell@executive.com",
+  phone: "777-888-9999",
+  location: "Chicago, IL",
+  github: "github.com/jmaxwell",
+  linkedin: "linkedin.com/in/jamesmaxwell",
+  summary:
+    "Accomplished technology leader with over 15 years of experience driving product strategy, engineering execution, and team leadership for high-growth SaaS companies. A strategic thinker with a track record of delivering innovative products, scaling engineering organizations, and achieving business goals.",
+  experience: [
+    {
+      id: "exp1",
+      role: "Vice President of Engineering",
+      company: "ScaleUp Solutions",
+      date: "2018 - Present",
+      description:
+        "• Grew the engineering team from 20 to 100+ members, fostering a high-performance culture of innovation and accountability.\n• Led the successful launch of three major enterprise products, contributing to a 200% increase in annual recurring revenue (ARR).\n• Defined the company's long-term technology vision and roadmap, aligning engineering efforts with strategic business objectives.",
+       projects: [],
+    },
+     {
+      id: "exp2",
+      role: "Director of Software Development",
+      company: "Innovate Corp",
+      date: "2012 - 2018",
+      description:
+        "• Managed multiple agile development teams responsible for the company's core product suite.\n• Oversaw the migration from a monolithic architecture to a modern, scalable microservices platform.",
+       projects: [],
+    },
+  ],
+  education: [
+    {
+      id: "edu1",
+      school: "Metropolitan University",
+      degree: "MBA, Technology Management",
+      date: "2010 - 2012",
+    },
+    {
+      id: "edu2",
+      school: "University of Science",
+      degree: "B.S. in Computer Engineering",
+      date: "2002 - 2006",
+    },
+  ],
+  skills: ["Strategic Planning", "Product Management", "Team Leadership", "Budgeting & P&L", "Agile Methodologies", "SaaS", "Cloud Architecture", "Go-to-Market Strategy"],
+  projects: [],
+};
+
 
 export const allTemplates: ResumeData[] = [
   classicTemplate,
@@ -195,6 +284,8 @@ export const allTemplates: ResumeData[] = [
   modernTemplate,
   creativeTemplate,
   minimalistTemplate,
+  technicalTemplate,
+  executiveTemplate,
 ];
 
 export const templateDetails: Record<Template, { name: string; description: string }> = {
@@ -203,4 +294,6 @@ export const templateDetails: Record<Template, { name: string; description: stri
     'modern': { name: 'Modern', description: 'A clean and stylish design with a focus on typography and visual hierarchy.' },
     'creative': { name: 'Creative', description: 'A unique and visually engaging template perfect for artists, designers, and developers.' },
     'minimalist': { name: 'Minimalist', description: 'A simple, elegant, and content-focused template that projects confidence and clarity.' },
+    'technical': { name: 'Technical', description: 'A clean, structured, and ATS-friendly format perfect for technical and engineering roles.' },
+    'executive': { name: 'Executive', description: 'A sophisticated and authoritative design for senior-level and leadership positions.' },
 };

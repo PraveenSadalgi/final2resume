@@ -7,6 +7,8 @@ import TwoColumnTemplate from "./templates/two-column";
 import ModernTemplate from "./templates/modern";
 import CreativeTemplate from "./templates/creative";
 import MinimalistTemplate from "./templates/minimalist";
+import TechnicalTemplate from "./templates/technical";
+import ExecutiveTemplate from "./templates/executive";
 
 interface ResumePreviewProps {
   resumeData: ResumeData;
@@ -19,6 +21,8 @@ const templateComponents = {
   'modern': ModernTemplate,
   'creative': CreativeTemplate,
   'minimalist': MinimalistTemplate,
+  'technical': TechnicalTemplate,
+  'executive': ExecutiveTemplate,
 };
 
 export default function ResumePreview({
