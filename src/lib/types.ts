@@ -36,6 +36,13 @@ export interface CoverLetterData {
   generatedLetter: string;
 }
 
+export interface CoverLetterTemplate {
+    id: string;
+    name: string;
+    description: string;
+    prompt: string;
+}
+
 export type Template = 'one-column' | 'two-column' | 'modern' | 'creative' | 'minimalist' | 'technical' | 'executive';
 
 export interface ResumeData {
@@ -61,6 +68,7 @@ export const GenerateCoverLetterInputSchema = z.object({
     .describe('The user\'s resume data in JSON format.'),
   jobDescription: z.string().describe('The job description the user is applying for.'),
   tone: z.string().describe('The desired tone of the cover letter (e.g., Professional, Creative, Enthusiastic).'),
+  template: z.string().describe('The prompt for the selected cover letter template.'),
 });
 export type GenerateCoverLetterInput = z.infer<typeof GenerateCoverLetterInputSchema>;
 

@@ -13,8 +13,9 @@ import {
 } from "./ui/select";
 import { Sparkles, Download } from "lucide-react";
 import LoadingSpinner from "./ui/loading-spinner";
-import type { CoverLetterData } from "@/lib/types";
+import type { CoverLetterData, CoverLetterTemplate } from "@/lib/types";
 import { SpeechRecognitionButton } from "./speech-recognition-button";
+import { Badge } from "./ui/badge";
 
 interface CoverLetterFormProps {
   coverLetterData: CoverLetterData;
@@ -23,6 +24,7 @@ interface CoverLetterFormProps {
   onGenerateCoverLetter: () => void;
   activeSpeechField: string | null;
   setActiveSpeechField: (field: string | null) => void;
+  selectedTemplate: CoverLetterTemplate;
 }
 
 export default function CoverLetterForm({
@@ -32,6 +34,7 @@ export default function CoverLetterForm({
   onGenerateCoverLetter,
   activeSpeechField,
   setActiveSpeechField,
+  selectedTemplate
 }: CoverLetterFormProps) {
   
   const handleDownloadDocx = () => {
@@ -62,6 +65,10 @@ export default function CoverLetterForm({
 
   return (
     <div className="space-y-6">
+        <div className="flex items-center gap-2">
+            <Label>Selected Template:</Label>
+            <Badge variant="secondary">{selectedTemplate.name}</Badge>
+        </div>
       <div className="space-y-2">
         <Label htmlFor="job-description">Job Description</Label>
         <div className="relative">
@@ -139,5 +146,3 @@ export default function CoverLetterForm({
     </div>
   );
 }
-
-    

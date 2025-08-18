@@ -7,6 +7,14 @@ import Link from "next/link";
 import { usePathname } from 'next/navigation';
 import type { ResumeData } from "@/lib/types";
 import { cn } from "@/lib/utils";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "./ui/dropdown-menu";
 
 interface HeaderProps {
   resumeData?: ResumeData;
@@ -21,12 +29,15 @@ export function Header({ resumeData }: HeaderProps) {
     }
   };
 
-  const navLinks = [
+  const mainLinks = [
     { href: '/', label: 'Home', icon: Home },
     { href: '/editor', label: 'Create Resume', icon: PencilRuler },
-    { href: '/templates', label: 'Templates', icon: LayoutTemplate, storageKey: 'selectedTemplate' },
-    { href: '/cover-letter', label: 'Cover Letter', icon: MailCheck, storageKey: 'resumeDataForCoverLetter' },
     { href: '/job-recommendations', label: 'Find Jobs', icon: Briefcase, storageKey: 'resumeDataForJobs' },
+  ];
+
+  const templatesLinks = [
+     { href: '/templates', label: 'Resume Templates', storageKey: 'selectedTemplate' },
+     { href: '/cover-letter/templates', label: 'Cover Letter Templates', storageKey: 'selectedCoverLetterTemplate' },
   ];
 
   return (
@@ -38,7 +49,7 @@ export function Header({ resumeData }: HeaderProps) {
         </Link>
         
         <nav className="flex items-center gap-1 sm:gap-2">
-           {navLinks.map(link => (
+           {mainLinks.map(link => (
              <Button
                 key={link.href}
                 asChild
@@ -55,6 +66,46 @@ export function Header({ resumeData }: HeaderProps) {
               </Link>
              </Button>
            ))}
+            <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                    <Button
+                        variant="ghost"
+                        className={cn(
+                            "transition-colors duration-200",
+                            pathname.includes('/templates') ? "text-primary bg-primary/10" : "text-muted-foreground hover:text-primary"
+                        )}
+                    >
+                         <LayoutTemplate className="h-4 w-4" />
+                         <span className="hidden md:inline-block ml-2">Templates</span>
+                    </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end">
+                    <DropdownMenuLabel>Choose a Template</DropdownMenuLabel>
+                    <DropdownMenuSeparator />
+                     {templatesLinks.map(link => (
+                        <DropdownMenuItem key={link.href} asChild>
+                            <Link href={link.href} onClick={() => link.storageKey && handleStorage(link.storageKey)}>
+                                {link.label}
+                            </Link>
+                        </DropdownMenuItem>
+                    ))}
+                </DropdownMenuContent>
+            </DropdownMenu>
+
+            <Button
+                asChild
+                variant="ghost"
+                className={cn(
+                    "transition-colors duration-200",
+                    pathname === '/cover-letter' ? "text-primary bg-primary/10" : "text-muted-foreground hover:text-primary"
+                )}
+                onClick={() => handleStorage('resumeDataForCoverLetter')}
+            >
+                <Link href='/cover-letter' className="flex items-center gap-2 px-3 py-2 text-sm font-medium">
+                    <MailCheck className="h-4 w-4" />
+                    <span className="hidden md:inline-block">Cover Letter</span>
+                </Link>
+            </Button>
         </nav>
       </div>
     </header>

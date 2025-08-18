@@ -1,5 +1,5 @@
 
-import type { ResumeData, Template } from "./types";
+import type { ResumeData, Template, CoverLetterTemplate } from "./types";
 
 export const classicTemplate: ResumeData = {
   template: "one-column",
@@ -297,3 +297,51 @@ export const templateDetails: Record<Template, { name: string; description: stri
     'technical': { name: 'Technical', description: 'A clean, structured, and ATS-friendly format perfect for technical and engineering roles.' },
     'executive': { name: 'Executive', description: 'A sophisticated and authoritative design for senior-level and leadership positions.' },
 };
+
+// Cover Letter Templates
+
+export const classicCoverLetterTemplate: CoverLetterTemplate = {
+    id: 'cl-classic',
+    name: 'Classic',
+    description: 'A timeless, professional format suitable for any industry. Focuses on direct, clear communication of skills and experience.',
+    prompt: `
+      Structure the cover letter as follows:
+      1.  **Introduction:** State the position you're applying for and where you saw it. Briefly introduce yourself and express your enthusiasm.
+      2.  **Body Paragraph 1:** Connect your main skills and experiences to the top 2-3 requirements in the job description. Provide a specific example or accomplishment.
+      3.  **Body Paragraph 2:** Elaborate on another key qualification or a significant project that demonstrates your value. Explain how your work can benefit the company.
+      4.  **Conclusion:** Reiterate your interest in the role, express your eagerness to discuss your qualifications further, and thank the hiring manager for their time and consideration. End with a professional closing.
+    `
+};
+
+export const modernCoverLetterTemplate: CoverLetterTemplate = {
+    id: 'cl-modern',
+    name: 'Modern',
+    description: 'A clean, concise, and slightly more personal template that uses bullet points to highlight key qualifications.',
+    prompt: `
+      Structure the cover letter as follows:
+      1.  **Introduction:** State the role you're applying for and express your excitement about the company's mission or a recent project.
+      2.  **Highlight Section:** Create a short section with 3-4 bullet points that directly match your top qualifications with the job requirements. Start each bullet with a strong action verb.
+      3.  **Elaboration Paragraph:** Pick one of the bullet points and expand on it, telling a brief story about a success or achievement that demonstrates your skills in action.
+      4.  **Closing Paragraph:** Briefly mention your enthusiasm for the team or culture. Include a clear call to action, stating your desire for an interview. End professionally.
+    `
+};
+
+export const impactfulCoverLetterTemplate: CoverLetterTemplate = {
+    id: 'cl-impactful',
+    name: 'Impactful',
+    description: 'A bold, results-oriented template that starts with a strong statement and focuses on quantifiable achievements.',
+    prompt: `
+      Structure the cover letter as follows:
+      1.  **Opening Hook:** Start with a powerful statement about a key achievement that is directly relevant to the role. For example, "In my previous role at [Company], I increased user engagement by 25% by redesigning the core product interface."
+      2.  **Connecting Paragraph:** Explain how that achievement and your related skills make you the perfect candidate to solve the company's problems or achieve their goals as stated in the job description.
+      3.  **Evidence Paragraph:** Provide another 1-2 examples of your accomplishments, using metrics and quantifiable results wherever possible.
+      4.  **Conclusion:** Reiterate your value proposition. Confidently state that you are looking forward to discussing how you can bring similar results to their team.
+    `
+};
+
+
+export const allCoverLetterTemplates: CoverLetterTemplate[] = [
+    classicCoverLetterTemplate,
+    modernCoverLetterTemplate,
+    impactfulCoverLetterTemplate,
+];

@@ -2,14 +2,15 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { generateCoverLetter } from "@/ai/flows/generate-cover-letter";
 import CoverLetterForm from "@/components/cover-letter-form";
 import { useToast } from "@/hooks/use-toast";
-import type { ResumeData, CoverLetterData } from "@/lib/types";
+import type { ResumeData, CoverLetterData, CoverLetterTemplate } from "@/lib/types";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
-import { ArrowLeft } from "lucide-react";
+import { ArrowLeft, LayoutTemplate } from "lucide-react";
+import { classicCoverLetterTemplate } from "@/lib/mock-data";
 
 const initialCoverLetterData: CoverLetterData = {
   jobDescription: "",
@@ -20,11 +21,14 @@ const initialCoverLetterData: CoverLetterData = {
 export default function CoverLetterPage() {
   const [resumeData, setResumeData] = useState<ResumeData | null>(null);
   const [coverLetterData, setCoverLetterData] = useState<CoverLetterData>(initialCoverLetterData);
+  const [selectedTemplate, setSelectedTemplate] = useState<CoverLetterTemplate>(classicCoverLetterTemplate);
   const [isClient, setIsClient] = useState(false);
   const [loading, setLoading] = useState(false);
   const [activeSpeechField, setActiveSpeechField] = useState<string | null>(null);
   const { toast } = useToast();
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const templateQuery = searchParams.get('template');
 
   useEffect(() => {
     setIsClient(true);
@@ -38,7 +42,18 @@ export default function CoverLetterPage() {
         setResumeData(null);
       }
     }
-  }, []);
+
+    const templateData = localStorage.getItem("selectedCoverLetterTemplate");
+    if (templateData && templateQuery) {
+        try {
+            setSelectedTemplate(JSON.parse(templateData));
+            localStorage.removeItem("selectedCoverLetterTemplate");
+            router.replace('/cover-letter', { scroll: false });
+        } catch (error) {
+            console.error("Failed to parse template data from localStorage", error);
+        }
+    }
+  }, [router, templateQuery]);
 
   const handleCoverLetterChange = (
     field: keyof CoverLetterData,
@@ -58,6 +73,7 @@ export default function CoverLetterPage() {
         resumeData: JSON.stringify(resumeData),
         jobDescription: coverLetterData.jobDescription,
         tone: coverLetterData.tone,
+        template: selectedTemplate.prompt,
       });
       handleCoverLetterChange('generatedLetter', result.coverLetter);
     } catch (error) {
@@ -85,8 +101,19 @@ export default function CoverLetterPage() {
             </Button>
 
             <div className="bg-card p-6 md:p-8 rounded-lg shadow-sm">
-              <h1 className="text-2xl font-bold mb-1">Cover Letter Generator</h1>
-              <p className="text-muted-foreground mb-6">Create a compelling cover letter based on your resume and the job you want.</p>
+                <div className="flex flex-col sm:flex-row justify-between sm:items-center mb-6">
+                    <div>
+                        <h1 className="text-2xl font-bold mb-1">Cover Letter Generator</h1>
+                        <p className="text-muted-foreground">Create a compelling cover letter based on your resume and the job you want.</p>
+                    </div>
+                     <Button asChild variant="outline">
+                        <Link href="/cover-letter/templates">
+                            <LayoutTemplate className="mr-2 h-4 w-4" />
+                            Choose Template
+                        </Link>
+                    </Button>
+                </div>
+
               {resumeData ? (
                   <CoverLetterForm
                       coverLetterData={coverLetterData}
@@ -95,6 +122,7 @@ export default function CoverLetterPage() {
                       onGenerateCoverLetter={generateLetter}
                       activeSpeechField={activeSpeechField}
                       setActiveSpeechField={setActiveSpeechField}
+                      selectedTemplate={selectedTemplate}
                   />
               ) : (
                   <div className="text-center py-12">
@@ -109,5 +137,3 @@ export default function CoverLetterPage() {
     </>
   );
 }
-
-    
