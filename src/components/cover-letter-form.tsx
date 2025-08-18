@@ -11,16 +11,18 @@ import {
   SelectTrigger,
   SelectValue,
 } from "./ui/select";
-import { Sparkles, Download, Mic } from "lucide-react";
+import { Sparkles, Download } from "lucide-react";
 import LoadingSpinner from "./ui/loading-spinner";
 import type { CoverLetterData } from "@/lib/types";
+import { SpeechRecognitionButton } from "./speech-recognition-button";
 
 interface CoverLetterFormProps {
   coverLetterData: CoverLetterData;
   loading: boolean;
   onCoverLetterChange: (field: keyof CoverLetterData, value: string) => void;
   onGenerateCoverLetter: () => void;
-  onSpeak: () => void;
+  activeSpeechField: string | null;
+  setActiveSpeechField: (field: string | null) => void;
 }
 
 export default function CoverLetterForm({
@@ -28,7 +30,8 @@ export default function CoverLetterForm({
   loading,
   onCoverLetterChange,
   onGenerateCoverLetter,
-  onSpeak,
+  activeSpeechField,
+  setActiveSpeechField,
 }: CoverLetterFormProps) {
   
   const handleDownloadDocx = () => {
@@ -53,23 +56,33 @@ export default function CoverLetterForm({
     }
   };
 
+  const handleSpeechResult = (transcript: string) => {
+    onCoverLetterChange("jobDescription", transcript);
+  };
+
   return (
     <div className="space-y-6">
       <div className="space-y-2">
-        <Label htmlFor="job-description" className="flex items-center justify-between">
-            Job Description
-            <Button variant="outline" size="sm" onClick={onSpeak} disabled={loading}>
-                <Mic className="h-4 w-4 mr-2" />
-                Speak to Fill
-            </Button>
-        </Label>
-        <Textarea
-          id="job-description"
-          value={coverLetterData.jobDescription}
-          onChange={(e) => onCoverLetterChange("jobDescription", e.target.value)}
-          placeholder="Paste the job description here, or use the 'Speak to Fill' button to dictate."
-          rows={8}
-        />
+        <Label htmlFor="job-description">Job Description</Label>
+        <div className="relative">
+          <Textarea
+            id="job-description"
+            value={coverLetterData.jobDescription}
+            onChange={(e) => onCoverLetterChange("jobDescription", e.target.value)}
+            placeholder="Paste the job description here, or use the microphone to dictate."
+            rows={8}
+            className="pr-12"
+          />
+          <div className="absolute top-2 right-2">
+            <SpeechRecognitionButton
+              fieldName="jobDescription"
+              onResult={handleSpeechResult}
+              activeField={activeSpeechField}
+              setActiveField={setActiveSpeechField}
+              tooltipContent="Speak the job description."
+            />
+          </div>
+        </div>
       </div>
 
       <div className="space-y-2">
@@ -126,3 +139,5 @@ export default function CoverLetterForm({
     </div>
   );
 }
+
+    

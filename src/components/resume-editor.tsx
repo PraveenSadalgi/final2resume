@@ -61,7 +61,8 @@ interface ResumeEditorProps {
     field: keyof WorkProject,
     value: string
   ) => void;
-  onSpeakToFill: (target: "personalDetails" | "summary") => void;
+  activeSpeechField: string | null;
+  setActiveSpeechField: (field: string | null) => void;
 }
 
 export default function ResumeEditor({
@@ -83,7 +84,8 @@ export default function ResumeEditor({
   onAddWorkProject,
   onRemoveWorkProject,
   onWorkProjectChange,
-  onSpeakToFill,
+  activeSpeechField,
+  setActiveSpeechField,
 }: ResumeEditorProps) {
   const sections = [
     {
@@ -91,7 +93,11 @@ export default function ResumeEditor({
       title: "Personal Details",
       Icon: User,
       Component: PersonalDetailsForm,
-      props: { onFieldChange, onSpeakToFill: () => onSpeakToFill("personalDetails") },
+      props: { 
+        onFieldChange, 
+        activeSpeechField, 
+        setActiveSpeechField 
+      },
     },
     {
       value: "summary",
@@ -102,7 +108,8 @@ export default function ResumeEditor({
         onFieldChange,
         onGenerateSummary,
         loading: loadingStates.summary,
-        onSpeakToFill: () => onSpeakToFill("summary"),
+        activeSpeechField,
+        setActiveSpeechField,
       },
     },
     {
@@ -189,3 +196,5 @@ export default function ResumeEditor({
     </div>
   );
 }
+
+    

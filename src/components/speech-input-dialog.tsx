@@ -39,6 +39,19 @@ export default function SpeechInputDialog({
   const { toast } = useToast();
 
   useEffect(() => {
+    // This effect handles stopping the recording when the component unmounts or the dialog is closed.
+    return () => {
+      if (mediaRecorderRef.current && mediaRecorderRef.current.state === "recording") {
+        mediaRecorderRef.current.stop();
+      }
+       // Also stop any media streams
+      if (mediaRecorderRef.current?.stream) {
+        mediaRecorderRef.current.stream.getTracks().forEach(track => track.stop());
+      }
+    };
+  }, []);
+
+  useEffect(() => {
     if (!isOpen) {
       // Reset state when dialog is closed
       setIsRecording(false);
@@ -46,13 +59,16 @@ export default function SpeechInputDialog({
       if (mediaRecorderRef.current && mediaRecorderRef.current.state === "recording") {
         mediaRecorderRef.current.stop();
       }
+      if (mediaRecorderRef.current?.stream) {
+        mediaRecorderRef.current.stream.getTracks().forEach(track => track.stop());
+      }
     }
   }, [isOpen]);
 
   const startRecording = async () => {
     try {
       const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-      const mediaRecorder = new MediaRecorder(stream);
+      const mediaRecorder = new MediaRecorder(stream, { mimeType: 'audio/webm' });
       mediaRecorderRef.current = mediaRecorder;
       audioChunksRef.current = [];
 
@@ -61,7 +77,7 @@ export default function SpeechInputDialog({
       };
 
       mediaRecorder.onstop = () => {
-        const audioBlob = new Blob(audioChunksRef.current, { type: "audio/wav" });
+        const audioBlob = new Blob(audioChunksRef.current, { type: "audio/webm" });
         const reader = new FileReader();
         reader.readAsDataURL(audioBlob);
         reader.onloadend = () => {
@@ -147,3 +163,5 @@ export default function SpeechInputDialog({
     </Dialog>
   );
 }
+
+    

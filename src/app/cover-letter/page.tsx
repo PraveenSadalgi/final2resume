@@ -4,9 +4,7 @@
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { generateCoverLetter } from "@/ai/flows/generate-cover-letter";
-import { speechToCoverLetter } from "@/ai/flows/speech-to-resume";
 import CoverLetterForm from "@/components/cover-letter-form";
-import SpeechInputDialog from "@/components/speech-input-dialog";
 import { useToast } from "@/hooks/use-toast";
 import type { ResumeData, CoverLetterData } from "@/lib/types";
 import { Button } from "@/components/ui/button";
@@ -24,7 +22,7 @@ export default function CoverLetterPage() {
   const [coverLetterData, setCoverLetterData] = useState<CoverLetterData>(initialCoverLetterData);
   const [isClient, setIsClient] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [isSpeechDialogOpen, setIsSpeechDialogOpen] = useState(false);
+  const [activeSpeechField, setActiveSpeechField] = useState<string | null>(null);
   const { toast } = useToast();
   const router = useRouter();
 
@@ -47,20 +45,6 @@ export default function CoverLetterPage() {
     value: string
   ) => {
     setCoverLetterData((prev) => ({ ...prev, [field]: value }));
-  };
-
-  const handleSpeechToCoverLetter = async (audioDataUri: string) => {
-    setLoading(true);
-    try {
-      const result = await speechToCoverLetter({ audioDataUri });
-      handleCoverLetterChange("jobDescription", result.jobDescription);
-      toast({ title: "Success", description: "Job description has been filled out." });
-    } catch (error) {
-      console.error("Error processing speech for cover letter:", error);
-      toast({ title: "Error", description: "Failed to process audio for the cover letter.", variant: "destructive" });
-    } finally {
-      setLoading(false);
-    }
   };
 
   const generateLetter = async () => {
@@ -90,13 +74,6 @@ export default function CoverLetterPage() {
   
   return (
     <>
-      <SpeechInputDialog
-        isOpen={isSpeechDialogOpen}
-        onClose={() => setIsSpeechDialogOpen(false)}
-        onSave={handleSpeechToCoverLetter}
-        instructions="Please state the job description you are applying for. Speak clearly to ensure accurate transcription."
-        title="Speak to Fill Job Description"
-      />
       <div className="flex flex-col h-[calc(100vh-69px)] bg-background">
         <main className="flex-1 overflow-y-auto p-4 md:p-6 lg:p-8">
           <div className="max-w-4xl mx-auto">
@@ -116,7 +93,8 @@ export default function CoverLetterPage() {
                       loading={loading}
                       onCoverLetterChange={handleCoverLetterChange}
                       onGenerateCoverLetter={generateLetter}
-                      onSpeak={() => setIsSpeechDialogOpen(true)}
+                      activeSpeechField={activeSpeechField}
+                      setActiveSpeechField={setActiveSpeechField}
                   />
               ) : (
                   <div className="text-center py-12">
@@ -131,3 +109,5 @@ export default function CoverLetterPage() {
     </>
   );
 }
+
+    

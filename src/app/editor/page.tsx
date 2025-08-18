@@ -9,15 +9,11 @@ import { generateProfessionalSummary } from "@/ai/flows/generate-summary";
 import { generateProjectDescription } from "@/ai/flows/generate-project-description";
 import { generateWorkProjectDescription } from "@/ai/flows/generate-work-project-description";
 import { suggestRelevantSkills } from "@/ai/flows/suggest-skills";
-import { speechToPersonalDetails, speechToSummary } from "@/ai/flows/speech-to-resume";
 import ResumeEditor from "@/components/resume-editor";
 import ResumePreview from "@/components/resume-preview";
-import SpeechInputDialog from "@/components/speech-input-dialog";
 import { useToast } from "@/hooks/use-toast";
 import type { Education, Experience, Project, ResumeData, WorkProject } from "@/lib/types";
 import { classicTemplate } from "@/lib/mock-data";
-
-type SpeechTarget = "personalDetails" | "summary" | null;
 
 // Helper to generate unique IDs on the client
 const generateUniqueId = () => `id-${Date.now()}-${Math.random().toString(36).substring(2, 9)}`;
@@ -31,9 +27,8 @@ export default function EditorPage() {
     skills: false,
     project: null as string | null,
     workProject: null as string | null,
-    speech: false,
   });
-  const [speechTarget, setSpeechTarget] = useState<SpeechTarget>(null);
+  const [activeSpeechField, setActiveSpeechField] = useState<string | null>(null);
 
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -175,7 +170,7 @@ export default function EditorPage() {
       const profession = resumeData.experience[0]?.role || "a professional";
       const result = await generateProfessionalSummary({ profession });
       handleFieldChange("summary", result.summary);
-    } catch (error) {
+    } catch (error) => {
       console.error("Error generating summary:", error);
       toast({ title: "Error", description: "Failed to generate summary.", variant: "destructive" });
     } finally {
@@ -253,52 +248,8 @@ export default function EditorPage() {
     }
   };
 
-  const handleSpeechInput = async (audioDataUri: string) => {
-    if (!speechTarget) return;
-
-    setLoadingStates(prev => ({ ...prev, speech: true }));
-    try {
-      if (speechTarget === "personalDetails") {
-        const result = await speechToPersonalDetails({ audioDataUri });
-        setResumeData(prev => ({ ...prev, ...result }));
-        toast({ title: "Success", description: "Personal details have been filled out." });
-      } else if (speechTarget === "summary") {
-        const result = await speechToSummary({ audioDataUri });
-        setResumeData(prev => ({ ...prev, summary: result.summary }));
-        toast({ title: "Success", description: "Summary has been filled out." });
-      }
-    } catch (error) {
-      console.error(`Error processing speech for ${speechTarget}:`, error);
-      toast({ title: "Error", description: `Failed to process audio for ${speechTarget}.`, variant: "destructive" });
-    } finally {
-      setLoadingStates(prev => ({ ...prev, speech: false }));
-      setSpeechTarget(null);
-    }
-  };
-
-  const speechDialogConfig = {
-    personalDetails: {
-      title: "Speak your Personal Details",
-      instructions: "Please state your full name, email, phone number, location, GitHub URL, and LinkedIn URL. Speak clearly for best results."
-    },
-    summary: {
-      title: "Speak your Professional Summary",
-      instructions: "Please provide a brief summary of your professional background. Aim for 3-4 sentences."
-    }
-  };
-
   return (
     <>
-      {speechTarget && (
-        <SpeechInputDialog
-          isOpen={!!speechTarget}
-          onClose={() => setSpeechTarget(null)}
-          onSave={handleSpeechInput}
-          isLoading={loadingStates.speech}
-          title={speechDialogConfig[speechTarget]?.title}
-          instructions={speechDialogConfig[speechTarget]?.instructions}
-        />
-      )}
       <div className="relative flex flex-col h-[calc(100vh-69px)] bg-gradient-to-br from-background via-background/95 to-muted/40">
         <motion.div
           className="absolute -top-32 -left-32 w-96 h-96 rounded-full bg-violet-500/20 blur-3xl"
@@ -334,11 +285,12 @@ export default function EditorPage() {
                 onGenerateProjectDescription={generateProjDescription}
                 onGenerateWorkProjectDescription={generateWorkProjDescription}
                 onSuggestSkills={suggestSkills}
-                loadingStates={loadingStates}
+                loadingStates={{...loadingStates, speech: false}}
                 onAddWorkProject={addWorkProject}
                 onRemoveWorkProject={removeWorkProject}
                 onWorkProjectChange={handleWorkProjectChange}
-                onSpeakToFill={(target) => setSpeechTarget(target)}
+                activeSpeechField={activeSpeechField}
+                setActiveSpeechField={setActiveSpeechField}
               />
             ) : (
               <div className="p-4 text-muted-foreground animate-pulse">Loading editor...</div>
@@ -369,3 +321,5 @@ export default function EditorPage() {
     </>
   );
 }
+
+    
