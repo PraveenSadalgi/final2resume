@@ -168,7 +168,10 @@ export default function EditorPage() {
     setLoadingStates((prev) => ({ ...prev, summary: true }));
     try {
       const profession = resumeData.experience[0]?.role || "a professional";
-      const result = await generateProfessionalSummary({ profession });
+      const result = await generateProfessionalSummary({ 
+        profession,
+        summary: resumeData.summary,
+      });
       handleFieldChange("summary", result.summary);
     } catch (error) {
       console.error("Error generating summary:", error);
@@ -321,5 +324,3 @@ export default function EditorPage() {
     </>
   );
 }
-
-    

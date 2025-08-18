@@ -110,11 +110,12 @@ export type GenerateProjectDescriptionOutput = z.infer<typeof GenerateProjectDes
 
 export const GenerateProfessionalSummaryInputSchema = z.object({
   profession: z.string().describe('The profession of the user.'),
+  summary: z.string().describe('The user\'s existing professional summary to be improved.'),
 });
 export type GenerateProfessionalSummaryInput = z.infer<typeof GenerateProfessionalSummaryInputSchema>;
 
 export const GenerateProfessionalSummaryOutputSchema = z.object({
-  summary: z.string().describe('A professional summary for the resume.'),
+  summary: z.string().describe('An improved and professional summary for the resume.'),
 });
 export type GenerateProfessionalSummaryOutput = z.infer<typeof GenerateProfessionalSummaryOutputSchema>;
 

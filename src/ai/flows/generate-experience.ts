@@ -20,16 +20,16 @@ const prompt = ai.definePrompt({
   model: googleAI.model('gemini-2.0-flash'),
   input: {schema: GenerateExperienceInputSchema},
   output: {schema: GenerateExperienceOutputSchema},
-  prompt: `You are an expert resume writer, specializing in tailoring experiences to specific roles and professions.
+  prompt: `You are an expert resume writer. Your task is to rewrite and enhance the provided resume experience description to be more professional, achievement-oriented, and impactful. Use strong action verbs and quantify results where possible.
 
-  Based on the user's profession: {{{profession}}}, and the role they are applying for: {{{role}}},
-  generate tailored experiences and bullet points for their resume.
+  User's Profession: {{{profession}}}
+  User's Role: {{{role}}}
+  Existing Experience Description:
+  \`\`\`
+  {{{desiredExperience}}}
+  \`\`\`
 
-  Consider these existing experiences if the user is trying to improve them: {{{desiredExperience}}}
-
-  Focus on showcasing relevant skills and accomplishments effectively.
-  Return a set of experiences with bullet points. Be concise and professional.
-  `,
+  Generate a new, improved description based on the provided text. Focus on clarity, conciseness, and showcasing value. Return only the improved text.`,
 });
 
 const generateExperienceFlow = ai.defineFlow(

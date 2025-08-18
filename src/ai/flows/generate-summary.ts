@@ -19,7 +19,12 @@ const prompt = ai.definePrompt({
   model: googleAI.model('gemini-2.0-flash'),
   input: {schema: GenerateProfessionalSummaryInputSchema},
   output: {schema: GenerateProfessionalSummaryOutputSchema},
-  prompt: `You are an expert resume writer. Generate a professional summary for a resume based on the following profession: {{{profession}}}. The summary should be concise and highlight key skills and experiences. Aim for a summary that is approximately 3-4 sentences long.`,
+  prompt: `You are an expert resume writer. Rephrase and improve the following professional summary to make it more impactful and professional. If the summary is empty, generate a new one based on the user's profession.
+
+  Profession: {{{profession}}}
+  Existing Summary: {{{summary}}}
+
+  The summary should be concise and highlight key skills and experiences. Aim for a summary that is approximately 3-4 sentences long.`,
 });
 
 const generateProfessionalSummaryFlow = ai.defineFlow(
