@@ -18,7 +18,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={inter.variable} suppressHydrationWarning style={{ scrollBehavior: 'smooth' }}>
+    <html lang="en" className={inter.variable} suppressHydrationWarning>
       <body className="antialiased">
         <Header />
         {children}
@@ -27,3 +27,5 @@ export default function RootLayout({
     </html>
   );
 }
+
+    
