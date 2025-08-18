@@ -1,7 +1,7 @@
 
 "use client";
 
-import type { Project } from "@/lib/types";
+import type { Project, WorkProject } from "@/lib/types";
 import { Button } from "./ui/button";
 import { Card, CardContent } from "./ui/card";
 import { Input } from "./ui/input";

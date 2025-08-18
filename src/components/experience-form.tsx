@@ -18,10 +18,7 @@ import {
 
 interface ExperienceFormProps {
   experience: Experience[];
-  loadingStates: {
-    experience: string | null;
-    workProject: string | null;
-  };
+  loadingState: string | null; // Changed to singular loadingState
   onNestedFieldChange: (
     section: "experience",
     index: number,
@@ -31,7 +28,7 @@ interface ExperienceFormProps {
   onAddExperience: () => void;
   onRemoveExperience: (index: number) => void;
   onGenerateExperience: (index: number) => void;
-  onAddWorkProject: (experienceIndex: number) => void;
+  onAddWorkProject: (experienceId: string) => void; // Changed to use experienceId
   onRemoveWorkProject: (experienceIndex: number, projectIndex: number) => void;
   onWorkProjectChange: (
     experienceIndex: number,
@@ -39,11 +36,12 @@ interface ExperienceFormProps {
     field: keyof WorkProject,
     value: string
   ) => void;
-  onGenerateWorkProjectDescription: (experienceIndex: number, projectIndex: number) => void;
+  onGenerateWorkProjectDescription: (projectId: string) => void; // Changed to use projectId
+  workProjectLoadingState: string | null; // Added prop for work project loading state
 }
 
 export default function ExperienceForm({
-  experience,
+  experience, // No changes needed here, will map over this
   loadingStates,
   onNestedFieldChange,
   onAddExperience,
@@ -52,7 +50,8 @@ export default function ExperienceForm({
   onAddWorkProject,
   onRemoveWorkProject,
   onWorkProjectChange,
-  onGenerateWorkProjectDescription,
+  onGenerateWorkProjectDescription, // Received the handler
+  workProjectLoadingState, // Received the loading state
 }: ExperienceFormProps) {
   return (
     <div className="space-y-4">
@@ -108,11 +107,11 @@ export default function ExperienceForm({
                 <Button
                   variant="ghost"
                   size="sm"
-                  onClick={() => onGenerateExperience(index)}
-                  disabled={loadingStates.experience === exp.id}
+                  onClick={() => onGenerateExperience(exp.id)} // Pass exp.id
+                  disabled={loadingStates.experience === exp.id} // Check loadingState against exp.id
                   className="text-accent hover:text-accent"
                 >
-                  {loadingStates.experience === exp.id ? (
+                  {loadingStates.experience === exp.id ? ( // Check loadingState against exp.id
                     <LoadingSpinner className="mr-2" />
                   ) : (
                     <Sparkles className="h-4 w-4 mr-2" />
@@ -176,11 +175,11 @@ export default function ExperienceForm({
                                 variant="ghost"
                                 size="sm"
                                 onClick={() => onGenerateWorkProjectDescription(index, projIndex)}
-                                disabled={loadingStates.workProject === workProject.id}
+                                disabled={workProjectLoadingState === workProject.id} // Check workProjectLoadingState against workProject.id
                                 className="text-accent hover:text-accent h-auto py-0 px-2"
                               >
                                 {loadingStates.workProject === workProject.id ? (
-                                  <LoadingSpinner className="mr-2" />
+                                  <LoadingSpinner className="mr-2" /> // Show spinner based on workProjectLoadingState
                                 ) : (
                                   <Sparkles className="h-4 w-4 mr-2" />
                                 )}

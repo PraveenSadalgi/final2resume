@@ -1,6 +1,7 @@
+
 "use client";
 
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { motion, useScroll, useSpring, useTransform } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -45,12 +46,18 @@ const Hero: React.FC = () => {
   const { scrollYProgress } = useScroll({ target: ref, offset: ["start start", "end start"] });
   const y1 = useTransform(scrollYProgress, [0, 1], [0, -80]);
   const y2 = useTransform(scrollYProgress, [0, 1], [0, -160]);
+  const [isClient, setIsClient] = useState(false);
+
+  useEffect(() => {
+    setIsClient(true);
+  }, []);
+
 
   return (
     <section id="hero" ref={ref} className="relative overflow-hidden">
       <div className="mx-auto grid max-w-7xl grid-cols-1 items-center gap-10 px-6 pb-24 pt-28 md:grid-cols-2">
         <div>
-          <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }}>
+          {isClient && <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }}>
             <Badge className="mb-4 inline-flex items-center gap-2"> <Sparkles className="h-4 w-4" /> New: AI bullet→polish</Badge>
             <h1 className="mb-4 text-4xl font-extrabold leading-tight tracking-tight md:text-6xl">
               Build a job‑ready resume
@@ -77,11 +84,11 @@ const Hero: React.FC = () => {
               <div className="flex items-center gap-1"><Zap className="h-4 w-4" /> Fast & simple</div>
               <div className="flex items-center gap-1"><FileText className="h-4 w-4" /> ATS-optimized</div>
             </div>
-          </motion.div>
+          </motion.div>}
         </div>
 
         <div className="relative">
-          <motion.div style={{ y: y1 }} className="relative rounded-2xl border bg-card p-4 shadow-2xl transform-gpu hover:scale-[1.01] transition-transform">
+          {isClient && <motion.div style={{ y: y1 }} className="relative rounded-2xl border bg-card p-4 shadow-2xl transform-gpu hover:scale-[1.01] transition-transform">
             <div className="rounded-xl border bg-background p-4">
               <div className="mb-3 flex items-center justify-between">
                 <div className="flex items-center gap-2">
@@ -128,9 +135,9 @@ const Hero: React.FC = () => {
                 </div>
               </div>
             </div>
-          </motion.div>
+          </motion.div>}
 
-          <motion.div style={{ y: y2 }} className="absolute -left-6 -top-6 -z-10 hidden h-40 w-40 rounded-3xl bg-gradient-to-br from-cyan-500/20 to-fuchsia-500/20 blur-xl md:block" />
+          {isClient && <motion.div style={{ y: y2 }} className="absolute -left-6 -top-6 -z-10 hidden h-40 w-40 rounded-3xl bg-gradient-to-br from-cyan-500/20 to-fuchsia-500/20 blur-xl md:block" />}
         </div>
       </div>
     </section>
@@ -216,7 +223,15 @@ const HowItWorks: React.FC = () => {
 // --- TemplateShowcase: improved — resumes move infinitely, placeholders static ---
 const TemplateShowcase: React.FC = () => {
   const trackRef = useRef<HTMLDivElement>(null);
+  const [isClient, setIsClient] = useState(false);
+
   useEffect(() => {
+    setIsClient(true);
+  }, []);
+
+  useEffect(() => {
+    if (!isClient) return;
+
     let raf = 0;
     let offset = 0;
     const step = () => {
@@ -231,7 +246,7 @@ const TemplateShowcase: React.FC = () => {
     };
     raf = requestAnimationFrame(step);
     return () => cancelAnimationFrame(raf);
-  }, []);
+  }, [isClient]);
 
   // single resume card — keep same size as original
   const resumeCard = (i: number) => (
@@ -271,6 +286,9 @@ const TemplateShowcase: React.FC = () => {
 
         {/* Row with static placeholders and moving resumes in the middle */}
         <div className="overflow-hidden">
+         {!isClient ? (
+            <div className="text-center p-8 text-muted-foreground">Loading templates...</div>
+          ) : (
           <div className="flex items-center px-6">
             {placeholderCard('left')}
 
@@ -284,6 +302,7 @@ const TemplateShowcase: React.FC = () => {
 
             {placeholderCard('right')}
           </div>
+          )}
         </div>
       </div>
 
@@ -446,3 +465,5 @@ export default function ResuAIHome() {
     </main>
   );
 }
+
+    

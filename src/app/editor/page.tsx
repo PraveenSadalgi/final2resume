@@ -2,10 +2,12 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useParams, useRouter, useSearchParams } from "next/navigation";
 import { motion } from "framer-motion";
 import { generateExperience } from "@/ai/flows/generate-experience";
 import { generateProfessionalSummary } from "@/ai/flows/generate-summary";
+import { Button } from "@/components/ui/button";
+import { LoadingSpinner } from "@/components/ui/loading-spinner";
 import { generateProjectDescription } from "@/ai/flows/generate-project-description";
 import { generateWorkProjectDescription } from "@/ai/flows/generate-work-project-description";
 import { suggestRelevantSkills } from "@/ai/flows/suggest-skills";
@@ -25,7 +27,7 @@ export default function EditorPage() {
     summary: false,
     experience: null as string | null,
     skills: false,
-    project: null as string | null,
+    project: null as string | null, // This will hold the ID of the personal project being loaded
     workProject: null as string | null,
   });
   const [activeSpeechField, setActiveSpeechField] = useState<string | null>(null);
@@ -164,16 +166,18 @@ export default function EditorPage() {
     });
   };
 
-  const generateSummary = async () => {
+  // Function to handle professional summary generation
+  const handleGenerateSummary = async () => {
     setLoadingStates((prev) => ({ ...prev, summary: true }));
     try {
       const profession = resumeData.experience[0]?.role || "a professional";
-      const result = await generateProfessionalSummary({ 
+      const generatedSummary = await generateProfessionalSummary({
         profession,
         summary: resumeData.summary,
       });
-      handleFieldChange("summary", result.summary);
+      setResumeData((prev) => ({ ...prev, summary: generatedSummary.summary }));
     } catch (error) {
+      // console.error("Error generating summary:", error);
       console.error("Error generating summary:", error);
       toast({ title: "Error", description: "Failed to generate summary.", variant: "destructive" });
     } finally {
@@ -181,16 +185,23 @@ export default function EditorPage() {
     }
   };
 
-  const generateExp = async (index: number) => {
+  // Function to handle experience description generation
+  const handleGenerateExperience = async (experienceId: string) => {
+    const index = resumeData.experience.findIndex(exp => exp.id === experienceId);
+    if (index === -1) {
+      toast({ title: "Error", description: "Experience not found.", variant: "destructive" });
+      return;
+    }
+
     setLoadingStates((prev) => ({ ...prev, experience: resumeData.experience[index].id }));
     try {
       const exp = resumeData.experience[index];
-      const result = await generateExperience({
+      const generatedDescription = await generateExperience({
         profession: exp.role || "a professional",
         role: exp.role,
         desiredExperience: exp.description,
       });
-      handleNestedFieldChange( "experience", index, "description", result.experiences );
+      handleNestedFieldChange( "experience", index, "description", generatedDescription.experiences );
     } catch (error) {
       console.error("Error generating experience:", error);
       toast({ title: "Error", description: "Failed to generate experience.", variant: "destructive" });
@@ -199,20 +210,26 @@ export default function EditorPage() {
     }
   };
 
-  const generateProjDescription = async (index: number) => {
-    setLoadingStates(prev => ({ ...prev, project: resumeData.projects[index].id }));
+  // Function to handle personal project description generation
+  const handleGenerateProject = async (projectId: string) => {
+    const index = resumeData.projects.findIndex(p => p.id === projectId);
+    if (index === -1) {
+      toast({ title: "Error", description: "Personal project not found.", variant: "destructive" });
+      return;
+    }
+
+    setLoadingStates(prev => ({ ...prev, project: resumeData.projects[index]?.id || null }));
     try {
       const project = resumeData.projects[index];
-      const result = await generateProjectDescription({
+      const generatedDescription = await generateProjectDescription({
         projectName: project.name,
         projectDescription: project.description
       });
-      handleNestedFieldChange('projects', index, 'description', result.description);
+      handleNestedFieldChange('projects', index, 'description', generatedDescription.description);
     } catch (error) {
+      // console.error("Error generating personal project description:", error);
       console.error("Error generating project description:", error);
       toast({ title: "Error", description: "Failed to generate project description.", variant: "destructive" });
-    } finally {
-      setLoadingStates(prev => ({ ...prev, project: null }));
     }
   };
 
@@ -222,7 +239,7 @@ export default function EditorPage() {
 
     setLoadingStates(prev => ({ ...prev, workProject: workProject.id }));
     try {
-      const result = await generateWorkProjectDescription({
+      const generatedDescription = await generateWorkProjectDescription({
         projectName: workProject.name,
         role: workProject.role,
         projectDescription: workProject.description,
@@ -231,9 +248,8 @@ export default function EditorPage() {
     } catch (error) {
       console.error("Error generating work project description:", error);
       toast({ title: "Error", description: "Failed to generate work project description.", variant: "destructive" });
-    } finally {
-      setLoadingStates(prev => ({ ...prev, workProject: null }));
     }
+     // Reset loading state after successful generation or error
   };
   
   const suggestSkills = async () => {
@@ -283,9 +299,9 @@ export default function EditorPage() {
                 onRemoveEducation={removeEducation}
                 onAddProject={addProject}
                 onRemoveProject={removeProject}
-                onGenerateSummary={generateSummary}
-                onGenerateExperience={generateExp}
-                onGenerateProjectDescription={generateProjDescription}
+                onGenerateSummary={handleGenerateSummary}
+                onGenerateExperience={handleGenerateExperience}
+                onGenerateProject={handleGenerateProject}
                 onGenerateWorkProjectDescription={generateWorkProjDescription}
                 onSuggestSkills={suggestSkills}
                 loadingStates={{...loadingStates, speech: false}}
