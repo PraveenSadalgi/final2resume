@@ -92,31 +92,33 @@ export default function CoverLetterForm({
         </div>
       </div>
 
-      <div className="space-y-2">
-        <Label htmlFor="tone-select">Tone</Label>
-        <Select
-          value={coverLetterData.tone}
-          onValueChange={(value) => onCoverLetterChange("tone", value)}
-        >
-          <SelectTrigger id="tone-select" className="w-full sm:w-[200px]">
-            <SelectValue placeholder="Select a tone" />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="Professional">Professional</SelectItem>
-            <SelectItem value="Creative">Creative</SelectItem>
-            <SelectItem value="Enthusiastic">Enthusiastic</SelectItem>
-          </SelectContent>
-        </Select>
-      </div>
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 items-end">
+        <div className="space-y-2">
+            <Label htmlFor="tone-select">Tone</Label>
+            <Select
+            value={coverLetterData.tone}
+            onValueChange={(value) => onCoverLetterChange("tone", value)}
+            >
+            <SelectTrigger id="tone-select" className="w-full">
+                <SelectValue placeholder="Select a tone" />
+            </SelectTrigger>
+            <SelectContent>
+                <SelectItem value="Professional">Professional</SelectItem>
+                <SelectItem value="Creative">Creative</SelectItem>
+                <SelectItem value="Enthusiastic">Enthusiastic</SelectItem>
+            </SelectContent>
+            </Select>
+        </div>
 
-      <Button onClick={onGenerateCoverLetter} disabled={loading || !coverLetterData.jobDescription} className="w-full sm:w-auto">
-        {loading ? (
-          <LoadingSpinner className="mr-2" />
-        ) : (
-          <Sparkles className="h-4 w-4 mr-2" />
-        )}
-        Generate Cover Letter
-      </Button>
+        <Button onClick={onGenerateCoverLetter} disabled={loading || !coverLetterData.jobDescription} className="w-full">
+            {loading ? (
+            <LoadingSpinner className="mr-2" />
+            ) : (
+            <Sparkles className="h-4 w-4 mr-2" />
+            )}
+            Generate with AI
+        </Button>
+      </div>
 
       {coverLetterData.generatedLetter && (
         <div className="space-y-4 pt-4 border-t">
