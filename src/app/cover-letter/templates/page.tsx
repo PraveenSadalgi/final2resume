@@ -10,11 +10,17 @@ import Link from "next/link";
 import { motion } from "framer-motion";
 import CorporateCoverLetter from "@/components/templates/corporate-cover-letter";
 import ElegantCoverLetter from "@/components/templates/elegant-cover-letter";
+import ProfessionalCoverLetter from "@/components/templates/professional-cover-letter";
+import CreativeCoverLetter from "@/components/templates/creative-cover-letter";
+import ModernCoverLetter from "@/components/templates/modern-cover-letter";
 
 // A map of template components to render previews
 const templateComponents: Record<string, React.FC<any>> = {
   CorporateCoverLetter,
   ElegantCoverLetter,
+  ProfessionalCoverLetter,
+  CreativeCoverLetter,
+  ModernCoverLetter,
   // Add other components here as they are created
 };
 

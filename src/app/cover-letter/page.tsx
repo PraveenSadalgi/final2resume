@@ -10,9 +10,12 @@ import type { ResumeData, CoverLetterData, CoverLetterTemplate } from "@/lib/typ
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { ArrowLeft, LayoutTemplate } from "lucide-react";
-import { classicCoverLetterTemplate, corporateCoverLetterTemplate, elegantCoverLetterTemplate } from "@/lib/mock-data";
+import { professionalCoverLetterTemplate } from "@/lib/mock-data";
 import CorporateCoverLetter from "@/components/templates/corporate-cover-letter";
 import ElegantCoverLetter from "@/components/templates/elegant-cover-letter";
+import ProfessionalCoverLetter from "@/components/templates/professional-cover-letter";
+import CreativeCoverLetter from "@/components/templates/creative-cover-letter";
+import ModernCoverLetter from "@/components/templates/modern-cover-letter";
 import { motion } from "framer-motion";
 
 const initialCoverLetterData: CoverLetterData = {
@@ -24,14 +27,16 @@ const initialCoverLetterData: CoverLetterData = {
 const templateComponents: Record<string, React.FC<any>> = {
     CorporateCoverLetter,
     ElegantCoverLetter,
-    // Add other cover letter components here as they are created
+    ProfessionalCoverLetter,
+    CreativeCoverLetter,
+    ModernCoverLetter,
 };
 
 
 export default function CoverLetterPage() {
   const [resumeData, setResumeData] = useState<ResumeData | null>(null);
   const [coverLetterData, setCoverLetterData] = useState<CoverLetterData>(initialCoverLetterData);
-  const [selectedTemplate, setSelectedTemplate] = useState<CoverLetterTemplate>(classicCoverLetterTemplate);
+  const [selectedTemplate, setSelectedTemplate] = useState<CoverLetterTemplate>(professionalCoverLetterTemplate);
   const [isClient, setIsClient] = useState(false);
   const [loading, setLoading] = useState(false);
   const [activeSpeechField, setActiveSpeechField] = useState<string | null>(null);
