@@ -1,6 +1,4 @@
 
-"use server";
-
 import "dotenv/config";
 
 const getEnvVar = (name: string): string => {
