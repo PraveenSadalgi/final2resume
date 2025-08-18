@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useRouter } from "next/navigation";
@@ -7,7 +8,6 @@ import ResumePreview from "@/components/resume-preview";
 import { Button } from "@/components/ui/button";
 import { ArrowLeft } from "lucide-react";
 import Link from "next/link";
-import { Card, CardContent } from "@/components/ui/card";
 import { motion } from "framer-motion";
 
 export default function TemplatesPage() {
@@ -36,36 +36,25 @@ export default function TemplatesPage() {
             </p>
           </div>
 
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 md:gap-10 xl:gap-12">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 md:gap-12 xl:gap-16">
             {allTemplates.map((templateData, index) => {
               const details = templateDetails[templateData.template];
               return (
                 <motion.div
                   key={templateData.template}
-                  className="group flex flex-col items-center gap-6"
+                  className="group flex flex-col items-center gap-4 cursor-pointer"
                   initial={{ opacity: 0, y: 50 }}
                   whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true, amount: 0.3 }}
+                  viewport={{ once: true, amount: 0.2 }}
                   transition={{ duration: 0.6, delay: index * 0.1 }}
+                  onClick={() => handleUseTemplate(templateData)}
                 >
-                  <Card className="w-full max-w-[500px] overflow-hidden shadow-lg hover:shadow-xl transition-all duration-300 ease-in-out border border-transparent hover:border-primary transform hover:-translate-y-1">
-                    <CardContent className="p-2">
-                      <div className="w-full aspect-[8.5/11] overflow-hidden bg-white rounded-md">
-                        {/* Scale down the preview slightly to fit better and show hover effect */}
-                        <div className="transform scale-[0.58] origin-top mx-auto transition-transform duration-300 ease-in-out group-hover:scale-[0.6]">
-                          {/* Ensure ResumePreview component handles the scaled rendering */}
-                          <ResumePreview resumeData={templateData} />
-                        </div>
-                      </div>
-                    </CardContent>
-                  </Card>
+                  <div className="w-full max-w-[600px] rounded-lg shadow-2xl overflow-hidden transition-all duration-300 ease-in-out group-hover:shadow-primary/40 group-hover:scale-105 transform">
+                     <ResumePreview resumeData={templateData} />
+                  </div>
                   <div className="text-center">
-                      <h2 className="text-2xl font-semibold mb-1">{details.name}</h2>
-                      {/* Added min-h to prevent layout shifts when description height varies */}
-                      <p className="text-sm text-muted-foreground mb-4 min-h-[2.5em]">{details.description}</p>
-                      <Button onClick={() => handleUseTemplate(templateData)} size="lg">
-                          Use This Template
-                      </Button>
+                      <h2 className="text-2xl font-semibold mb-1 transition-colors group-hover:text-primary">{details.name}</h2>
+                      <p className="text-sm text-muted-foreground max-w-md">{details.description}</p>
                   </div>
                 </motion.div>
               );
