@@ -3,7 +3,6 @@
 
 import { useState, useEffect } from "react";
 import { useSearchParams } from "next/navigation";
-import { Header } from "@/components/header";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -142,8 +141,7 @@ export default function JobRecommendationsPage() {
   }
   
   return (
-    <div className="flex flex-col h-screen bg-background">
-      <Header resumeData={resumeData} />
+    <div className="flex flex-col h-[calc(100vh-69px)] bg-background">
       <main className="flex-1 overflow-y-auto">
          <div className="bg-card border-b p-4 md:p-6">
             <div className="max-w-4xl mx-auto">

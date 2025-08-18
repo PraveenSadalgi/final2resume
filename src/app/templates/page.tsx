@@ -6,7 +6,6 @@ import type { ResumeData } from "@/lib/types";
 import { allTemplates, templateDetails } from "@/lib/mock-data";
 import ResumePreview from "@/components/resume-preview";
 import { Button } from "@/components/ui/button";
-import { Header } from "@/components/header";
 import { ArrowLeft } from "lucide-react";
 import Link from "next/link";
 import { ScrollArea } from "@/components/ui/scroll-area";
@@ -17,16 +16,15 @@ export default function TemplatesPage() {
 
   const handleUseTemplate = (templateData: ResumeData) => {
     localStorage.setItem("selectedTemplate", JSON.stringify(templateData));
-    router.push(`/?template=${templateData.template}`);
+    router.push(`/editor?template=${templateData.template}`);
   };
 
   return (
-    <div className="flex flex-col h-screen bg-background">
-      <Header />
+    <div className="flex flex-col h-[calc(100vh-69px)] bg-background">
       <main className="flex-1 overflow-y-auto p-4 md:p-6 lg:p-8">
         <div className="max-w-7xl mx-auto">
           <Button asChild variant="ghost" className="mb-4 -ml-4">
-            <Link href="/">
+            <Link href="/editor">
               <ArrowLeft className="mr-2 h-4 w-4" />
               Back to Editor
             </Link>

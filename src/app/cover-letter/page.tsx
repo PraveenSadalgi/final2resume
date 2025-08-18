@@ -7,7 +7,6 @@ import { generateCoverLetter } from "@/ai/flows/generate-cover-letter";
 import CoverLetterForm from "@/components/cover-letter-form";
 import { useToast } from "@/hooks/use-toast";
 import type { ResumeData, CoverLetterData } from "@/lib/types";
-import { Header } from "@/components/header";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { ArrowLeft } from "lucide-react";
@@ -73,12 +72,11 @@ export default function CoverLetterPage() {
   }
   
   return (
-    <div className="flex flex-col h-screen bg-background">
-      <Header resumeData={resumeData}/>
+    <div className="flex flex-col h-[calc(100vh-69px)] bg-background">
       <main className="flex-1 overflow-y-auto p-4 md:p-6 lg:p-8">
         <div className="max-w-4xl mx-auto">
           <Button asChild variant="ghost" className="mb-4 -ml-4">
-             <Link href="/">
+             <Link href="/editor">
                 <ArrowLeft className="mr-2 h-4 w-4" />
                 Back to Resume Editor
             </Link>
@@ -97,7 +95,7 @@ export default function CoverLetterPage() {
             ) : (
                 <div className="text-center py-12">
                     <p className="text-muted-foreground mb-4">Could not load resume data.</p>
-                    <Button onClick={() => router.push('/')}>Go to Editor</Button>
+                    <Button onClick={() => router.push('/editor')}>Go to Editor</Button>
                 </div>
             )}
           </div>
