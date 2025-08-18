@@ -31,11 +31,12 @@ export default function Home() {
 
   const router = useRouter();
   const searchParams = useSearchParams();
+  const templateQuery = searchParams.get('template');
 
   useEffect(() => {
     setIsClient(true);
     const templateData = localStorage.getItem("selectedTemplate");
-    if (templateData) {
+    if (templateData && templateQuery) {
       try {
         setResumeData(JSON.parse(templateData));
         // Clear the item from localStorage after using it
@@ -46,7 +47,7 @@ export default function Home() {
         console.error("Failed to parse template data from localStorage", error);
       }
     }
-  }, [router, searchParams]);
+  }, [router, templateQuery]);
 
   const { toast } = useToast();
 
