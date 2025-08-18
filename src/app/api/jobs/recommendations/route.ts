@@ -2,73 +2,84 @@
 import { NextResponse } from 'next/server';
 import { z } from 'zod';
 
-const API_KEY = '738e36a228b0573aedee77bf750d25457b5e72f3e0e7641063c60cd5dbe19d21';
-const API_URL = 'https://api.apijobs.dev/v1/job/search';
+const API_URL = 'https://jobicy.com/api/v2/remote-jobs';
 
 const RequestBodySchema = z.object({
-    preferences: z.object({
-        keywords: z.string().min(1, 'Keywords are required for job search.'),
-        location: z.string().optional(),
-    }),
+  preferences: z.object({
+    keywords: z.string().min(1, 'Keywords are required for job search.'),
+    count: z.number().optional(),   // how many jobs to fetch
+    geo: z.string().optional(),     // region filter
+    industry: z.string().optional() // industry filter
+  }),
 });
 
 export async function POST(request: Request) {
   try {
     const body = await request.json();
-
     const validation = RequestBodySchema.safeParse(body);
+
     if (!validation.success) {
-      return NextResponse.json({ error: 'Invalid request body', details: validation.error.flatten() }, { status: 400 });
+      return NextResponse.json(
+        { error: 'Invalid request body', details: validation.error.flatten() },
+        { status: 400 }
+      );
     }
-    
+
     const { preferences } = validation.data;
-    
-    const apiRequestBody: { q: string; l?: string } = {
-        q: preferences.keywords,
-    };
 
-    if (preferences.location) {
-        apiRequestBody.l = preferences.location;
-    }
-
-    const response = await fetch(API_URL, {
-        method: 'POST',
-        headers: {
-            'apikey': API_KEY,
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(apiRequestBody)
+    // Build query string for Jobicy API
+    const params = new URLSearchParams({
+      count: String(preferences.count || 10),
+      tag: preferences.keywords,
     });
+
+    if (preferences.geo) params.append('geo', preferences.geo);
+    if (preferences.industry) params.append('industry', preferences.industry);
+
+    const apiUrl = `${API_URL}?${params.toString()}`;
+
+    // Debug log
+    console.log('Fetching from Jobicy:', apiUrl);
+
+    const response = await fetch(apiUrl);
+    if (!response.ok) {
+      const text = await response.text();
+      return NextResponse.json(
+        { error: `Jobicy API error: ${text}` },
+        { status: response.status }
+      );
+    }
 
     const data = await response.json();
 
-    if (!response.ok) {
-      console.error('API Error:', data);
-      const errorMessage = data?.message || `API Error: ${response.statusText}`;
-      return NextResponse.json({ error: errorMessage }, { status: response.status });
-    }
-    
-    if (!data.jobs) {
-        return NextResponse.json({ jobs: [] });
-    }
+    // Debug log
+    console.log('Jobicy response:', data);
 
-    const jobs = data.jobs.map((job: any, index: number) => ({
-      id: job.id || `job-${Date.now()}-${index}`,
-      title: job.title,
-      company: job.company?.name || 'N/A',
-      location: [job.location?.city, job.location?.country].filter(Boolean).join(', ') || 'N/A',
-      description: job.description,
-      url: job.url || '#',
-      posted_at: job.posted_date || 'N/A',
+    const jobs = (data.jobs || []).map((job: any, idx: number) => ({
+      id: job.id || `job-${Date.now()}-${idx}`,
+      title: job.jobTitle,
+      company: job.companyName,
+      location: job.jobGeo || 'Remote',
+      description: job.jobExcerpt,
+      url: job.url,
+      posted_at: job.pubDate,
+      salary: job.annualSalaryMin
+        ? `${job.annualSalaryMin} - ${job.annualSalaryMax} ${job.salaryCurrency}`
+        : 'Not disclosed',
     }));
-    
-    return NextResponse.json({ jobs });
 
-  } catch (error) {
-    console.error('Server Error:', error);
+    return NextResponse.json({ jobs });
+  } catch (error: any) {
+    console.error('Server Error:', error?.message || error);
     if (error instanceof z.ZodError) {
-        return NextResponse.json({ error: 'Invalid request body', details: error.flatten() }, { status: 400 });
+      return NextResponse.json(
+        { error: 'Invalid request body', details: error.flatten() },
+        { status: 400 }
+      );
     }
-    return NextResponse.json({ error: 'An internal server error occurred' }, { status: 500 });
+    return NextResponse.json(
+      { error: error?.message || 'Internal server error' },
+      { status: 500 }
+    );
   }
 }
