@@ -22,7 +22,11 @@ export default function PersonalDetailsForm({
   const fields: (keyof ResumeData)[] = ["name", "email", "phone", "location", "github", "linkedin"];
 
   const handleSpeechResult = (field: keyof ResumeData, transcript: string) => {
-    onFieldChange(field, transcript);
+    let formattedTranscript = transcript;
+    if (field === 'email') {
+      formattedTranscript = transcript.toLowerCase().replace(/\s/g, '');
+    }
+    onFieldChange(field, formattedTranscript);
   };
   
   const getTooltipContent = (field: string) => {
