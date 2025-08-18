@@ -1,76 +1,39 @@
 
 "use client";
 
-import { useEffect, useRef } from "react";
-import { Button } from "@/components/ui/button";
-import Link from 'next/link';
-import { allTemplates } from "@/lib/mock-data";
-import ResumePreview from "./resume-preview";
+import React from 'react';
 
 export const TemplateShowcase: React.FC = () => {
-  const trackRef = useRef<HTMLDivElement>(null);
-  
-  useEffect(() => {
-    if (!trackRef.current) return;
+  const templates = [
+    "https://i.ibb.co/5vYyR6y/resume1.png",
+    "https://i.ibb.co/gR8y9cF/resume2.png",
+    "https://i.ibb.co/sJ7QW5W/resume3.png",
+    "https://i.ibb.co/tc6S8cd/resume4.png",
+  ];
 
-    const track = trackRef.current;
-    let offset = 0;
-    const scrollSpeed = 0.5; // Adjust speed here
-
-    const clones = Array.from(track.children).slice(0, allTemplates.length);
-    clones.forEach(clone => {
-      track.appendChild(clone.cloneNode(true));
-    });
-
-    const totalWidth = track.scrollWidth / 2;
-    
-    let animationFrameId: number;
-
-    const step = () => {
-      offset -= scrollSpeed;
-      if (Math.abs(offset) >= totalWidth) {
-        offset = 0;
-      }
-      track.style.transform = `translateX(${offset}px)`;
-      animationFrameId = requestAnimationFrame(step);
-    };
-
-    const timeoutId = setTimeout(() => {
-        animationFrameId = requestAnimationFrame(step);
-    }, 100)
-
-
-    return () => {
-        cancelAnimationFrame(animationFrameId)
-        clearTimeout(timeoutId)
-    };
-  }, []);
+  // Duplicate the templates for a seamless loop
+  const duplicatedTemplates = [...templates, ...templates];
 
   return (
-    <section id="templates" className="relative overflow-hidden py-20">
-      <div className="mx-auto max-w-7xl px-6">
-        <div className="mb-10 flex items-end justify-between gap-6">
-          <div>
-            <h2 className="text-3xl font-bold tracking-tight md:text-4xl">Templates that pass ATS</h2>
-            <p className="mt-2 max-w-2xl text-muted-foreground">Pick from elegant, readable templates that keep parsing systems happy.</p>
-          </div>
-           <Button asChild variant="outline">
-            <Link href="/templates">Browse all templates</Link>
-          </Button>
-        </div>
-      </div>
-      <div className="relative h-[600px]">
-        <div className="pointer-events-none absolute inset-y-0 left-0 z-10 w-24 bg-gradient-to-r from-background to-transparent" />
-        <div className="pointer-events-none absolute inset-y-0 right-0 z-10 w-24 bg-gradient-to-l from-background to-transparent" />
-        <div className="absolute top-0 left-0 flex w-max" ref={trackRef}>
-            {allTemplates.map((template, i) => (
-                <div key={i} className="mx-4 w-[400px] shrink-0">
-                    <div className="transform scale-[0.5] origin-top-left rounded-lg overflow-hidden border bg-background p-1 shadow-sm">
-                        <ResumePreview resumeData={template} />
-                    </div>
-                </div>
+    <section id="templates" className="py-20 bg-gradient-to-b from-background to-muted/30 relative overflow-hidden">
+      <div className="container mx-auto px-6 lg:px-12 text-center">
+        <h2 className="text-4xl font-bold mb-4">Templates That Pass ATS</h2>
+        <p className="text-lg text-muted-foreground mb-12 max-w-2xl mx-auto">
+          Professionally designed, recruiter-approved resume templates built to pass Applicant Tracking Systems and land interviews.
+        </p>
+
+        {/* Infinite Resume Carousel */}
+        <div className="relative w-full overflow-hidden">
+          <div className="flex animate-scroll gap-8 w-max">
+            {duplicatedTemplates.map((src, index) => (
+              <img
+                key={index}
+                src={src}
+                alt={`Resume Template ${index + 1}`}
+                className="w-[280px] h-[360px] object-cover rounded-2xl shadow-lg"
+              />
             ))}
-            {/* Cloned elements will be appended by useEffect */}
+          </div>
         </div>
       </div>
     </section>
