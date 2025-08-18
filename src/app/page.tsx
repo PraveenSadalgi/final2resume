@@ -12,25 +12,35 @@ import { Sparkles, Bot, Zap, CheckCircle2, ArrowRight, Shield, FileText, Wand2, 
 import Link from 'next/link';
 import { TemplateShowcase } from "@/components/template-showcase";
 
-
+// --- Decorative background gradient ---
 const GradientBackground: React.FC = () => {
   return (
     <div aria-hidden className="pointer-events-none fixed inset-0 -z-10">
       <div className="absolute inset-0 bg-gradient-to-b from-background via-background/80 to-background" />
-      <div className="absolute -top-40 left-1/2 h-[600px] w-[600px] -translate-x-1/2 rounded-full bg-[radial-gradient(ellipse_at_center,theme(colors.violet.500/.25),transparent_60%)] blur-2xl" />
-      <div className="absolute -bottom-40 right-10 h-[500px] w-[500px] rounded-full bg-[radial-gradient(ellipse_at_center,theme(colors.cyan.500/.20),transparent_60%)] blur-2xl" />
+      <motion.div
+        animate={{ x: [0, 40, -40, 0], y: [0, -30, 30, 0] }}
+        transition={{ repeat: Infinity, duration: 20 }}
+        className="absolute -top-40 left-1/2 h-[600px] w-[600px] -translate-x-1/2 rounded-full bg-[radial-gradient(ellipse_at_center,theme(colors.violet.500/.25),transparent_60%)] blur-3xl"
+      />
+      <motion.div
+        animate={{ x: [0, -40, 40, 0], y: [0, 25, -25, 0] }}
+        transition={{ repeat: Infinity, duration: 18 }}
+        className="absolute -bottom-40 right-10 h-[500px] w-[500px] rounded-full bg-[radial-gradient(ellipse_at_center,theme(colors.cyan.500/.20),transparent_60%)] blur-3xl"
+      />
     </div>
   );
 };
 
+// --- Sticky progress bar tied to scroll ---
 const ScrollProgressBar: React.FC = () => {
   const { scrollYProgress } = useScroll();
   const scaleX = useSpring(scrollYProgress, { stiffness: 100, damping: 30, restDelta: 0.001 });
   return (
-    <motion.div style={{ scaleX }} className="fixed left-0 top-0 z-50 h-1 w-full origin-left bg-gradient-to-r from-violet-500 via-fuchsia-500 to-cyan-500" />
+    <motion.div style={{ scaleX }} className="fixed left-0 top-0 z-50 h-1 w-full origin-left bg-gradient-to-r from-violet-500 via-fuchsia-500 to-cyan-500 shadow-lg" />
   );
 };
 
+// --- Parallax hero ---
 const Hero: React.FC = () => {
   const ref = useRef<HTMLDivElement>(null);
   const { scrollYProgress } = useScroll({ target: ref, offset: ["start start", "end start"] });
@@ -43,23 +53,34 @@ const Hero: React.FC = () => {
         <div>
           <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }}>
             <Badge className="mb-4 inline-flex items-center gap-2"> <Sparkles className="h-4 w-4" /> New: AI bullet→polish</Badge>
-            <h1 className="mb-4 text-4xl font-extrabold leading-tight tracking-tight md:text-6xl">
-              Build a job‑ready resume
-              <span className="block bg-gradient-to-r from-violet-600 via-fuchsia-600 to-cyan-600 bg-clip-text text-transparent">
-                in seconds with AI
-              </span>
-            </h1>
+             <motion.h1
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                className="mb-4 text-4xl font-extrabold leading-tight tracking-tight md:text-6xl"
+              >
+                <motion.span
+                  initial={{ width: 0 }}
+                  animate={{ width: "100%" }}
+                  transition={{ duration: 2, ease: "easeInOut" }}
+                  className="overflow-hidden whitespace-nowrap border-r-2 border-violet-600 pr-2 inline-block"
+                >
+                  Build a job-ready resume
+                </motion.span>
+                <span className="block bg-gradient-to-r from-violet-600 via-fuchsia-600 to-cyan-600 bg-clip-text text-transparent">
+                  in seconds with AI
+                </span>
+              </motion.h1>
             <p className="mb-6 max-w-xl text-base text-muted-foreground md:text-lg">
               ResuAI turns your experience into ATS‑friendly, beautifully designed resumes. Write bullet points with AI, tailor for roles, and export instantly.
             </p>
             <div className="flex flex-col gap-3 sm:flex-row">
-               <Button asChild size="lg" className="group">
+               <Button asChild size="lg" className="group hover:scale-105 transition">
                 <Link href="/editor">
                     Try it free
                     <Stars className="ml-2 h-5 w-5 transition group-hover:scale-110" />
                 </Link>
               </Button>
-              <Button size="lg" variant="outline" asChild>
+              <Button size="lg" variant="outline" asChild className="hover:scale-105 transition">
                 <a href="#how"> See how it works </a>
               </Button>
             </div>
@@ -71,7 +92,7 @@ const Hero: React.FC = () => {
           </motion.div>
         </div>
         <div className="relative">
-          <motion.div style={{ y: y1 }} className="relative rounded-2xl border bg-card p-4 shadow-xl">
+          <motion.div style={{ y: y1 }} className="relative rounded-2xl border bg-card p-4 shadow-xl hover:shadow-2xl transition">
             <div className="rounded-xl border bg-background p-4">
               <div className="mb-3 flex items-center justify-between">
                 <div className="flex items-center gap-2">
@@ -212,13 +233,13 @@ const CTA: React.FC = () => (
             <p className="mt-2 text-muted-foreground">Start free. No credit card required. Generate your first resume in minutes.</p>
           </div>
           <div className="flex flex-col gap-3 sm:flex-row sm:justify-end">
-            <Button asChild size="lg" className="group">
+            <Button asChild size="lg" className="group hover:scale-105 transition">
               <Link href="/editor">
                 Start building now
                 <ArrowRight className="ml-2 h-4 w-4 transition group-hover:translate-x-0.5" />
               </Link>
             </Button>
-            <Button size="lg" variant="outline">View pricing</Button>
+            <Button size="lg" variant="outline" className="hover:scale-105 transition">View pricing</Button>
           </div>
         </div>
       </div>
