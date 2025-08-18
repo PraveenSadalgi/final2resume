@@ -3,6 +3,7 @@
 
 import { useState, useEffect } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
+import { motion } from "framer-motion";
 import { generateExperience } from "@/ai/flows/generate-experience";
 import { generateProfessionalSummary } from "@/ai/flows/generate-summary";
 import { generateProjectDescription } from "@/ai/flows/generate-project-description";
@@ -246,14 +247,28 @@ export default function EditorPage() {
     }
   };
 
-  const setTemplate = (template: 'one-column' | 'two-column' | 'modern' | 'creative' | 'minimalist') => {
-    setResumeData(prev => ({...prev, template}));
-  };
-
   return (
-    <div className="flex flex-col h-[calc(100vh-69px)] bg-background">
-      <main className="flex-1 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-[1fr_1.2fr] overflow-hidden">
-        <div className="no-print overflow-y-auto">
+    <div className="relative flex flex-col h-[calc(100vh-69px)] bg-gradient-to-br from-background via-background/95 to-muted/40">
+      {/* Subtle animated background blob */}
+      <motion.div
+        className="absolute -top-32 -left-32 w-96 h-96 rounded-full bg-violet-500/20 blur-3xl"
+        animate={{ x: [0, 30, -30, 0], y: [0, -20, 20, 0] }}
+        transition={{ duration: 18, repeat: Infinity, ease: "easeInOut" }}
+      />
+      <motion.div
+        className="absolute bottom-0 right-0 w-80 h-80 rounded-full bg-cyan-500/20 blur-3xl"
+        animate={{ x: [0, -20, 20, 0], y: [0, 20, -20, 0] }}
+        transition={{ duration: 22, repeat: Infinity, ease: "easeInOut" }}
+      />
+
+      <main className="relative flex-1 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-[1fr_1.1fr] overflow-hidden backdrop-blur-sm">
+        {/* Editor */}
+        <motion.div
+          initial={{ opacity: 0, x: -40 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ duration: 0.6, ease: "easeOut" }}
+          className="no-print overflow-y-auto"
+        >
           {isClient ? (
             <ResumeEditor
               resumeData={resumeData}
@@ -276,17 +291,33 @@ export default function EditorPage() {
               onWorkProjectChange={handleWorkProjectChange}
             />
           ) : (
-            <div className="p-4">Loading editor...</div>
+            <div className="p-4 text-muted-foreground animate-pulse">Loading editor...</div>
           )}
-        </div>
-        <div className="bg-muted/30 p-4 lg:p-8 overflow-y-auto flex justify-center">
+        </motion.div>
+
+        {/* Preview */}
+        <motion.div
+          initial={{ opacity: 0, x: 40 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ duration: 0.6, ease: "easeOut", delay: 0.2 }}
+          className="bg-muted/30 backdrop-blur-md rounded-tl-2xl lg:rounded-tl-3xl p-4 lg:p-8 overflow-y-auto flex justify-center shadow-inner"
+        >
           {isClient ? (
-            <ResumePreview resumeData={resumeData} />
+            <motion.div
+              initial={{ scale: 0.98, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              transition={{ duration: 0.5, ease: "easeOut" }}
+              className="w-full max-w-3xl"
+            >
+              <ResumePreview resumeData={resumeData} />
+            </motion.div>
           ) : (
-            <div className="p-4">Loading preview...</div>
+            <div className="p-4 text-muted-foreground animate-pulse">Loading preview...</div>
           )}
-        </div>
+        </motion.div>
       </main>
     </div>
   );
 }
+
+    
