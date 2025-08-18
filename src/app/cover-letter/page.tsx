@@ -74,7 +74,7 @@ export default function CoverLetterPage() {
   
   return (
     <div className="flex flex-col h-screen bg-background">
-      <Header onSetTemplate={() => {}} currentTemplate="one-column" />
+      <Header resumeData={resumeData}/>
       <main className="flex-1 overflow-y-auto p-4 md:p-6 lg:p-8">
         <div className="max-w-4xl mx-auto">
           <Button asChild variant="ghost" className="mb-4 -ml-4">

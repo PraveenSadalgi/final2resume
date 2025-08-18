@@ -1,39 +1,16 @@
+
 'use server';
 /**
  * @fileOverview Generates tailored experiences and bullet points for a resume based on profession and role.
  *
  * - generateExperience - A function that handles the experience generation process.
- * - GenerateExperienceInput - The input type for the generateExperience function.
- * - GenerateExperienceOutput - The return type for the generateExperience function.
  */
 
 import {ai} from '@/ai/genkit';
-import {z} from 'genkit';
+import { GenerateExperienceInputSchema, GenerateExperienceOutputSchema, type GenerateExperienceInput } from '@/lib/types';
 
-const GenerateExperienceInputSchema = z.object({
-  profession: z
-    .string()
-    .describe('The profession of the user (e.g., Software Engineer).'),
-  role: z.string().describe('The specific role the user is applying for.'),
-  desiredExperience: z
-    .string()
-    .optional()
-    .describe(
-      'The users existing work experience they want to improve or rewrite'
-    ),
-});
-export type GenerateExperienceInput = z.infer<typeof GenerateExperienceInputSchema>;
 
-const GenerateExperienceOutputSchema = z.object({
-  experiences: z
-    .string()
-    .describe(
-      'Tailored experiences and bullet points for the resume, optimized for the specified profession and role.'
-    ),
-});
-export type GenerateExperienceOutput = z.infer<typeof GenerateExperienceOutputSchema>;
-
-export async function generateExperience(input: GenerateExperienceInput): Promise<GenerateExperienceOutput> {
+export async function generateExperience(input: GenerateExperienceInput) {
   return generateExperienceFlow(input);
 }
 

@@ -4,30 +4,12 @@
  * @fileOverview Generates an attractive project description for a resume's work experience section.
  *
  * - generateWorkProjectDescription - A function that handles the project description generation process.
- * - GenerateWorkProjectDescriptionInput - The input type for the generateWorkProjectDescription function.
- * - GenerateWorkProjectDescriptionOutput - The return type for the generateWorkProjectDescription function.
  */
 
 import {ai} from '@/ai/genkit';
-import {z} from 'genkit';
+import { GenerateWorkProjectDescriptionInputSchema, GenerateWorkProjectDescriptionOutputSchema, type GenerateWorkProjectDescriptionInput } from '@/lib/types';
 
-const GenerateWorkProjectDescriptionInputSchema = z.object({
-  projectName: z.string().describe('The name of the project.'),
-  role: z.string().describe('The user\'s role in the project.'),
-  projectDescription: z
-    .string()
-    .describe('The user-provided description of the project.'),
-});
-export type GenerateWorkProjectDescriptionInput = z.infer<typeof GenerateWorkProjectDescriptionInputSchema>;
-
-const GenerateWorkProjectDescriptionOutputSchema = z.object({
-  description: z
-    .string()
-    .describe('A generated, attractive description of the project for a work experience entry.'),
-});
-export type GenerateWorkProjectDescriptionOutput = z.infer<typeof GenerateWorkProjectDescriptionOutputSchema>;
-
-export async function generateWorkProjectDescription(input: GenerateWorkProjectDescriptionInput): Promise<GenerateWorkProjectDescriptionOutput> {
+export async function generateWorkProjectDescription(input: GenerateWorkProjectDescriptionInput) {
   return generateWorkProjectDescriptionFlow(input);
 }
 
@@ -56,5 +38,3 @@ const generateWorkProjectDescriptionFlow = ai.defineFlow(
     return output!;
   }
 );
-
-    

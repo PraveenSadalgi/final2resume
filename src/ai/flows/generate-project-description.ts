@@ -4,29 +4,12 @@
  * @fileOverview Generates an attractive project description for a resume.
  *
  * - generateProjectDescription - A function that handles the project description generation process.
- * - GenerateProjectDescriptionInput - The input type for the generateProjectDescription function.
- * - GenerateProjectDescriptionOutput - The return type for the generateProjectDescription function.
  */
 
 import {ai} from '@/ai/genkit';
-import {z} from 'genkit';
+import { GenerateProjectDescriptionInputSchema, GenerateProjectDescriptionOutputSchema, type GenerateProjectDescriptionInput } from '@/lib/types';
 
-const GenerateProjectDescriptionInputSchema = z.object({
-  projectName: z.string().describe('The name of the project.'),
-  projectDescription: z
-    .string()
-    .describe('The user-provided description of the project.'),
-});
-export type GenerateProjectDescriptionInput = z.infer<typeof GenerateProjectDescriptionInputSchema>;
-
-const GenerateProjectDescriptionOutputSchema = z.object({
-  description: z
-    .string()
-    .describe('A generated, attractive description of the project.'),
-});
-export type GenerateProjectDescriptionOutput = z.infer<typeof GenerateProjectDescriptionOutputSchema>;
-
-export async function generateProjectDescription(input: GenerateProjectDescriptionInput): Promise<GenerateProjectDescriptionOutput> {
+export async function generateProjectDescription(input: GenerateProjectDescriptionInput) {
   return generateProjectDescriptionFlow(input);
 }
 

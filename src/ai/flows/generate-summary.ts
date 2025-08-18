@@ -1,26 +1,15 @@
+
 'use server';
 /**
  * @fileOverview AI-powered professional summary generator for resumes.
  *
  * - generateProfessionalSummary - Generates a tailored professional summary based on the user's profession.
- * - GenerateProfessionalSummaryInput - The input type for the generateProfessionalSummary function.
- * - GenerateProfessionalSummaryOutput - The return type for the generateProfessionalSummary function.
  */
 
 import {ai} from '@/ai/genkit';
-import {z} from 'genkit';
+import { GenerateProfessionalSummaryInputSchema, GenerateProfessionalSummaryOutputSchema, type GenerateProfessionalSummaryInput } from '@/lib/types';
 
-const GenerateProfessionalSummaryInputSchema = z.object({
-  profession: z.string().describe('The profession of the user.'),
-});
-export type GenerateProfessionalSummaryInput = z.infer<typeof GenerateProfessionalSummaryInputSchema>;
-
-const GenerateProfessionalSummaryOutputSchema = z.object({
-  summary: z.string().describe('A professional summary for the resume.'),
-});
-export type GenerateProfessionalSummaryOutput = z.infer<typeof GenerateProfessionalSummaryOutputSchema>;
-
-export async function generateProfessionalSummary(input: GenerateProfessionalSummaryInput): Promise<GenerateProfessionalSummaryOutput> {
+export async function generateProfessionalSummary(input: GenerateProfessionalSummaryInput) {
   return generateProfessionalSummaryFlow(input);
 }
 

@@ -1,28 +1,16 @@
+
 // src/ai/flows/suggest-skills.ts
 'use server';
 /**
  * @fileOverview A skill suggestion AI agent.
  *
  * - suggestRelevantSkills - A function that suggests relevant skills for a resume.
- * - SuggestRelevantSkillsInput - The input type for the suggestRelevantSkills function.
- * - SuggestRelevantSkillsOutput - The return type for the suggestRelevantSkills function.
  */
 
 import {ai} from '@/ai/genkit';
-import {z} from 'genkit';
+import { SuggestRelevantSkillsInputSchema, SuggestRelevantSkillsOutputSchema, type SuggestRelevantSkillsInput } from '@/lib/types';
 
-const SuggestRelevantSkillsInputSchema = z.object({
-  profession: z.string().describe('The profession of the user.'),
-  chosenRoles: z.string().describe('The chosen roles or job titles the user is applying for.'),
-});
-export type SuggestRelevantSkillsInput = z.infer<typeof SuggestRelevantSkillsInputSchema>;
-
-const SuggestRelevantSkillsOutputSchema = z.object({
-  skills: z.array(z.string()).describe('An array of relevant skills for the resume.'),
-});
-export type SuggestRelevantSkillsOutput = z.infer<typeof SuggestRelevantSkillsOutputSchema>;
-
-export async function suggestRelevantSkills(input: SuggestRelevantSkillsInput): Promise<SuggestRelevantSkillsOutput> {
+export async function suggestRelevantSkills(input: SuggestRelevantSkillsInput) {
   return suggestRelevantSkillsFlow(input);
 }
 

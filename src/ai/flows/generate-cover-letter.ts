@@ -4,28 +4,12 @@
  * @fileOverview AI-powered cover letter generator.
  *
  * - generateCoverLetter - Generates a tailored cover letter based on resume data, a job description, and desired tone.
- * - GenerateCoverLetterInput - The input type for the generateCoverLetter function.
- * - GenerateCoverLetterOutput - The return type for the generateCoverLetter function.
  */
 
 import {ai} from '@/ai/genkit';
-import {z} from 'genkit';
+import { GenerateCoverLetterInputSchema, GenerateCoverLetterOutputSchema, type GenerateCoverLetterInput } from '@/lib/types';
 
-const GenerateCoverLetterInputSchema = z.object({
-  resumeData: z
-    .string()
-    .describe('The user\'s resume data in JSON format.'),
-  jobDescription: z.string().describe('The job description the user is applying for.'),
-  tone: z.string().describe('The desired tone of the cover letter (e.g., Professional, Creative, Enthusiastic).'),
-});
-export type GenerateCoverLetterInput = z.infer<typeof GenerateCoverLetterInputSchema>;
-
-const GenerateCoverLetterOutputSchema = z.object({
-  coverLetter: z.string().describe('The generated cover letter text.'),
-});
-export type GenerateCoverLetterOutput = z.infer<typeof GenerateCoverLetterOutputSchema>;
-
-export async function generateCoverLetter(input: GenerateCoverLetterInput): Promise<GenerateCoverLetterOutput> {
+export async function generateCoverLetter(input: GenerateCoverLetterInput) {
   return generateCoverLetterFlow(input);
 }
 
