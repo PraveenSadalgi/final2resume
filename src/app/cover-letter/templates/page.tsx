@@ -9,10 +9,12 @@ import { ArrowLeft } from "lucide-react";
 import Link from "next/link";
 import { motion } from "framer-motion";
 import CorporateCoverLetter from "@/components/templates/corporate-cover-letter";
+import ElegantCoverLetter from "@/components/templates/elegant-cover-letter";
 
 // A map of template components to render previews
 const templateComponents: Record<string, React.FC<any>> = {
   CorporateCoverLetter,
+  ElegantCoverLetter,
   // Add other components here as they are created
 };
 

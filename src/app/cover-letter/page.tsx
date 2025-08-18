@@ -10,8 +10,9 @@ import type { ResumeData, CoverLetterData, CoverLetterTemplate } from "@/lib/typ
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { ArrowLeft, LayoutTemplate } from "lucide-react";
-import { classicCoverLetterTemplate, corporateCoverLetterTemplate } from "@/lib/mock-data";
+import { classicCoverLetterTemplate, corporateCoverLetterTemplate, elegantCoverLetterTemplate } from "@/lib/mock-data";
 import CorporateCoverLetter from "@/components/templates/corporate-cover-letter";
+import ElegantCoverLetter from "@/components/templates/elegant-cover-letter";
 import { motion } from "framer-motion";
 
 const initialCoverLetterData: CoverLetterData = {
@@ -22,6 +23,7 @@ const initialCoverLetterData: CoverLetterData = {
 
 const templateComponents: Record<string, React.FC<any>> = {
     CorporateCoverLetter,
+    ElegantCoverLetter,
     // Add other cover letter components here as they are created
 };
 

@@ -358,10 +358,27 @@ export const corporateCoverLetterTemplate: CoverLetterTemplate = {
     `
 };
 
+export const elegantCoverLetterTemplate: CoverLetterTemplate = {
+    id: 'cl-elegant',
+    name: 'Elegant',
+    description: 'A refined and stylish template with a focus on typography and clean aesthetics, perfect for creative or modern roles.',
+    component: 'ElegantCoverLetter',
+    prompt: `
+      Generate a cover letter with a distinct salutation.
+      1. **Salutation:** Start with a clear and direct salutation, like "Dear [Hiring Manager Name],". This should be the very first part of the text.
+      2. **Body:** Follow the salutation with 3-4 paragraphs that are professional and engaging.
+         - **Intro:** State the position and your interest.
+         - **Body Paragraphs:** Connect your experience to the job description, highlighting key skills and achievements.
+         - **Conclusion:** Express your enthusiasm and include a call to action for an interview.
+      3. **Closing:** End with a professional closing like "Sincerely,". Do not include your name after the closing; the template will handle that.
+    `
+};
+
 
 export const allCoverLetterTemplates: CoverLetterTemplate[] = [
     classicCoverLetterTemplate,
     modernCoverLetterTemplate,
     impactfulCoverLetterTemplate,
     corporateCoverLetterTemplate,
+    elegantCoverLetterTemplate,
 ];
