@@ -1,4 +1,3 @@
-
 "use client";
 
 import React, { useEffect, useRef } from "react";
@@ -10,33 +9,33 @@ import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import { Sparkles, Bot, Zap, CheckCircle2, ArrowRight, Shield, FileText, Wand2, Stars, MousePointerClick } from "lucide-react";
 import Link from 'next/link';
-import { TemplateShowcase } from "@/components/template-showcase";
 
-// --- Decorative background gradient ---
-const GradientBackground: React.FC = () => {
-  return (
-    <div aria-hidden className="pointer-events-none fixed inset-0 -z-10">
-      <div className="absolute inset-0 bg-gradient-to-b from-background via-background/80 to-background" />
-      <motion.div
-        animate={{ x: [0, 40, -40, 0], y: [0, -30, 30, 0] }}
-        transition={{ repeat: Infinity, duration: 20 }}
-        className="absolute -top-40 left-1/2 h-[600px] w-[600px] -translate-x-1/2 rounded-full bg-[radial-gradient(ellipse_at_center,theme(colors.violet.500/.25),transparent_60%)] blur-3xl"
-      />
-      <motion.div
-        animate={{ x: [0, -40, 40, 0], y: [0, 25, -25, 0] }}
-        transition={{ repeat: Infinity, duration: 18 }}
-        className="absolute -bottom-40 right-10 h-[500px] w-[500px] rounded-full bg-[radial-gradient(ellipse_at_center,theme(colors.cyan.500/.20),transparent_60%)] blur-3xl"
-      />
-    </div>
-  );
-};
+// --- Decorative background gradient + subtle animated blobs ---
+const GradientBackground: React.FC = () => (
+  <div aria-hidden className="pointer-events-none fixed inset-0 -z-10">
+    <div className="absolute inset-0 bg-gradient-to-b from-background via-background/80 to-background" />
+    <motion.div
+      className="absolute -top-48 left-1/3 h-[680px] w-[680px] -translate-x-1/2 rounded-full bg-[radial-gradient(ellipse_at_center,rgba(99,102,241,0.16),transparent_60%)] blur-3xl"
+      animate={{ x: [0, -40, 0] }}
+      transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
+    />
+    <motion.div
+      className="absolute -bottom-44 right-10 h-[520px] w-[520px] rounded-full bg-[radial-gradient(ellipse_at_center,rgba(14,165,233,0.12),transparent_60%)] blur-3xl"
+      animate={{ x: [0, 30, 0] }}
+      transition={{ duration: 18, repeat: Infinity, ease: "linear" }}
+    />
+  </div>
+);
 
-// --- Sticky progress bar tied to scroll ---
+// --- Sticky progress bar tied to scroll (more pronounced) ---
 const ScrollProgressBar: React.FC = () => {
   const { scrollYProgress } = useScroll();
-  const scaleX = useSpring(scrollYProgress, { stiffness: 100, damping: 30, restDelta: 0.001 });
+  const scaleX = useSpring(scrollYProgress, { stiffness: 120, damping: 30, restDelta: 0.001 });
   return (
-    <motion.div style={{ scaleX }} className="fixed left-0 top-0 z-50 h-1 w-full origin-left bg-gradient-to-r from-violet-500 via-fuchsia-500 to-cyan-500 shadow-lg" />
+    <motion.div
+      style={{ scaleX }}
+      className="fixed left-0 top-0 z-50 h-1.5 w-full origin-left bg-gradient-to-r from-violet-500 via-fuchsia-500 to-cyan-500 shadow-sm"
+    />
   );
 };
 
@@ -53,34 +52,23 @@ const Hero: React.FC = () => {
         <div>
           <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }}>
             <Badge className="mb-4 inline-flex items-center gap-2"> <Sparkles className="h-4 w-4" /> New: AI bullet→polish</Badge>
-             <motion.h1
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                className="mb-4 text-4xl font-extrabold leading-tight tracking-tight md:text-6xl"
-              >
-                <motion.span
-                  initial={{ width: 0 }}
-                  animate={{ width: "100%" }}
-                  transition={{ duration: 2, ease: "easeInOut" }}
-                  className="overflow-hidden whitespace-nowrap border-r-2 border-violet-600 pr-2 inline-block"
-                >
-                  Build a job-ready resume
-                </motion.span>
-                <span className="block bg-gradient-to-r from-violet-600 via-fuchsia-600 to-cyan-600 bg-clip-text text-transparent">
-                  in seconds with AI
-                </span>
-              </motion.h1>
+            <h1 className="mb-4 text-4xl font-extrabold leading-tight tracking-tight md:text-6xl">
+              Build a job‑ready resume
+              <span className="block bg-gradient-to-r from-violet-600 via-fuchsia-600 to-cyan-600 bg-clip-text text-transparent">
+                in seconds with AI
+              </span>
+            </h1>
             <p className="mb-6 max-w-xl text-base text-muted-foreground md:text-lg">
               ResuAI turns your experience into ATS‑friendly, beautifully designed resumes. Write bullet points with AI, tailor for roles, and export instantly.
             </p>
             <div className="flex flex-col gap-3 sm:flex-row">
-               <Button asChild size="lg" className="group hover:scale-105 transition">
+              <Button size="lg" className="group shadow-md hover:shadow-lg transform-gpu transition-all" asChild>
                 <Link href="/editor">
-                    Try it free
-                    <Stars className="ml-2 h-5 w-5 transition group-hover:scale-110" />
+                  Try it free
+                  <Stars className="ml-2 h-5 w-5 transition group-hover:scale-110" />
                 </Link>
               </Button>
-              <Button size="lg" variant="outline" asChild className="hover:scale-105 transition">
+              <Button size="lg" variant="outline" asChild>
                 <a href="#how"> See how it works </a>
               </Button>
             </div>
@@ -91,8 +79,9 @@ const Hero: React.FC = () => {
             </div>
           </motion.div>
         </div>
+
         <div className="relative">
-          <motion.div style={{ y: y1 }} className="relative rounded-2xl border bg-card p-4 shadow-xl hover:shadow-2xl transition">
+          <motion.div style={{ y: y1 }} className="relative rounded-2xl border bg-card p-4 shadow-2xl transform-gpu hover:scale-[1.01] transition-transform">
             <div className="rounded-xl border bg-background p-4">
               <div className="mb-3 flex items-center justify-between">
                 <div className="flex items-center gap-2">
@@ -104,7 +93,7 @@ const Hero: React.FC = () => {
               </div>
               <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
                 <div className="space-y-3">
-                  <div className="aspect-square w-full rounded-lg bg-gradient-to-br from-violet-500/20 to-fuchsia-500/20" />
+                  <div className="aspect-square w-full rounded-lg bg-gradient-to-br from-violet-500/20 to-fuchsia-500/20 shadow-inner" />
                   <div className="space-y-2">
                     <div className="h-3 w-2/3 rounded bg-muted" />
                     <div className="h-3 w-1/2 rounded bg-muted" />
@@ -127,9 +116,9 @@ const Hero: React.FC = () => {
                         <Wand2 className="h-4 w-4" /> Try: “Boosted checkout conversion by 18% using A/B tests.”
                       </div>
                       <div className="h-9 w-full rounded-md border bg-background/60" />
-                       <Button size="sm" className="w-full" asChild>
-                         <Link href="/editor">Generate bullet with AI</Link>
-                       </Button>
+                      <Button size="sm" className="w-full" asChild>
+                        <Link href="/editor">Generate bullet with AI</Link>
+                      </Button>
                     </div>
                   </div>
                   <div className="flex items-center justify-between text-xs text-muted-foreground">
@@ -140,6 +129,7 @@ const Hero: React.FC = () => {
               </div>
             </div>
           </motion.div>
+
           <motion.div style={{ y: y2 }} className="absolute -left-6 -top-6 -z-10 hidden h-40 w-40 rounded-3xl bg-gradient-to-br from-cyan-500/20 to-fuchsia-500/20 blur-xl md:block" />
         </div>
       </div>
@@ -148,8 +138,8 @@ const Hero: React.FC = () => {
 };
 
 const FeatureCard: React.FC<{ title: string; icon: React.ReactNode; desc: string; }>= ({ title, icon, desc }) => (
-  <motion.div initial={{ opacity: 0, y: 16 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, margin: "-80px" }} transition={{ duration: 0.5 }}>
-    <Card className="h-full">
+  <motion.div initial={{ opacity: 0, y: 16 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, margin: "-80px" }} transition={{ duration: 0.45 }}>
+    <Card className="h-full hover:shadow-lg transform-gpu hover:-translate-y-1 transition-all">
       <CardHeader>
         <CardTitle className="flex items-center gap-2 text-lg">
           <span className="rounded-xl bg-primary/10 p-2 text-primary">{icon}</span>
@@ -204,7 +194,7 @@ const HowItWorks: React.FC = () => {
         <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
           {steps.map((s, i) => (
             <motion.div key={s.title} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: i * 0.05 }} className="relative">
-              <Card className="h-full">
+              <Card className="h-full hover:shadow-lg transform-gpu hover:-translate-y-1 transition-all">
                 <CardHeader>
                   <CardTitle className="flex items-center gap-2 text-lg">
                     <span className="rounded-xl bg-primary/10 p-2 text-primary">{s.icon}</span>
@@ -223,6 +213,89 @@ const HowItWorks: React.FC = () => {
   );
 };
 
+// --- TemplateShowcase: improved — resumes move infinitely, placeholders static ---
+const TemplateShowcase: React.FC = () => {
+  const trackRef = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    let raf = 0;
+    let offset = 0;
+    const step = () => {
+      offset += 0.6; // speed
+      if (trackRef.current) {
+        // translate the moving track
+        trackRef.current.style.transform = `translateX(${-offset}px)`;
+        const width = trackRef.current.scrollWidth / 2; // because we duplicate items
+        if (offset > width) offset = 0;
+      }
+      raf = requestAnimationFrame(step);
+    };
+    raf = requestAnimationFrame(step);
+    return () => cancelAnimationFrame(raf);
+  }, []);
+
+  // single resume card — keep same size as original
+  const resumeCard = (i: number) => (
+    <div key={i} className="mx-3 w-[280px] shrink-0 rounded-2xl border bg-background p-4 shadow-sm transform-gpu transition-all hover:scale-[1.03] hover:shadow-lg">
+      <div className="mb-3 aspect-[3/4] w-full rounded-xl bg-gradient-to-br from-violet-500/15 to-cyan-500/15 shadow-inner" />
+      <div className="space-y-2">
+        <div className="h-3 w-2/3 rounded bg-muted" />
+        <div className="h-3 w-1/2 rounded bg-muted" />
+      </div>
+    </div>
+  );
+
+  // placeholder card (static) with same dimensions
+  const placeholderCard = (key: string) => (
+    <div key={key} className="mx-3 w-[280px] shrink-0 rounded-2xl border bg-muted/30 p-4 flex items-center justify-center text-sm text-muted-foreground">
+      <span className="select-none">Placeholder</span>
+    </div>
+  );
+
+  return (
+    <section id="templates" className="relative overflow-hidden py-20">
+      <div className="mx-auto max-w-7xl px-6">
+        <div className="mb-10 flex items-end justify-between gap-6">
+          <div>
+            <h2 className="text-3xl font-bold tracking-tight md:text-4xl">Templates that pass ATS</h2>
+            <p className="mt-2 max-w-2xl text-muted-foreground">Pick from elegant, readable templates that keep parsing systems happy.</p>
+          </div>
+          <Button variant="outline" asChild>
+            <Link href="/templates">Browse all templates</Link>
+          </Button>
+        </div>
+      </div>
+
+      <div className="relative">
+        <div className="pointer-events-none absolute inset-y-0 left-0 z-10 w-24 bg-gradient-to-r from-background to-transparent" />
+        <div className="pointer-events-none absolute inset-y-0 right-0 z-10 w-24 bg-gradient-to-l from-background to-transparent" />
+
+        {/* Row with static placeholders and moving resumes in the middle */}
+        <div className="overflow-hidden">
+          <div className="flex items-center px-6">
+            {placeholderCard('left')}
+
+            {/* Moving track: we duplicate resume cards to create a seamless infinite loop */}
+            <div className="mx-3 overflow-hidden">
+              <div ref={trackRef} className="flex w-[200%] items-center">
+                {[...Array(8)].map((_, i) => resumeCard(i))}
+                {[...Array(8)].map((_, i) => resumeCard(i + 8))}
+              </div>
+            </div>
+
+            {placeholderCard('right')}
+          </div>
+        </div>
+      </div>
+
+      {/* small CSS tweak to make the motion very smooth */}
+      <style>{`
+        /* keep user-select off for carousel items while moving */
+        #templates .w-\\[280px\\] { user-select: none; }
+      `}</style>
+    </section>
+  );
+};
+
 const CTA: React.FC = () => (
   <section className="relative py-20">
     <div className="mx-auto max-w-5xl overflow-hidden rounded-3xl border bg-gradient-to-br from-violet-600 to-fuchsia-600 p-1 shadow-xl">
@@ -233,13 +306,13 @@ const CTA: React.FC = () => (
             <p className="mt-2 text-muted-foreground">Start free. No credit card required. Generate your first resume in minutes.</p>
           </div>
           <div className="flex flex-col gap-3 sm:flex-row sm:justify-end">
-            <Button asChild size="lg" className="group hover:scale-105 transition">
+            <Button size="lg" className="group shadow-md hover:shadow-lg transform-gpu transition-all" asChild>
               <Link href="/editor">
                 Start building now
                 <ArrowRight className="ml-2 h-4 w-4 transition group-hover:translate-x-0.5" />
               </Link>
             </Button>
-            <Button size="lg" variant="outline" className="hover:scale-105 transition">View pricing</Button>
+            <Button size="lg" variant="outline">View pricing</Button>
           </div>
         </div>
       </div>
@@ -340,6 +413,7 @@ const NoiseOverlay: React.FC = () => (
 );
 
 export default function ResuAIHome() {
+  // Smooth scroll for in-page links (kept exactly as original)
   useEffect(() => {
     const handler = (e: Event) => {
       const t = e.target as HTMLElement;
@@ -361,6 +435,7 @@ export default function ResuAIHome() {
       <ScrollProgressBar />
       <GradientBackground />
       <NoiseOverlay />
+      {/* <Navbar /> -- This will be replaced by the existing Header */}
       <Hero />
       <Features />
       <HowItWorks />
@@ -371,5 +446,3 @@ export default function ResuAIHome() {
     </main>
   );
 }
-
-    
