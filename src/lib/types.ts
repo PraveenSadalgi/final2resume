@@ -145,3 +145,40 @@ export const SuggestRelevantSkillsOutputSchema = z.object({
   skills: z.array(z.string()).describe('An array of relevant skills for the resume.'),
 });
 export type SuggestRelevantSkillsOutput = z.infer<typeof SuggestRelevantSkillsOutputSchema>;
+
+
+// Speech to Resume Flow Types
+export const SpeechToPersonalDetailsInputSchema = z.object({
+  audioDataUri: z.string().describe("Base64 encoded audio data URI."),
+});
+export type SpeechToPersonalDetailsInput = z.infer<typeof SpeechToPersonalDetailsInputSchema>;
+
+export const SpeechToPersonalDetailsOutputSchema = z.object({
+  name: z.string(),
+  email: z.string(),
+  phone: z.string(),
+  location: z.string(),
+  github: z.string(),
+  linkedin: z.string(),
+});
+export type SpeechToPersonalDetailsOutput = z.infer<typeof SpeechToPersonalDetailsOutputSchema>;
+
+export const SpeechToSummaryInputSchema = z.object({
+  audioDataUri: z.string().describe("Base64 encoded audio data URI."),
+});
+export type SpeechToSummaryInput = z.infer<typeof SpeechToSummaryInputSchema>;
+
+export const SpeechToSummaryOutputSchema = z.object({
+  summary: z.string().describe("The user's professional summary."),
+});
+export type SpeechToSummaryOutput = z.infer<typeof SpeechToSummaryOutputSchema>;
+
+export const SpeechToCoverLetterInputSchema = z.object({
+  audioDataUri: z.string().describe("Base64 encoded audio data URI."),
+});
+export type SpeechToCoverLetterInput = z.infer<typeof SpeechToCoverLetterInputSchema>;
+
+export const SpeechToCoverLetterOutputSchema = z.object({
+  jobDescription: z.string().describe("The job description for the cover letter."),
+});
+export type SpeechToCoverLetterOutput = z.infer<typeof SpeechToCoverLetterOutputSchema>;

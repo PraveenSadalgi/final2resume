@@ -1,20 +1,31 @@
+
 "use client";
 
 import { Input } from "./ui/input";
 import { Label } from "./ui/label";
 import type { ResumeData } from "@/lib/types";
+import { Button } from "./ui/button";
+import { Mic } from "lucide-react";
 
 interface PersonalDetailsFormProps {
   resumeData: ResumeData;
   onFieldChange: (field: keyof ResumeData, value: string) => void;
+  onSpeakToFill: () => void;
 }
 
 export default function PersonalDetailsForm({
   resumeData,
   onFieldChange,
+  onSpeakToFill,
 }: PersonalDetailsFormProps) {
   return (
     <div className="space-y-4">
+      <div className="flex items-center justify-end">
+        <Button variant="outline" size="sm" onClick={onSpeakToFill}>
+            <Mic className="h-4 w-4 mr-2" />
+            Speak to Fill
+        </Button>
+      </div>
       <div className="space-y-2">
         <Label htmlFor="name">Full Name</Label>
         <Input

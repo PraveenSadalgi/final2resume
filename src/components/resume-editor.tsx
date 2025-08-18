@@ -51,6 +51,7 @@ interface ResumeEditorProps {
     skills: boolean;
     project: string | null;
     workProject: string | null;
+    speech: boolean;
   };
   onAddWorkProject: (experienceIndex: number) => void;
   onRemoveWorkProject: (experienceIndex: number, projectIndex: number) => void;
@@ -60,6 +61,7 @@ interface ResumeEditorProps {
     field: keyof WorkProject,
     value: string
   ) => void;
+  onSpeakToFill: (target: "personalDetails" | "summary") => void;
 }
 
 export default function ResumeEditor({
@@ -81,6 +83,7 @@ export default function ResumeEditor({
   onAddWorkProject,
   onRemoveWorkProject,
   onWorkProjectChange,
+  onSpeakToFill,
 }: ResumeEditorProps) {
   const sections = [
     {
@@ -88,7 +91,7 @@ export default function ResumeEditor({
       title: "Personal Details",
       Icon: User,
       Component: PersonalDetailsForm,
-      props: { onFieldChange },
+      props: { onFieldChange, onSpeakToFill: () => onSpeakToFill("personalDetails") },
     },
     {
       value: "summary",
@@ -99,6 +102,7 @@ export default function ResumeEditor({
         onFieldChange,
         onGenerateSummary,
         loading: loadingStates.summary,
+        onSpeakToFill: () => onSpeakToFill("summary"),
       },
     },
     {

@@ -9,11 +9,15 @@ import { generateProfessionalSummary } from "@/ai/flows/generate-summary";
 import { generateProjectDescription } from "@/ai/flows/generate-project-description";
 import { generateWorkProjectDescription } from "@/ai/flows/generate-work-project-description";
 import { suggestRelevantSkills } from "@/ai/flows/suggest-skills";
+import { speechToPersonalDetails, speechToSummary } from "@/ai/flows/speech-to-resume";
 import ResumeEditor from "@/components/resume-editor";
 import ResumePreview from "@/components/resume-preview";
+import SpeechInputDialog from "@/components/speech-input-dialog";
 import { useToast } from "@/hooks/use-toast";
 import type { Education, Experience, Project, ResumeData, WorkProject } from "@/lib/types";
 import { classicTemplate } from "@/lib/mock-data";
+
+type SpeechTarget = "personalDetails" | "summary" | null;
 
 // Helper to generate unique IDs on the client
 const generateUniqueId = () => `id-${Date.now()}-${Math.random().toString(36).substring(2, 9)}`;
@@ -27,7 +31,9 @@ export default function EditorPage() {
     skills: false,
     project: null as string | null,
     workProject: null as string | null,
+    speech: false,
   });
+  const [speechTarget, setSpeechTarget] = useState<SpeechTarget>(null);
 
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -247,77 +253,119 @@ export default function EditorPage() {
     }
   };
 
+  const handleSpeechInput = async (audioDataUri: string) => {
+    if (!speechTarget) return;
+
+    setLoadingStates(prev => ({ ...prev, speech: true }));
+    try {
+      if (speechTarget === "personalDetails") {
+        const result = await speechToPersonalDetails({ audioDataUri });
+        setResumeData(prev => ({ ...prev, ...result }));
+        toast({ title: "Success", description: "Personal details have been filled out." });
+      } else if (speechTarget === "summary") {
+        const result = await speechToSummary({ audioDataUri });
+        setResumeData(prev => ({ ...prev, summary: result.summary }));
+        toast({ title: "Success", description: "Summary has been filled out." });
+      }
+    } catch (error) {
+      console.error(`Error processing speech for ${speechTarget}:`, error);
+      toast({ title: "Error", description: `Failed to process audio for ${speechTarget}.`, variant: "destructive" });
+    } finally {
+      setLoadingStates(prev => ({ ...prev, speech: false }));
+      setSpeechTarget(null);
+    }
+  };
+
+  const speechDialogConfig = {
+    personalDetails: {
+      title: "Speak your Personal Details",
+      instructions: "Please state your full name, email, phone number, location, GitHub URL, and LinkedIn URL. Speak clearly for best results."
+    },
+    summary: {
+      title: "Speak your Professional Summary",
+      instructions: "Please provide a brief summary of your professional background. Aim for 3-4 sentences."
+    }
+  };
+
   return (
-    <div className="relative flex flex-col h-[calc(100vh-69px)] bg-gradient-to-br from-background via-background/95 to-muted/40">
-      {/* Subtle animated background blob */}
-      <motion.div
-        className="absolute -top-32 -left-32 w-96 h-96 rounded-full bg-violet-500/20 blur-3xl"
-        animate={{ x: [0, 30, -30, 0], y: [0, -20, 20, 0] }}
-        transition={{ duration: 18, repeat: Infinity, ease: "easeInOut" }}
-      />
-      <motion.div
-        className="absolute bottom-0 right-0 w-80 h-80 rounded-full bg-cyan-500/20 blur-3xl"
-        animate={{ x: [0, -20, 20, 0], y: [0, 20, -20, 0] }}
-        transition={{ duration: 22, repeat: Infinity, ease: "easeInOut" }}
-      />
-
-      <main className="relative flex-1 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-[1fr_1.1fr] overflow-hidden backdrop-blur-sm">
-        {/* Editor */}
+    <>
+      {speechTarget && (
+        <SpeechInputDialog
+          isOpen={!!speechTarget}
+          onClose={() => setSpeechTarget(null)}
+          onSave={handleSpeechInput}
+          isLoading={loadingStates.speech}
+          title={speechDialogConfig[speechTarget]?.title}
+          instructions={speechDialogConfig[speechTarget]?.instructions}
+        />
+      )}
+      <div className="relative flex flex-col h-[calc(100vh-69px)] bg-gradient-to-br from-background via-background/95 to-muted/40">
         <motion.div
-          initial={{ opacity: 0, x: -40 }}
-          animate={{ opacity: 1, x: 0 }}
-          transition={{ duration: 0.6, ease: "easeOut" }}
-          className="no-print overflow-y-auto"
-        >
-          {isClient ? (
-            <ResumeEditor
-              resumeData={resumeData}
-              onFieldChange={handleFieldChange}
-              onNestedFieldChange={handleNestedFieldChange}
-              onAddExperience={addExperience}
-              onRemoveExperience={removeExperience}
-              onAddEducation={addEducation}
-              onRemoveEducation={removeEducation}
-              onAddProject={addProject}
-              onRemoveProject={removeProject}
-              onGenerateSummary={generateSummary}
-              onGenerateExperience={generateExp}
-              onGenerateProjectDescription={generateProjDescription}
-              onGenerateWorkProjectDescription={generateWorkProjDescription}
-              onSuggestSkills={suggestSkills}
-              loadingStates={loadingStates}
-              onAddWorkProject={addWorkProject}
-              onRemoveWorkProject={removeWorkProject}
-              onWorkProjectChange={handleWorkProjectChange}
-            />
-          ) : (
-            <div className="p-4 text-muted-foreground animate-pulse">Loading editor...</div>
-          )}
-        </motion.div>
-
-        {/* Preview */}
+          className="absolute -top-32 -left-32 w-96 h-96 rounded-full bg-violet-500/20 blur-3xl"
+          animate={{ x: [0, 30, -30, 0], y: [0, -20, 20, 0] }}
+          transition={{ duration: 18, repeat: Infinity, ease: "easeInOut" }}
+        />
         <motion.div
-          initial={{ opacity: 0, x: 40 }}
-          animate={{ opacity: 1, x: 0 }}
-          transition={{ duration: 0.6, ease: "easeOut", delay: 0.2 }}
-          className="bg-muted/30 backdrop-blur-md rounded-tl-2xl lg:rounded-tl-3xl p-4 lg:p-8 overflow-y-auto flex justify-center shadow-inner"
-        >
-          {isClient ? (
-            <motion.div
-              initial={{ scale: 0.98, opacity: 0 }}
-              animate={{ scale: 1, opacity: 1 }}
-              transition={{ duration: 0.5, ease: "easeOut" }}
-              className="w-full max-w-3xl"
-            >
-              <ResumePreview resumeData={resumeData} />
-            </motion.div>
-          ) : (
-            <div className="p-4 text-muted-foreground animate-pulse">Loading preview...</div>
-          )}
-        </motion.div>
-      </main>
-    </div>
+          className="absolute bottom-0 right-0 w-80 h-80 rounded-full bg-cyan-500/20 blur-3xl"
+          animate={{ x: [0, -20, 20, 0], y: [0, 20, -20, 0] }}
+          transition={{ duration: 22, repeat: Infinity, ease: "easeInOut" }}
+        />
+
+        <main className="relative flex-1 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-[1fr_1.1fr] overflow-hidden backdrop-blur-sm">
+          <motion.div
+            initial={{ opacity: 0, x: -40 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.6, ease: "easeOut" }}
+            className="no-print overflow-y-auto"
+          >
+            {isClient ? (
+              <ResumeEditor
+                resumeData={resumeData}
+                onFieldChange={handleFieldChange}
+                onNestedFieldChange={handleNestedFieldChange}
+                onAddExperience={addExperience}
+                onRemoveExperience={removeExperience}
+                onAddEducation={addEducation}
+                onRemoveEducation={removeEducation}
+                onAddProject={addProject}
+                onRemoveProject={removeProject}
+                onGenerateSummary={generateSummary}
+                onGenerateExperience={generateExp}
+                onGenerateProjectDescription={generateProjDescription}
+                onGenerateWorkProjectDescription={generateWorkProjDescription}
+                onSuggestSkills={suggestSkills}
+                loadingStates={loadingStates}
+                onAddWorkProject={addWorkProject}
+                onRemoveWorkProject={removeWorkProject}
+                onWorkProjectChange={handleWorkProjectChange}
+                onSpeakToFill={(target) => setSpeechTarget(target)}
+              />
+            ) : (
+              <div className="p-4 text-muted-foreground animate-pulse">Loading editor...</div>
+            )}
+          </motion.div>
+
+          <motion.div
+            initial={{ opacity: 0, x: 40 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.6, ease: "easeOut", delay: 0.2 }}
+            className="bg-muted/30 backdrop-blur-md rounded-tl-2xl lg:rounded-tl-3xl p-4 lg:p-8 overflow-y-auto flex justify-center shadow-inner"
+          >
+            {isClient ? (
+              <motion.div
+                initial={{ scale: 0.98, opacity: 0 }}
+                animate={{ scale: 1, opacity: 1 }}
+                transition={{ duration: 0.5, ease: "easeOut" }}
+                className="w-full max-w-3xl"
+              >
+                <ResumePreview resumeData={resumeData} />
+              </motion.div>
+            ) : (
+              <div className="p-4 text-muted-foreground animate-pulse">Loading preview...</div>
+            )}
+          </motion.div>
+        </main>
+      </div>
+    </>
   );
 }
-
-    

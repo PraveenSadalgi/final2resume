@@ -11,7 +11,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "./ui/select";
-import { Sparkles, Download } from "lucide-react";
+import { Sparkles, Download, Mic } from "lucide-react";
 import LoadingSpinner from "./ui/loading-spinner";
 import type { CoverLetterData } from "@/lib/types";
 
@@ -20,6 +20,7 @@ interface CoverLetterFormProps {
   loading: boolean;
   onCoverLetterChange: (field: keyof CoverLetterData, value: string) => void;
   onGenerateCoverLetter: () => void;
+  onSpeak: () => void;
 }
 
 export default function CoverLetterForm({
@@ -27,6 +28,7 @@ export default function CoverLetterForm({
   loading,
   onCoverLetterChange,
   onGenerateCoverLetter,
+  onSpeak,
 }: CoverLetterFormProps) {
   
   const handleDownloadDocx = () => {
@@ -54,12 +56,18 @@ export default function CoverLetterForm({
   return (
     <div className="space-y-6">
       <div className="space-y-2">
-        <Label htmlFor="job-description">Job Description</Label>
+        <Label htmlFor="job-description" className="flex items-center justify-between">
+            Job Description
+            <Button variant="outline" size="sm" onClick={onSpeak} disabled={loading}>
+                <Mic className="h-4 w-4 mr-2" />
+                Speak to Fill
+            </Button>
+        </Label>
         <Textarea
           id="job-description"
           value={coverLetterData.jobDescription}
           onChange={(e) => onCoverLetterChange("jobDescription", e.target.value)}
-          placeholder="Paste the job description here..."
+          placeholder="Paste the job description here, or use the 'Speak to Fill' button to dictate."
           rows={8}
         />
       </div>
