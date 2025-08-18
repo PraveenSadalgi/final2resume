@@ -24,7 +24,10 @@ export default function PersonalDetailsForm({
   const handleSpeechResult = (field: keyof ResumeData, transcript: string) => {
     let formattedTranscript = transcript;
     if (field === 'email') {
-      formattedTranscript = transcript.toLowerCase().replace(/\s/g, '');
+      formattedTranscript = transcript
+        .toLowerCase()
+        .replace(/\s+at\s+/gi, '@')
+        .replace(/\s/g, '');
     }
     onFieldChange(field, formattedTranscript);
   };
@@ -177,5 +180,3 @@ export default function PersonalDetailsForm({
     </div>
   );
 }
-
-    
