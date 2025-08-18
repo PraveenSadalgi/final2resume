@@ -4,34 +4,40 @@
 import { useEffect, useRef } from "react";
 import { Button } from "@/components/ui/button";
 import Link from 'next/link';
+import { allTemplates } from "@/lib/mock-data";
+import ResumePreview from "./resume-preview";
 
 export const TemplateShowcase: React.FC = () => {
   const trackRef = useRef<HTMLDivElement>(null);
   useEffect(() => {
-    let raf = 0;
+    if (!trackRef.current) return;
+
+    const track = trackRef.current;
     let offset = 0;
+    const scrollSpeed = 0.5; // Adjust speed here
+
+    // Clone templates to create a seamless loop
+    const templates = [...allTemplates, ...allTemplates];
+    const templateElements = Array.from(track.children) as HTMLElement[];
+    const totalWidth = templateElements.reduce((acc, el) => acc + el.offsetWidth, 0) / 2;
+
+    let animationFrameId: number;
+
     const step = () => {
-      offset += 0.5; // speed
-      if (trackRef.current) {
-        trackRef.current.style.transform = `translateX(${-offset}px)`;
-        const width = trackRef.current.scrollWidth / 2; // duplicated set width
-        if (offset > width) offset = 0;
+      offset -= scrollSpeed;
+      if (Math.abs(offset) >= totalWidth) {
+        offset = 0;
       }
-      raf = requestAnimationFrame(step);
+      track.style.transform = `translateX(${offset}px)`;
+      animationFrameId = requestAnimationFrame(step);
     };
-    raf = requestAnimationFrame(step);
-    return () => cancelAnimationFrame(raf);
+
+    animationFrameId = requestAnimationFrame(step);
+
+    return () => cancelAnimationFrame(animationFrameId);
   }, []);
 
-  const card = (i: number) => (
-    <div key={i} className="mx-3 w-[280px] shrink-0 rounded-2xl border bg-background p-4 shadow-sm">
-      <div className="mb-3 aspect-[3/4] w-full rounded-xl bg-gradient-to-br from-violet-500/15 to-cyan-500/15" />
-      <div className="space-y-2">
-        <div className="h-3 w-2/3 rounded bg-muted" />
-        <div className="h-3 w-1/2 rounded bg-muted" />
-      </div>
-    </div>
-  );
+  const templatesToRender = [...allTemplates, ...allTemplates];
 
   return (
     <section id="templates" className="relative overflow-hidden py-20">
@@ -46,14 +52,17 @@ export const TemplateShowcase: React.FC = () => {
           </Button>
         </div>
       </div>
-      <div className="relative">
+      <div className="relative h-[600px]">
         <div className="pointer-events-none absolute inset-y-0 left-0 z-10 w-24 bg-gradient-to-r from-background to-transparent" />
         <div className="pointer-events-none absolute inset-y-0 right-0 z-10 w-24 bg-gradient-to-l from-background to-transparent" />
-        <div className="overflow-hidden">
-          <div ref={trackRef} className="flex w-[200%]">
-            {[...Array(10)].map((_, i) => card(i))}
-            {[...Array(10)].map((_, i) => card(i + 10))}
-          </div>
+        <div className="absolute top-0 left-0 flex w-max" ref={trackRef}>
+            {templatesToRender.map((template, i) => (
+                <div key={i} className="mx-4 w-[400px] shrink-0">
+                    <div className="transform scale-[0.5] origin-top-left">
+                        <ResumePreview resumeData={template} />
+                    </div>
+                </div>
+            ))}
         </div>
       </div>
     </section>
