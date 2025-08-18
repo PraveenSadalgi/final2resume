@@ -1,4 +1,3 @@
-
 // src/ai/flows/suggest-skills.ts
 'use server';
 /**
@@ -9,6 +8,7 @@
 
 import {ai} from '@/ai/genkit';
 import { SuggestRelevantSkillsInputSchema, SuggestRelevantSkillsOutputSchema, type SuggestRelevantSkillsInput } from '@/lib/types';
+import {googleAI} from '@genkit-ai/googleai';
 
 export async function suggestRelevantSkills(input: SuggestRelevantSkillsInput) {
   return suggestRelevantSkillsFlow(input);
@@ -16,6 +16,7 @@ export async function suggestRelevantSkills(input: SuggestRelevantSkillsInput) {
 
 const prompt = ai.definePrompt({
   name: 'suggestRelevantSkillsPrompt',
+  model: googleAI.model('gemini-2.0-flash'),
   input: {schema: SuggestRelevantSkillsInputSchema},
   output: {schema: SuggestRelevantSkillsOutputSchema},
   prompt: `You are an AI resume assistant that suggests relevant skills based on the user's profession and chosen roles.

@@ -8,6 +8,7 @@
 
 import {ai} from '@/ai/genkit';
 import { GenerateExperienceInputSchema, GenerateExperienceOutputSchema, type GenerateExperienceInput } from '@/lib/types';
+import {googleAI} from '@genkit-ai/googleai';
 
 
 export async function generateExperience(input: GenerateExperienceInput) {
@@ -16,6 +17,7 @@ export async function generateExperience(input: GenerateExperienceInput) {
 
 const prompt = ai.definePrompt({
   name: 'generateExperiencePrompt',
+  model: googleAI.model('gemini-2.0-flash'),
   input: {schema: GenerateExperienceInputSchema},
   output: {schema: GenerateExperienceOutputSchema},
   prompt: `You are an expert resume writer, specializing in tailoring experiences to specific roles and professions.

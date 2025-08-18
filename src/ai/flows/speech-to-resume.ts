@@ -39,6 +39,7 @@ export async function speechToPersonalDetails(
 
 const personalDetailsPrompt = ai.definePrompt({
   name: 'speechToPersonalDetailsPrompt',
+  model: googleAI.model('gemini-2.0-flash'),
   input: {schema: SpeechInputSchema},
   output: {schema: SpeechToPersonalDetailsOutputSchema},
   prompt: `You are a resume assistant. A user has provided an audio recording containing their personal information. Your task is to transcribe the audio and extract the following fields: name, email, phone, location, GitHub URL, and LinkedIn URL.
@@ -69,6 +70,7 @@ export async function speechToSummary(input: SpeechToSummaryInput) {
 
 const summaryPrompt = ai.definePrompt({
   name: 'speechToSummaryPrompt',
+  model: googleAI.model('gemini-2.0-flash'),
   input: {schema: SpeechInputSchema},
   output: {schema: SpeechToSummaryOutputSchema},
   prompt: `You are a resume assistant. A user has provided an audio recording of their professional summary. Your task is to transcribe the audio and return the summary as a single string.
@@ -99,6 +101,7 @@ export async function speechToCoverLetter(input: SpeechToCoverLetterInput) {
 
 const coverLetterPrompt = ai.definePrompt({
   name: 'speechToCoverLetterPrompt',
+  model: googleAI.model('gemini-2.0-flash'),
   input: {schema: SpeechInputSchema},
   output: {schema: SpeechToCoverLetterOutputSchema},
   prompt: `You are a helpful assistant. A user has provided an audio recording containing the job description for a cover letter they want to write. Your task is to transcribe the audio and return the job description as a single string.

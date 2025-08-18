@@ -8,6 +8,7 @@
 
 import {ai} from '@/ai/genkit';
 import { GenerateCoverLetterInputSchema, GenerateCoverLetterOutputSchema, type GenerateCoverLetterInput } from '@/lib/types';
+import {googleAI} from '@genkit-ai/googleai';
 
 export async function generateCoverLetter(input: GenerateCoverLetterInput) {
   return generateCoverLetterFlow(input);
@@ -15,6 +16,7 @@ export async function generateCoverLetter(input: GenerateCoverLetterInput) {
 
 const prompt = ai.definePrompt({
   name: 'generateCoverLetterPrompt',
+  model: googleAI.model('gemini-2.0-flash'),
   input: {schema: GenerateCoverLetterInputSchema},
   output: {schema: GenerateCoverLetterOutputSchema},
   prompt: `You are an expert career coach and resume writer. Your task is to generate a personalized and compelling cover letter for a user based on their resume and a specific job description.
