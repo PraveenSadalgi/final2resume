@@ -1,7 +1,7 @@
 
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { generateCoverLetter } from "@/ai/flows/generate-cover-letter";
 import CoverLetterForm from "@/components/cover-letter-form";
@@ -10,13 +10,21 @@ import type { ResumeData, CoverLetterData, CoverLetterTemplate } from "@/lib/typ
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { ArrowLeft, LayoutTemplate } from "lucide-react";
-import { classicCoverLetterTemplate } from "@/lib/mock-data";
+import { classicCoverLetterTemplate, corporateCoverLetterTemplate } from "@/lib/mock-data";
+import CorporateCoverLetter from "@/components/templates/corporate-cover-letter";
+import { motion } from "framer-motion";
 
 const initialCoverLetterData: CoverLetterData = {
   jobDescription: "",
   tone: "Professional",
-  generatedLetter: "",
+  generatedLetter: "Dear Hiring Manager,\n\nI am writing to express my interest in the [Job Title] position I saw on [Platform]. With my experience in [Your Key Skill/Area] and my track record of [Brief Achievement], I am confident I would be a valuable asset to your team.\n\nIn my previous role at [Previous Company], I was responsible for [A Key Responsibility]. One of my major accomplishments was [Quantifiable Achievement], which demonstrates my ability to [Relevant Skill]. I am particularly drawn to [Company Name]'s work in [Area of Interest] and I am eager to contribute to a company that values [Company Value].\n\nMy resume provides further detail on my qualifications. Thank you for your time and consideration. I look forward to hearing from you soon.\n\nSincerely,\n[Your Name]",
 };
+
+const templateComponents: Record<string, React.FC<any>> = {
+    CorporateCoverLetter,
+    // Add other cover letter components here as they are created
+};
+
 
 export default function CoverLetterPage() {
   const [resumeData, setResumeData] = useState<ResumeData | null>(null);
@@ -83,6 +91,22 @@ export default function CoverLetterPage() {
       setLoading(false);
     }
   };
+  
+  const CoverLetterPreview = useMemo(() => {
+    const Component = templateComponents[selectedTemplate.component];
+    if (Component) {
+      return <Component resumeData={resumeData} coverLetterText={coverLetterData.generatedLetter} />;
+    }
+    // Fallback for templates without a visual component yet
+    return (
+        <div className="bg-white p-8 rounded-lg shadow-lg w-full aspect-[8.5/11]">
+            <pre className="whitespace-pre-wrap font-serif text-sm">
+                {coverLetterData.generatedLetter}
+            </pre>
+        </div>
+    );
+  }, [selectedTemplate, resumeData, coverLetterData.generatedLetter]);
+
 
   if (!isClient) {
     return <div className="p-4">Loading...</div>;
@@ -90,49 +114,65 @@ export default function CoverLetterPage() {
   
   return (
     <>
-      <div className="flex flex-col h-[calc(100vh-69px)] bg-background">
-        <main className="flex-1 overflow-y-auto p-4 md:p-6 lg:p-8">
-          <div className="max-w-4xl mx-auto">
-            <Button asChild variant="ghost" className="mb-4 -ml-4">
-              <Link href="/editor">
-                  <ArrowLeft className="mr-2 h-4 w-4" />
-                  Back to Resume Editor
-              </Link>
-            </Button>
+      <div className="flex flex-col md:flex-row h-[calc(100vh-69px)] bg-muted/40">
+        {/* Editor Panel */}
+        <div className="w-full md:w-1/2 lg:w-2/5 xl:w-1/3 p-4 md:p-6 lg:p-8 bg-background border-r overflow-y-auto">
+            <div className="max-w-4xl mx-auto">
+                <Button asChild variant="ghost" className="mb-4 -ml-4">
+                <Link href="/editor">
+                    <ArrowLeft className="mr-2 h-4 w-4" />
+                    Back to Resume Editor
+                </Link>
+                </Button>
 
-            <div className="bg-card p-6 md:p-8 rounded-lg shadow-sm">
-                <div className="flex flex-col sm:flex-row justify-between sm:items-center mb-6">
-                    <div>
-                        <h1 className="text-2xl font-bold mb-1">Cover Letter Generator</h1>
-                        <p className="text-muted-foreground">Create a compelling cover letter based on your resume and the job you want.</p>
+                <div className="bg-card p-6 md:p-8 rounded-lg shadow-sm">
+                    <div className="flex flex-col sm:flex-row justify-between sm:items-center mb-6">
+                        <div>
+                            <h1 className="text-2xl font-bold mb-1">Cover Letter Generator</h1>
+                            <p className="text-muted-foreground">Create a compelling cover letter based on your resume and the job you want.</p>
+                        </div>
+                        <Button asChild variant="outline">
+                            <Link href="/cover-letter/templates">
+                                <LayoutTemplate className="mr-2 h-4 w-4" />
+                                Choose Template
+                            </Link>
+                        </Button>
                     </div>
-                     <Button asChild variant="outline">
-                        <Link href="/cover-letter/templates">
-                            <LayoutTemplate className="mr-2 h-4 w-4" />
-                            Choose Template
-                        </Link>
-                    </Button>
-                </div>
 
-              {resumeData ? (
-                  <CoverLetterForm
-                      coverLetterData={coverLetterData}
-                      loading={loading}
-                      onCoverLetterChange={handleCoverLetterChange}
-                      onGenerateCoverLetter={generateLetter}
-                      activeSpeechField={activeSpeechField}
-                      setActiveSpeechField={setActiveSpeechField}
-                      selectedTemplate={selectedTemplate}
-                  />
-              ) : (
-                  <div className="text-center py-12">
-                      <p className="text-muted-foreground mb-4">Could not load resume data.</p>
-                      <Button onClick={() => router.push('/editor')}>Go to Editor</Button>
-                  </div>
-              )}
+                {resumeData ? (
+                    <CoverLetterForm
+                        coverLetterData={coverLetterData}
+                        loading={loading}
+                        onCoverLetterChange={handleCoverLetterChange}
+                        onGenerateCoverLetter={generateLetter}
+                        activeSpeechField={activeSpeechField}
+                        setActiveSpeechField={setActiveSpeechField}
+                        selectedTemplate={selectedTemplate}
+                    />
+                ) : (
+                    <div className="text-center py-12">
+                        <p className="text-muted-foreground mb-4">Could not load resume data.</p>
+                        <Button onClick={() => router.push('/editor')}>Go to Editor</Button>
+                    </div>
+                )}
+                </div>
             </div>
-          </div>
-        </main>
+        </div>
+
+        {/* Preview Panel */}
+        <div className="flex-1 p-4 md:p-6 lg:p-8 overflow-y-auto flex justify-center">
+            <motion.div
+                key={selectedTemplate.id}
+                initial={{ opacity: 0, scale: 0.95 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ duration: 0.5, ease: 'easeOut' }}
+                className="w-full max-w-2xl"
+                >
+                <div className="transform scale-[0.8] origin-top">
+                    {CoverLetterPreview}
+                </div>
+            </motion.div>
+        </div>
       </div>
     </>
   );

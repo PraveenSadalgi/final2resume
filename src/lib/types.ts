@@ -41,6 +41,7 @@ export interface CoverLetterTemplate {
     name: string;
     description: string;
     prompt: string;
+    component: string;
 }
 
 export type Template = 'one-column' | 'two-column' | 'modern' | 'creative' | 'minimalist' | 'technical' | 'executive';

@@ -304,6 +304,7 @@ export const classicCoverLetterTemplate: CoverLetterTemplate = {
     id: 'cl-classic',
     name: 'Classic',
     description: 'A timeless, professional format suitable for any industry. Focuses on direct, clear communication of skills and experience.',
+    component: 'ClassicCoverLetter',
     prompt: `
       Structure the cover letter as follows:
       1.  **Introduction:** State the position you're applying for and where you saw it. Briefly introduce yourself and express your enthusiasm.
@@ -317,6 +318,7 @@ export const modernCoverLetterTemplate: CoverLetterTemplate = {
     id: 'cl-modern',
     name: 'Modern',
     description: 'A clean, concise, and slightly more personal template that uses bullet points to highlight key qualifications.',
+    component: 'ModernCoverLetter',
     prompt: `
       Structure the cover letter as follows:
       1.  **Introduction:** State the role you're applying for and express your excitement about the company's mission or a recent project.
@@ -330,6 +332,7 @@ export const impactfulCoverLetterTemplate: CoverLetterTemplate = {
     id: 'cl-impactful',
     name: 'Impactful',
     description: 'A bold, results-oriented template that starts with a strong statement and focuses on quantifiable achievements.',
+    component: 'ImpactfulCoverLetter',
     prompt: `
       Structure the cover letter as follows:
       1.  **Opening Hook:** Start with a powerful statement about a key achievement that is directly relevant to the role. For example, "In my previous role at [Company], I increased user engagement by 25% by redesigning the core product interface."
@@ -339,9 +342,26 @@ export const impactfulCoverLetterTemplate: CoverLetterTemplate = {
     `
 };
 
+export const corporateCoverLetterTemplate: CoverLetterTemplate = {
+    id: 'cl-corporate',
+    name: 'Corporate',
+    description: 'A sophisticated design with a stylish header and footer, perfect for corporate and formal applications.',
+    component: 'CorporateCoverLetter',
+    prompt: `
+      Generate a formal and professional cover letter.
+      - Start with the user's name and address at the top.
+      - Include the date.
+      - Address the recipient formally (e.g., "Dear Hiring Manager," or "To whom it may concern,").
+      - The body should be 3-4 paragraphs long, clearly articulating the user's qualifications and alignment with the job description.
+      - Maintain a respectful and professional tone throughout.
+      - End with a formal closing (e.g., "Sincerely," or "Kind regards,"), followed by the user's name.
+    `
+};
+
 
 export const allCoverLetterTemplates: CoverLetterTemplate[] = [
     classicCoverLetterTemplate,
     modernCoverLetterTemplate,
     impactfulCoverLetterTemplate,
+    corporateCoverLetterTemplate,
 ];
