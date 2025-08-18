@@ -170,7 +170,7 @@ export default function EditorPage() {
       const profession = resumeData.experience[0]?.role || "a professional";
       const result = await generateProfessionalSummary({ profession });
       handleFieldChange("summary", result.summary);
-    } catch (error) => {
+    } catch (error) {
       console.error("Error generating summary:", error);
       toast({ title: "Error", description: "Failed to generate summary.", variant: "destructive" });
     } finally {
