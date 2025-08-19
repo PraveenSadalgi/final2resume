@@ -21,7 +21,11 @@ interface ControlsProps {
 
 export default function Controls({ resumeData }: ControlsProps) {
   const handlePrint = () => {
-    window.print();
+    if (typeof window !== "undefined") {
+      localStorage.setItem("resumeDataForPreview", JSON.stringify(resumeData));
+      const url = new URL("/preview", window.location.origin);
+      window.open(url.toString(), "_blank");
+    }
   };
 
   const handleShare = () => {

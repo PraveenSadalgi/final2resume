@@ -16,7 +16,10 @@ export default function PreviewPage() {
     const data = localStorage.getItem("resumeDataForPreview");
     if (data) {
       try {
-        setResumeData(JSON.parse(data));
+        const parsedData = JSON.parse(data);
+        setResumeData(parsedData);
+        // Automatically trigger print once data is loaded
+        setTimeout(() => window.print(), 500);
       } catch (error) {
         console.error("Failed to parse resume data from localStorage", error);
         setResumeData(null);
