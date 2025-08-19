@@ -23,8 +23,6 @@ interface CoverLetterFormProps {
   loading: boolean;
   onCoverLetterChange: (field: keyof CoverLetterData, value: string) => void;
   onGenerateCoverLetter: () => void;
-  activeSpeechField: string | null;
-  setActiveSpeechField: (field: string | null) => void;
   selectedTemplate: CoverLetterTemplate;
   previewRef: React.RefObject<HTMLDivElement>;
 }
@@ -34,8 +32,6 @@ export default function CoverLetterForm({
   loading,
   onCoverLetterChange,
   onGenerateCoverLetter,
-  activeSpeechField,
-  setActiveSpeechField,
   selectedTemplate,
   previewRef,
 }: CoverLetterFormProps) {
@@ -81,10 +77,6 @@ export default function CoverLetterForm({
     }
   };
 
-  const handleSpeechResult = (transcript: string) => {
-    onCoverLetterChange("jobDescription", transcript);
-  };
-
   return (
     <div className="space-y-6">
         <div className="flex items-center gap-2">
@@ -104,10 +96,7 @@ export default function CoverLetterForm({
           />
           <div className="absolute top-2 right-2">
             <SpeechRecognitionButton
-              fieldName="jobDescription"
-              onResult={handleSpeechResult}
-              activeField={activeSpeechField}
-              setActiveField={setActiveSpeechField}
+              onResult={(transcript) => onCoverLetterChange("jobDescription", transcript)}
               tooltipContent="Speak the job description."
             />
           </div>

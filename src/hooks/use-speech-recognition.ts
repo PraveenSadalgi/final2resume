@@ -18,7 +18,6 @@ const getSpeechRecognition = () => {
 
 export const useSpeechRecognition = ({ onResult, onEnd, onError }: SpeechRecognitionOptions) => {
   const [isListening, setIsListening] = useState(false);
-  const [transcript, setTranscript] = useState('');
   const [error, setError] = useState<string | null>(null);
   const recognitionRef = useRef<any>(null);
 
@@ -31,7 +30,7 @@ export const useSpeechRecognition = ({ onResult, onEnd, onError }: SpeechRecogni
     }
 
     const recognition = new SpeechRecognitionAPI();
-    recognition.continuous = false;
+    recognition.continuous = true; // Keep listening until explicitly stopped
     recognition.interimResults = true;
     recognition.lang = 'en-US';
 
@@ -43,7 +42,6 @@ export const useSpeechRecognition = ({ onResult, onEnd, onError }: SpeechRecogni
         }
       }
       if (finalTranscript) {
-        setTranscript(finalTranscript);
         onResult(finalTranscript.trim());
       }
     };
@@ -74,7 +72,6 @@ export const useSpeechRecognition = ({ onResult, onEnd, onError }: SpeechRecogni
       try {
         recognitionRef.current.start();
         setIsListening(true);
-        setTranscript('');
         setError(null);
       } catch (err) {
         console.error("Could not start recognition:", err);
@@ -89,7 +86,5 @@ export const useSpeechRecognition = ({ onResult, onEnd, onError }: SpeechRecogni
     }
   };
 
-  return { isListening, transcript, startListening, stopListening, error };
+  return { isListening, startListening, stopListening, error };
 };
-
-    

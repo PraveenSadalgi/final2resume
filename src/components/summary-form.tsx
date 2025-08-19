@@ -15,8 +15,6 @@ interface SummaryFormProps {
   loading: boolean;
   onFieldChange: (field: "summary", value: string) => void;
   onGenerateSummary: () => Promise<void>;
-  activeSpeechField: string | null;
-  setActiveSpeechField: (field: string | null) => void;
 }
 
 export default function SummaryForm({
@@ -25,13 +23,7 @@ export default function SummaryForm({
   loading,
   onFieldChange,
   onGenerateSummary,
-  activeSpeechField,
-  setActiveSpeechField,
 }: SummaryFormProps) {
-  
-  const handleSpeechResult = (transcript: string) => {
-    onFieldChange("summary", transcript);
-  };
   
   return (
     <div className="space-y-2">
@@ -65,10 +57,7 @@ export default function SummaryForm({
         />
          <div className="absolute top-2 right-2">
             <SpeechRecognitionButton
-              fieldName="summary"
-              onResult={handleSpeechResult}
-              activeField={activeSpeechField}
-              setActiveField={setActiveSpeechField}
+              onResult={(transcript) => onFieldChange("summary", transcript)}
               tooltipContent="Speak your professional summary."
             />
           </div>

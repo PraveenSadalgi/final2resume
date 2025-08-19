@@ -39,7 +39,6 @@ export default function CoverLetterPage() {
   const [selectedTemplate, setSelectedTemplate] = useState<CoverLetterTemplate>(professionalCoverLetterTemplate);
   const [isClient, setIsClient] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [activeSpeechField, setActiveSpeechField] = useState<string | null>(null);
   const { toast } = useToast();
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -156,8 +155,6 @@ export default function CoverLetterPage() {
                         loading={loading}
                         onCoverLetterChange={handleCoverLetterChange}
                         onGenerateCoverLetter={generateLetter}
-                        activeSpeechField={activeSpeechField}
-                        setActiveSpeechField={setActiveSpeechField}
                         selectedTemplate={selectedTemplate}
                         previewRef={previewRef}
                     />
@@ -189,5 +186,3 @@ export default function CoverLetterPage() {
     </>
   );
 }
-
-    

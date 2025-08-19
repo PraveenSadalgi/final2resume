@@ -28,7 +28,6 @@ export default function EditorPage() {
     project: null as string | null, // This will hold the ID of the personal project being loaded
     workProject: null as string | null,
   });
-  const [activeSpeechField, setActiveSpeechField] = useState<string | null>(null);
 
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -322,8 +321,6 @@ export default function EditorPage() {
                 onAddWorkProject={addWorkProject}
                 onRemoveWorkProject={removeWorkProject}
                 onWorkProjectChange={handleWorkProjectChange}
-                activeSpeechField={activeSpeechField}
-                setActiveSpeechField={setActiveSpeechField}
               />
             ) : (
               <div className="p-4 text-muted-foreground animate-pulse">Loading editor...</div>
@@ -354,5 +351,3 @@ export default function EditorPage() {
     </>
   );
 }
-
-    

@@ -9,15 +9,11 @@ import { SpeechRecognitionButton } from "./speech-recognition-button";
 interface PersonalDetailsFormProps {
   resumeData: ResumeData;
   onFieldChange: (field: keyof ResumeData, value: string) => void;
-  activeSpeechField: string | null;
-  setActiveSpeechField: (field: string | null) => void;
 }
 
 export default function PersonalDetailsForm({
   resumeData,
   onFieldChange,
-  activeSpeechField,
-  setActiveSpeechField,
 }: PersonalDetailsFormProps) {
   const fields: (keyof ResumeData)[] = ["name", "email", "phone", "location", "github", "linkedin"];
 
@@ -58,10 +54,7 @@ export default function PersonalDetailsForm({
           />
           <div className="absolute top-1/2 -translate-y-1/2 right-2">
             <SpeechRecognitionButton
-              fieldName="name"
               onResult={(transcript) => handleSpeechResult("name", transcript)}
-              activeField={activeSpeechField}
-              setActiveField={setActiveSpeechField}
               tooltipContent={getTooltipContent('name')}
             />
           </div>
@@ -81,10 +74,7 @@ export default function PersonalDetailsForm({
             />
              <div className="absolute top-1/2 -translate-y-1/2 right-2">
                <SpeechRecognitionButton
-                fieldName="email"
                 onResult={(transcript) => handleSpeechResult("email", transcript)}
-                activeField={activeSpeechField}
-                setActiveField={setActiveSpeechField}
                 tooltipContent={getTooltipContent('email')}
               />
             </div>
@@ -102,10 +92,7 @@ export default function PersonalDetailsForm({
             />
             <div className="absolute top-1/2 -translate-y-1/2 right-2">
               <SpeechRecognitionButton
-                fieldName="phone"
                 onResult={(transcript) => handleSpeechResult("phone", transcript)}
-                activeField={activeSpeechField}
-                setActiveField={setActiveSpeechField}
                 tooltipContent={getTooltipContent('phone')}
               />
             </div>
@@ -125,10 +112,7 @@ export default function PersonalDetailsForm({
             />
              <div className="absolute top-1/2 -translate-y-1/2 right-2">
               <SpeechRecognitionButton
-                fieldName="location"
                 onResult={(transcript) => handleSpeechResult("location", transcript)}
-                activeField={activeSpeechField}
-                setActiveField={setActiveSpeechField}
                 tooltipContent={getTooltipContent('location')}
               />
             </div>
@@ -146,10 +130,7 @@ export default function PersonalDetailsForm({
             />
              <div className="absolute top-1/2 -translate-y-1/2 right-2">
               <SpeechRecognitionButton
-                fieldName="github"
                 onResult={(transcript) => handleSpeechResult("github", transcript)}
-                activeField={activeSpeechField}
-                setActiveField={setActiveSpeechField}
                 tooltipContent={getTooltipContent('github')}
               />
             </div>
@@ -168,10 +149,7 @@ export default function PersonalDetailsForm({
             />
             <div className="absolute top-1/2 -translate-y-1/2 right-2">
               <SpeechRecognitionButton
-                fieldName="linkedin"
                 onResult={(transcript) => handleSpeechResult("linkedin", transcript)}
-                activeField={activeSpeechField}
-                setActiveField={setActiveSpeechField}
                 tooltipContent={getTooltipContent('linkedin')}
               />
             </div>
