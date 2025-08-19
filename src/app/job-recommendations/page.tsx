@@ -1,7 +1,7 @@
 
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, Suspense } from "react";
 import { useSearchParams } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -29,7 +29,7 @@ interface Job {
   type: string;
 }
 
-export default function JobRecommendationsPage() {
+function JobRecommendations() {
   const [resumeData, setResumeData] = useState<ResumeData | null>(null);
   const [preferences, setPreferences] = useState({
     keywords: "",
@@ -227,4 +227,12 @@ export default function JobRecommendationsPage() {
       </main>
     </div>
   );
+}
+
+export default function JobRecommendationsPage() {
+    return (
+        <Suspense fallback={<div>Loading...</div>}>
+            <JobRecommendations />
+        </Suspense>
+    )
 }
