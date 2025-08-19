@@ -32,6 +32,7 @@ export default function EditorPage() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const templateQuery = searchParams.get('template');
+  const { toast } = useToast();
 
   useEffect(() => {
     setIsClient(true);
@@ -67,8 +68,6 @@ export default function EditorPage() {
       localStorage.setItem("resumeDataForJobs", JSON.stringify(resumeData));
     }
   }, [resumeData, isClient]);
-
-  const { toast } = useToast();
 
   const handleFieldChange = (
     field: keyof Omit<ResumeData, 'coverLetter'>,
@@ -191,6 +190,7 @@ export default function EditorPage() {
         summary: resumeData.summary,
       });
       handleFieldChange("summary", result.summary);
+      toast({ title: "AI Suggestion", description: result.explanation });
     } catch (error) {
       console.error("Error generating summary:", error);
       toast({ title: "Error", description: "Failed to generate summary.", variant: "destructive" });
@@ -215,6 +215,7 @@ export default function EditorPage() {
         desiredExperience: exp.description,
       });
       handleNestedFieldChange( "experience", index, "description", result.experiences );
+      toast({ title: "AI Suggestion", description: result.explanation });
     } catch (error) {
       console.error("Error generating experience:", error);
       toast({ title: "Error", description: "Failed to generate experience.", variant: "destructive" });
@@ -238,6 +239,7 @@ export default function EditorPage() {
         projectDescription: project.description
       });
       handleNestedFieldChange('projects', index, 'description', result.description);
+      toast({ title: "AI Suggestion", description: result.explanation });
     } catch (error) {
       console.error("Error generating project description:", error);
       toast({ title: "Error", description: "Failed to generate project description.", variant: "destructive" });
@@ -258,6 +260,7 @@ export default function EditorPage() {
         projectDescription: workProject.description,
       });
       handleWorkProjectChange(experienceIndex, projectIndex, 'description', result.description);
+      toast({ title: "AI Suggestion", description: result.explanation });
     } catch (error) {
       console.error("Error generating work project description:", error);
       toast({ title: "Error", description: "Failed to generate work project description.", variant: "destructive" });
