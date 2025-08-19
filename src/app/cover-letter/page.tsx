@@ -124,7 +124,7 @@ export default function CoverLetterPage() {
     <>
       <div className="flex flex-col md:flex-row h-[calc(100vh-69px)] bg-muted/40">
         {/* Editor Panel */}
-        <div className="w-full md:w-1/2 lg:w-2/5 xl:w-1/3 p-4 md:p-6 lg:p-8 bg-background border-r overflow-y-auto">
+        <div className="w-full md:w-1/2 lg:w-2/5 xl:w-1/3 p-4 md:p-6 lg:p-8 bg-background border-r overflow-y-auto md:h-[calc(100vh-69px)]">
             <div className="max-w-4xl mx-auto">
                 <Button asChild variant="ghost" className="mb-4 -ml-4">
                 <Link href="/editor">
@@ -134,12 +134,12 @@ export default function CoverLetterPage() {
                 </Button>
 
                 <div className="bg-card p-6 md:p-8 rounded-lg shadow-sm">
-                    <div className="flex flex-col sm:flex-row justify-between sm:items-center mb-6">
+                    <div className="flex flex-col sm:flex-row justify-between sm:items-center mb-6 gap-4">
                         <div>
                             <h1 className="text-2xl font-bold mb-1">Cover Letter Generator</h1>
                             <p className="text-muted-foreground">Create a compelling cover letter based on your resume and the job you want.</p>
                         </div>
-                        <Button asChild variant="outline">
+                        <Button asChild variant="outline" className="w-full sm:w-auto">
                             <Link href="/cover-letter/templates">
                                 <LayoutTemplate className="mr-2 h-4 w-4" />
                                 Choose Template
@@ -177,7 +177,7 @@ export default function CoverLetterPage() {
                 transition={{ duration: 0.5, ease: 'easeOut' }}
                 className="w-full max-w-2xl"
                 >
-                <div ref={previewRef} className="transform scale-[0.8] origin-top">
+                <div ref={previewRef} className="transform scale-[0.35] sm:scale-[0.5] md:scale-[0.6] lg:scale-[0.8] origin-top">
                     {CoverLetterPreview}
                 </div>
             </motion.div>

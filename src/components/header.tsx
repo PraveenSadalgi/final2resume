@@ -36,8 +36,8 @@ export function Header({ resumeData }: HeaderProps) {
   ];
 
   const templatesLinks = [
-     { href: '/templates', label: 'Resume Templates', storageKey: 'selectedTemplate' },
-     { href: '/cover-letter/templates', label: 'Cover Letter Templates', storageKey: 'selectedCoverLetterTemplate' },
+     { href: '/templates', label: 'Resume Templates' },
+     { href: '/cover-letter/templates', label: 'Cover Letter Templates' },
   ];
 
   return (
@@ -84,7 +84,7 @@ export function Header({ resumeData }: HeaderProps) {
                     <DropdownMenuSeparator />
                      {templatesLinks.map(link => (
                         <DropdownMenuItem key={link.href} asChild>
-                            <Link href={link.href} onClick={() => link.storageKey && handleStorage(link.storageKey)}>
+                            <Link href={link.href}>
                                 {link.label}
                             </Link>
                         </DropdownMenuItem>

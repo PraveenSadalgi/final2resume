@@ -282,7 +282,7 @@ export default function EditorPage() {
             initial={{ opacity: 0, x: -40 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.6, ease: "easeOut" }}
-            className="no-print overflow-y-auto"
+            className="no-print overflow-y-auto md:h-[calc(100vh-69px)]"
           >
             {isClient ? (
               <ResumeEditor

@@ -250,7 +250,7 @@ const TemplateShowcase: React.FC = () => {
 
   // single resume card — keep same size as original
   const resumeCard = (i: number) => (
-    <div key={i} className="mx-3 w-[280px] shrink-0 rounded-2xl border bg-background p-4 shadow-sm transform-gpu transition-all hover:scale-[1.03] hover:shadow-lg">
+    <div key={i} className="mx-3 w-[240px] sm:w-[280px] shrink-0 rounded-2xl border bg-background p-4 shadow-sm transform-gpu transition-all hover:scale-[1.03] hover:shadow-lg">
       <div className="mb-3 aspect-[3/4] w-full rounded-xl bg-gradient-to-br from-violet-500/15 to-cyan-500/15 shadow-inner" />
       <div className="space-y-2">
         <div className="h-3 w-2/3 rounded bg-muted" />
@@ -259,17 +259,10 @@ const TemplateShowcase: React.FC = () => {
     </div>
   );
 
-  // placeholder card (static) with same dimensions
-  const placeholderCard = (key: string) => (
-    <div key={key} className="mx-3 w-[280px] shrink-0 rounded-2xl border bg-muted/30 p-4 flex items-center justify-center text-sm text-muted-foreground">
-      <span className="select-none">Placeholder</span>
-    </div>
-  );
-
   return (
     <section id="templates" className="relative overflow-hidden py-20">
       <div className="mx-auto max-w-7xl px-6">
-        <div className="mb-10 flex items-end justify-between gap-6">
+        <div className="mb-10 flex flex-col items-start gap-4 sm:flex-row sm:items-end sm:justify-between">
           <div>
             <h2 className="text-3xl font-bold tracking-tight md:text-4xl">Templates that pass ATS</h2>
             <p className="mt-2 max-w-2xl text-muted-foreground">Pick from elegant, readable templates that keep parsing systems happy.</p>
@@ -281,26 +274,16 @@ const TemplateShowcase: React.FC = () => {
       </div>
 
       <div className="relative">
-        <div className="pointer-events-none absolute inset-y-0 left-0 z-10 w-24 bg-gradient-to-r from-background to-transparent" />
-        <div className="pointer-events-none absolute inset-y-0 right-0 z-10 w-24 bg-gradient-to-l from-background to-transparent" />
+        <div className="pointer-events-none absolute inset-y-0 left-0 z-10 w-12 sm:w-24 bg-gradient-to-r from-background to-transparent" />
+        <div className="pointer-events-none absolute inset-y-0 right-0 z-10 w-12 sm:w-24 bg-gradient-to-l from-background to-transparent" />
 
-        {/* Row with static placeholders and moving resumes in the middle */}
         <div className="overflow-hidden">
          {!isClient ? (
             <div className="text-center p-8 text-muted-foreground">Loading templates...</div>
           ) : (
-          <div className="flex items-center px-6">
-            {placeholderCard('left')}
-
-            {/* Moving track: we duplicate resume cards to create a seamless infinite loop */}
-            <div className="mx-3 overflow-hidden">
-              <div ref={trackRef} className="flex w-[200%] items-center">
-                {[...Array(8)].map((_, i) => resumeCard(i))}
-                {[...Array(8)].map((_, i) => resumeCard(i + 8))}
-              </div>
-            </div>
-
-            {placeholderCard('right')}
+          <div ref={trackRef} className="flex w-max items-center">
+              {[...Array(8)].map((_, i) => resumeCard(i))}
+              {[...Array(8)].map((_, i) => resumeCard(i + 8))}
           </div>
           )}
         </div>
@@ -309,17 +292,17 @@ const TemplateShowcase: React.FC = () => {
       {/* small CSS tweak to make the motion very smooth */}
       <style>{`
         /* keep user-select off for carousel items while moving */
-        #templates .w-\\[280px\\] { user-select: none; }
+        #templates .w-\\[240px\\], #templates .sm\\:w-\\[280px\\] { user-select: none; }
       `}</style>
     </section>
   );
 };
 
 const CTA: React.FC = () => (
-  <section className="relative py-20">
+  <section className="relative py-20 px-4">
     <div className="mx-auto max-w-5xl overflow-hidden rounded-3xl border bg-gradient-to-br from-violet-600 to-fuchsia-600 p-1 shadow-xl">
       <div className="rounded-[22px] bg-background px-8 py-12 sm:px-12">
-        <div className="grid items-center gap-8 sm:grid-cols-2">
+        <div className="grid items-center gap-8 md:grid-cols-2">
           <div>
             <h3 className="text-2xl font-bold tracking-tight md:text-3xl">Ready to land more interviews?</h3>
             <p className="mt-2 text-muted-foreground">Start free. No credit card required. Generate your first resume in minutes.</p>
@@ -465,5 +448,3 @@ export default function ResuAIHome() {
     </main>
   );
 }
-
-    

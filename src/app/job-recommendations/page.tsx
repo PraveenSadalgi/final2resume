@@ -80,7 +80,10 @@ export default function JobRecommendationsPage() {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          preferences: preferences,
+          preferences: {
+            ...preferences,
+            geo: preferences.location
+          }
         }),
       });
 
@@ -147,7 +150,7 @@ export default function JobRecommendationsPage() {
             <div className="max-w-4xl mx-auto">
               <h1 className="text-2xl font-bold mb-1">Job Recommendations</h1>
               <p className="text-muted-foreground mb-6">Find your next role based on your resume and preferences.</p>
-              <div className="grid grid-cols-1 sm:grid-cols-[1fr_1fr_auto] gap-4 items-end">
+              <div className="grid grid-cols-1 md:grid-cols-[1fr_1fr_auto] gap-4 items-end">
                 <div className="space-y-2">
                   <Label htmlFor="keywords">Job Title / Keywords</Label>
                   <Input
@@ -166,7 +169,7 @@ export default function JobRecommendationsPage() {
                     placeholder="e.g., San Francisco, CA"
                   />
                 </div>
-                <Button onClick={fetchJobs} disabled={loading} className="w-full sm:w-auto">
+                <Button onClick={fetchJobs} disabled={loading} className="w-full md:w-auto">
                   {loading ? (
                     <LoadingSpinner className="mr-2" />
                   ) : (
