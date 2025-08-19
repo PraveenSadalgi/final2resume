@@ -12,8 +12,9 @@ import LoadingSpinner from "@/components/ui/loading-spinner";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { useToast } from "@/hooks/use-toast";
 import type { ResumeData } from "@/lib/types";
-import { Search, Briefcase, MapPin, Building, Calendar, ExternalLink, AlertCircle } from "lucide-react";
+import { Search, Briefcase, MapPin, Building, Calendar, ExternalLink, AlertCircle, Tag, DollarSign } from "lucide-react";
 import Link from "next/link";
+import { Badge } from "@/components/ui/badge";
 
 interface Job {
   id: string;
@@ -23,13 +24,16 @@ interface Job {
   description: string;
   url: string;
   posted_at: string;
+  salary: string;
+  category: string;
+  type: string;
 }
 
 export default function JobRecommendationsPage() {
   const [resumeData, setResumeData] = useState<ResumeData | null>(null);
   const [preferences, setPreferences] = useState({
     keywords: "",
-    location: "",
+    category: "",
   });
   const [jobs, setJobs] = useState<Job[] | null>(null);
   const [loading, setLoading] = useState(false);
@@ -49,7 +53,8 @@ export default function JobRecommendationsPage() {
           parsedData.experience?.[0]?.role,
           ...parsedData.skills.slice(0, 2)
         ].filter(Boolean).join(', ');
-        setPreferences(prev => ({ ...prev, keywords: initialKeywords, location: parsedData.location || "" }));
+        const initialCategory = parsedData.experience?.[0]?.role.toLowerCase().includes('develop') ? 'software-dev' : '';
+        setPreferences(prev => ({ ...prev, keywords: initialKeywords, category: initialCategory }));
       } catch (error) {
         console.error("Failed to parse resume data from localStorage", error);
         setResumeData(null);
@@ -81,8 +86,7 @@ export default function JobRecommendationsPage() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           preferences: {
-            ...preferences,
-            geo: preferences.location
+            ...preferences
           }
         }),
       });
@@ -129,8 +133,16 @@ export default function JobRecommendationsPage() {
             </div>
              <div className="flex items-center gap-2">
                 <Calendar className="h-3.5 w-3.5" />
-                <span>Posted: {job.posted_at}</span>
+                <span>Posted: {new Date(job.posted_at).toLocaleDateString()}</span>
             </div>
+             <div className="flex items-center gap-2">
+                <DollarSign className="h-3.5 w-3.5" />
+                <span>{job.salary}</span>
+            </div>
+        </div>
+        <div className="flex items-center gap-2 pt-2">
+            <Badge variant="secondary">{job.category}</Badge>
+            {job.type && <Badge variant="outline">{job.type}</Badge>}
         </div>
       </CardHeader>
       <CardContent>
@@ -161,12 +173,12 @@ export default function JobRecommendationsPage() {
                   />
                 </div>
                 <div className="space-y-2">
-                  <Label htmlFor="location">Location</Label>
+                  <Label htmlFor="category">Category</Label>
                   <Input
-                    id="location"
-                    value={preferences.location}
-                    onChange={(e) => handlePreferenceChange("location", e.target.value)}
-                    placeholder="e.g., San Francisco, CA"
+                    id="category"
+                    value={preferences.category}
+                    onChange={(e) => handlePreferenceChange("category", e.target.value)}
+                    placeholder="e.g., software-dev, design"
                   />
                 </div>
                 <Button onClick={fetchJobs} disabled={loading} className="w-full md:w-auto">

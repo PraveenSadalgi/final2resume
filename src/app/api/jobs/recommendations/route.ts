@@ -1,15 +1,14 @@
-
 import { NextResponse } from 'next/server';
 import { z } from 'zod';
 
-const API_URL = 'https://jobicy.com/api/v2/remote-jobs';
+const API_URL = 'https://remotive.com/api/remote-jobs';
 
 const RequestBodySchema = z.object({
   preferences: z.object({
     keywords: z.string().min(1, 'Keywords are required for job search.'),
     count: z.number().optional(),   // how many jobs to fetch
-    geo: z.string().optional(),     // region filter
-    industry: z.string().optional() // industry filter
+    category: z.string().optional(), // Remotive supports categories
+    company: z.string().optional(),  // filter by company name
   }),
 });
 
@@ -27,45 +26,42 @@ export async function POST(request: Request) {
 
     const { preferences } = validation.data;
 
-    // Build query string for Jobicy API
-    const params = new URLSearchParams({
-      count: String(preferences.count || 10),
-      tag: preferences.keywords,
-    });
+    // Build query string for Remotive API
+    const params = new URLSearchParams();
 
-    if (preferences.geo) params.append('geo', preferences.geo);
-    if (preferences.industry) params.append('industry', preferences.industry);
+    if (preferences.keywords) params.append('search', preferences.keywords);
+    if (preferences.category) params.append('category', preferences.category);
+    if (preferences.company) params.append('company_name', preferences.company);
+    if (preferences.count) params.append('limit', String(preferences.count));
 
-    const apiUrl = `${API_URL}?${params.toString()}`;
+  const apiUrl = `${API_URL}?${params.toString()}`;
 
-    // Debug log
-    console.log('Fetching from Jobicy:', apiUrl);
+    console.log('Fetching from Remotive:', apiUrl);
 
     const response = await fetch(apiUrl);
     if (!response.ok) {
       const text = await response.text();
       return NextResponse.json(
-        { error: `Jobicy API error: ${text}` },
+        { error: `Remotive API error: ${text}` },
         { status: response.status }
       );
     }
 
     const data = await response.json();
 
-    // Debug log
-    console.log('Jobicy response:', data);
+    console.log('Remotive response:', data);
 
     const jobs = (data.jobs || []).map((job: any, idx: number) => ({
       id: job.id || `job-${Date.now()}-${idx}`,
-      title: job.jobTitle,
-      company: job.companyName,
-      location: job.jobGeo || 'Remote',
-      description: job.jobExcerpt,
+      title: job.title,
+      company: job.company_name,
+      location: job.candidate_required_location || 'Remote',
+      description: job.description,
       url: job.url,
-      posted_at: job.pubDate,
-      salary: job.annualSalaryMin
-        ? `${job.annualSalaryMin} - ${job.annualSalaryMax} ${job.salaryCurrency}`
-        : 'Not disclosed',
+      posted_at: job.publication_date,
+      salary: job.salary || 'Not disclosed',
+      category: job.category,
+      type: job.job_type,
     }));
 
     return NextResponse.json({ jobs });
