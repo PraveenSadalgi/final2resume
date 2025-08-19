@@ -155,3 +155,16 @@ export const SuggestRelevantSkillsOutputSchema = z.object({
   skills: z.array(z.string()).describe('An array of relevant skills for the resume.'),
 });
 export type SuggestRelevantSkillsOutput = z.infer<typeof SuggestRelevantSkillsOutputSchema>;
+
+export const ImproveResumeInputSchema = z.object({
+  resumeData: z.string().describe('The entire resume content as a JSON string.'),
+});
+export type ImproveResumeInput = z.infer<typeof ImproveResumeInputSchema>;
+
+export const ImproveResumeOutputSchema = z.object({
+  summary: z.string().describe('The improved professional summary.'),
+  experience: z.array(z.string()).describe('An array of improved experience descriptions, one for each job.'),
+  projects: z.array(z.string()).describe('An array of improved project descriptions, one for each project.'),
+  suggestedSkills: z.array(z.string()).describe('An array of new skills to add.'),
+});
+export type ImproveResumeOutput = z.infer<typeof ImproveResumeOutputSchema>;

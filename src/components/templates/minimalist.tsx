@@ -40,6 +40,14 @@ export default function MinimalistTemplate({ resumeData }: TemplateProps) {
       {children}
     </section>
   );
+  
+  const ensureProtocol = (url: string) => {
+    if (!url) return "#";
+    if (!/^https?:\/\//i.test(url)) {
+      return `https://${url}`;
+    }
+    return url;
+  };
 
   return (
     <div className="p-10 bg-white text-gray-800 font-light text-[10pt] leading-relaxed">
@@ -48,13 +56,13 @@ export default function MinimalistTemplate({ resumeData }: TemplateProps) {
         <div className="flex items-center flex-wrap gap-x-4 gap-y-1 text-xs text-gray-500 mt-2">
           <span>{location}</span>
           <span>&bull;</span>
-          <span>{email}</span>
+          <a href={`mailto:${email}`}>{email}</a>
           <span>&bull;</span>
           <span>{phone}</span>
            <span>&bull;</span>
-          <span>{github}</span>
+          <a href={ensureProtocol(github)} target="_blank" rel="noopener noreferrer">{github}</a>
            <span>&bull;</span>
-          <span>{linkedin}</span>
+          <a href={ensureProtocol(linkedin)} target="_blank" rel="noopener noreferrer">{linkedin}</a>
         </div>
       </header>
 
@@ -135,4 +143,3 @@ export default function MinimalistTemplate({ resumeData }: TemplateProps) {
     </div>
   );
 }
-

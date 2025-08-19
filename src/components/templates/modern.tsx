@@ -52,6 +52,14 @@ export default function ModernTemplate({ resumeData }: TemplateProps) {
     </section>
   );
 
+  const ensureProtocol = (url: string) => {
+    if (!url) return "#";
+    if (!/^https?:\/\//i.test(url)) {
+      return `https://${url}`;
+    }
+    return url;
+  };
+
   return (
     <div className="p-8 bg-white text-gray-800 font-sans text-[10pt] leading-normal">
       <header className="mb-8">
@@ -59,12 +67,12 @@ export default function ModernTemplate({ resumeData }: TemplateProps) {
         {experience[0] && <p className="text-lg text-primary mt-1">{experience[0].role}</p>}
         <div className="flex items-center flex-wrap gap-x-4 gap-y-1 text-xs text-gray-500 mt-3">
           {location && <span className="flex items-center gap-1.5"><MapPin size={12} /> {location}</span>}
-          {email && <span className="flex items-center gap-1.5"><Mail size={12} /> {email}</span>}
+          {email && <a href={`mailto:${email}`} className="flex items-center gap-1.5"><Mail size={12} /> {email}</a>}
           {phone && <span className="flex items-center gap-1.5"><Phone size={12} /> {phone}</span>}
         </div>
          <div className="flex items-center flex-wrap gap-x-4 gap-y-1 text-xs text-gray-500 mt-1">
-          {github && <span className="flex items-center gap-1.5"><Globe size={12} /> {github}</span>}
-          {linkedin && <span className="flex items-center gap-1.5"><Linkedin size={12} /> {linkedin}</span>}
+          {github && <a href={ensureProtocol(github)} target="_blank" rel="noopener noreferrer" className="flex items-center gap-1.5"><Globe size={12} /> {github}</a>}
+          {linkedin && <a href={ensureProtocol(linkedin)} target="_blank" rel="noopener noreferrer" className="flex items-center gap-1.5"><Linkedin size={12} /> {linkedin}</a>}
         </div>
       </header>
 

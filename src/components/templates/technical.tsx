@@ -52,6 +52,14 @@ export default function TechnicalTemplate({ resumeData }: TemplateProps) {
     </section>
   );
 
+  const ensureProtocol = (url: string) => {
+    if (!url) return "#";
+    if (!/^https?:\/\//i.test(url)) {
+      return `https://${url}`;
+    }
+    return url;
+  };
+
   return (
     <div className="p-8 bg-white text-gray-800 font-sans text-[10pt] leading-relaxed">
       <header className="text-center mb-6">
@@ -60,8 +68,8 @@ export default function TechnicalTemplate({ resumeData }: TemplateProps) {
           {location && <span className="flex items-center gap-1.5"><MapPin size={12} /> {location}</span>}
           {email && <a href={`mailto:${email}`} className="flex items-center gap-1.5 hover:text-primary">{email}</a>}
           {phone && <span>{phone}</span>}
-          {linkedin && <a href={`https://${linkedin}`} className="flex items-center gap-1.5 hover:text-primary">linkedin.com/in/...</a>}
-          {github && <a href={`https://${github}`} className="flex items-center gap-1.5 hover:text-primary">github.com/...</a>}
+          {linkedin && <a href={ensureProtocol(linkedin)} target="_blank" rel="noopener noreferrer" className="flex items-center gap-1.5 hover:text-primary">linkedin.com/in/...</a>}
+          {github && <a href={ensureProtocol(github)} target="_blank" rel="noopener noreferrer" className="flex items-center gap-1.5 hover:text-primary">github.com/...</a>}
         </div>
       </header>
 

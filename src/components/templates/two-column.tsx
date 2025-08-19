@@ -71,6 +71,14 @@ export default function TwoColumnTemplate({ resumeData }: TemplateProps) {
     </section>
   );
 
+  const ensureProtocol = (url: string) => {
+    if (!url) return "#";
+    if (!/^https?:\/\//i.test(url)) {
+      return `https://${url}`;
+    }
+    return url;
+  };
+
   return (
     <div className="flex bg-white text-gray-800 text-[9pt] leading-normal h-full">
       {/* Sidebar */}
@@ -83,10 +91,10 @@ export default function TwoColumnTemplate({ resumeData }: TemplateProps) {
         <SidebarSection title="Contact" Icon={Mail}>
             <ul className="space-y-1.5 text-xs">
                 {location && <li className="flex items-start gap-2"><MapPin size={12} className="mt-0.5 shrink-0"/> {location}</li>}
-                {email && <li className="flex items-start gap-2"><Mail size={12} className="mt-0.5 shrink-0"/> {email}</li>}
+                {email && <li className="flex items-start gap-2"><Mail size={12} className="mt-0.5 shrink-0"/> <a href={`mailto:${email}`} className="text-white hover:underline">{email}</a></li>}
                 {phone && <li className="flex items-start gap-2"><Phone size={12} className="mt-0.5 shrink-0"/> {phone}</li>}
-                {github && <li className="flex items-start gap-2"><Globe size={12} className="mt-0.5 shrink-0"/> {github}</li>}
-                {linkedin && <li className="flex items-start gap-2"><Linkedin size={12} className="mt-0.5 shrink-0"/> {linkedin}</li>}
+                {github && <li className="flex items-start gap-2"><Globe size={12} className="mt-0.5 shrink-0"/> <a href={ensureProtocol(github)} target="_blank" rel="noopener noreferrer" className="text-white hover:underline">{github}</a></li>}
+                {linkedin && <li className="flex items-start gap-2"><Linkedin size={12} className="mt-0.5 shrink-0"/> <a href={ensureProtocol(linkedin)} target="_blank" rel="noopener noreferrer" className="text-white hover:underline">{linkedin}</a></li>}
             </ul>
         </SidebarSection>
         

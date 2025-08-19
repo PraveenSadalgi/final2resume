@@ -304,6 +304,7 @@ export default function EditorPage() {
             {isClient ? (
               <ResumeEditor
                 resumeData={resumeData}
+                setResumeData={setResumeData}
                 onFieldChange={handleFieldChange}
                 onNestedFieldChange={handleNestedFieldChange}
                 onAddExperience={addExperience}

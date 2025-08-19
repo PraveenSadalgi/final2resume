@@ -49,6 +49,15 @@ export default function ExecutiveTemplate({ resumeData }: TemplateProps) {
     </section>
   );
 
+  const ensureProtocol = (url: string) => {
+    if (!url) return "#";
+    if (!/^https?:\/\//i.test(url)) {
+      return `https://${url}`;
+    }
+    return url;
+  };
+
+
   return (
     <div className="p-10 bg-white text-gray-800 font-serif text-[10pt] leading-relaxed">
       <header className="text-center mb-8 pb-4 border-b-2 border-primary">
@@ -118,10 +127,10 @@ export default function ExecutiveTemplate({ resumeData }: TemplateProps) {
             <h2 className="text-xs font-bold uppercase tracking-[0.2em] text-primary/80 mb-3">Contact</h2>
              <ul className="space-y-1.5 text-xs text-gray-600 mb-6">
                 {location && <li className="flex items-start gap-2"><MapPin size={12} className="mt-0.5 shrink-0"/> {location}</li>}
-                {email && <li className="flex items-start gap-2"><Mail size={12} className="mt-0.5 shrink-0"/> {email}</li>}
+                {email && <li className="flex items-start gap-2"><Mail size={12} className="mt-0.5 shrink-0"/> <a href={`mailto:${email}`}>{email}</a></li>}
                 {phone && <li className="flex items-start gap-2"><Phone size={12} className="mt-0.5 shrink-0"/> {phone}</li>}
-                {github && <li className="flex items-start gap-2"><Globe size={12} className="mt-0.5 shrink-0"/> {github}</li>}
-                {linkedin && <li className="flex items-start gap-2"><Linkedin size={12} className="mt-0.5 shrink-0"/> {linkedin}</li>}
+                {github && <li className="flex items-start gap-2"><Globe size={12} className="mt-0.5 shrink-0"/> <a href={ensureProtocol(github)} target="_blank" rel="noopener noreferrer">{github}</a></li>}
+                {linkedin && <li className="flex items-start gap-2"><Linkedin size={12} className="mt-0.5 shrink-0"/> <a href={ensureProtocol(linkedin)} target="_blank" rel="noopener noreferrer">{linkedin}</a></li>}
             </ul>
 
             <h2 className="text-xs font-bold uppercase tracking-[0.2em] text-primary/80 mb-3">Core Competencies</h2>

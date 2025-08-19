@@ -38,6 +38,15 @@ export default function CreativeTemplate({ resumeData }: TemplateProps) {
   const SectionTitle = ({ title }: { title: string }) => (
     <h2 className="text-xl font-bold text-primary tracking-wide mb-3">{title}</h2>
   );
+  
+  const ensureProtocol = (url: string) => {
+    if (!url) return "#";
+    if (!/^https?:\/\//i.test(url)) {
+      return `https://${url}`;
+    }
+    return url;
+  };
+
 
   return (
     <div className="flex h-full bg-white text-gray-800 text-[9.5pt] leading-normal font-serif">
@@ -54,7 +63,7 @@ export default function CreativeTemplate({ resumeData }: TemplateProps) {
         <div className="space-y-4 text-xs">
            <div className="flex items-start gap-2.5">
             <Mail size={14} className="mt-0.5 shrink-0 text-primary" />
-            <span>{email}</span>
+            <a href={`mailto:${email}`}>{email}</a>
           </div>
           <div className="flex items-start gap-2.5">
             <Phone size={14} className="mt-0.5 shrink-0 text-primary" />
@@ -66,11 +75,11 @@ export default function CreativeTemplate({ resumeData }: TemplateProps) {
           </div>
            <div className="flex items-start gap-2.5">
             <Globe size={14} className="mt-0.5 shrink-0 text-primary" />
-            <span>{github}</span>
+            <a href={ensureProtocol(github)} target="_blank" rel="noopener noreferrer">{github}</a>
           </div>
            <div className="flex items-start gap-2.5">
             <Linkedin size={14} className="mt-0.5 shrink-0 text-primary" />
-            <span>{linkedin}</span>
+            <a href={ensureProtocol(linkedin)} target="_blank" rel="noopener noreferrer">{linkedin}</a>
           </div>
         </div>
 
