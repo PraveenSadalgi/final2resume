@@ -22,6 +22,8 @@ const prompt = ai.definePrompt({
   output: {schema: GenerateExperienceOutputSchema},
   prompt: `You are an expert resume writer. Your task is to rewrite and enhance the provided resume experience description to be more professional, achievement-oriented, and impactful. Use strong action verbs and quantify results where possible.
 
+  Also provide a brief explanation of the key changes you made and why, such as noting the addition of stronger verbs, quantifying results, or improving clarity.
+
   User's Profession: {{{profession}}}
   User's Role: {{{role}}}
   Existing Experience Description:
@@ -29,7 +31,7 @@ const prompt = ai.definePrompt({
   {{{desiredExperience}}}
   \`\`\`
 
-  Generate a new, improved description based on the provided text. Focus on clarity, conciseness, and showcasing value. Return only the improved text.`,
+  Generate a new, improved description and an explanation for the changes. Focus on clarity, conciseness, and showcasing value.`,
 });
 
 const generateExperienceFlow = ai.defineFlow(

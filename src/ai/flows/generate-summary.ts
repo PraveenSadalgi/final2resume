@@ -21,6 +21,8 @@ const prompt = ai.definePrompt({
   output: {schema: GenerateProfessionalSummaryOutputSchema},
   prompt: `You are an expert resume writer. Rephrase and improve the following professional summary to make it more impactful and professional. If the summary is empty, generate a new one based on the user's profession.
 
+  Also provide a brief, one-sentence explanation of the improvement (e.g., "Made the summary more concise and results-oriented.").
+
   Profession: {{{profession}}}
   Existing Summary: {{{summary}}}
 

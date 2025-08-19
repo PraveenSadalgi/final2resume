@@ -99,6 +99,7 @@ export const GenerateExperienceOutputSchema = z.object({
     .describe(
       'Tailored experiences and bullet points for the resume, optimized for the specified profession and role.'
     ),
+  explanation: z.string().describe('A brief explanation of the changes made.'),
 });
 export type GenerateExperienceOutput = z.infer<typeof GenerateExperienceOutputSchema>;
 
@@ -115,6 +116,7 @@ export const GenerateProjectDescriptionOutputSchema = z.object({
   description: z
     .string()
     .describe('A generated, attractive description of the project.'),
+  explanation: z.string().describe('A brief explanation of the changes made.'),
 });
 export type GenerateProjectDescriptionOutput = z.infer<typeof GenerateProjectDescriptionOutputSchema>;
 
@@ -126,6 +128,7 @@ export type GenerateProfessionalSummaryInput = z.infer<typeof GenerateProfession
 
 export const GenerateProfessionalSummaryOutputSchema = z.object({
   summary: z.string().describe('An improved and professional summary for the resume.'),
+  explanation: z.string().describe('A brief explanation of the changes made.'),
 });
 export type GenerateProfessionalSummaryOutput = z.infer<typeof GenerateProfessionalSummaryOutputSchema>;
 
@@ -142,6 +145,7 @@ export const GenerateWorkProjectDescriptionOutputSchema = z.object({
   description: z
     .string()
     .describe('A generated, attractive description of the project for a work experience entry.'),
+  explanation: z.string().describe('A brief explanation of the changes made.'),
 });
 export type GenerateWorkProjectDescriptionOutput = z.infer<typeof GenerateWorkProjectDescriptionOutputSchema>;
 
@@ -167,5 +171,6 @@ export const ImproveResumeOutputSchema = z.object({
   experience: z.array(z.string()).describe('An array of improved experience descriptions, one for each job.'),
   projects: z.array(z.string()).describe('An array of improved project descriptions, one for each project.'),
   suggestedSkills: z.array(z.string()).describe('An array of new skills to add.'),
+  achievements: z.array(z.string()).optional().describe('Improved versions of achievements or other sections.'),
 });
 export type ImproveResumeOutput = z.infer<typeof ImproveResumeOutputSchema>;

@@ -21,11 +21,13 @@ const prompt = ai.definePrompt({
   output: {schema: GenerateWorkProjectDescriptionOutputSchema},
   prompt: `You are an expert resume writer. Based on the project name, the user's role, and the description, generate a more attractive and professional description for a resume's work experience section. Focus on highlighting the key achievements and technologies used. Keep it concise and impactful.
 
+  Also provide a brief explanation of the improvements made.
+
   Project Name: {{{projectName}}}
   Role: {{{role}}}
   Original Description: {{{projectDescription}}}
 
-  Strictly provide an attractive description based on the provided details.
+  Strictly provide an attractive description and a brief explanation based on the provided details.
   `,
 });
 
