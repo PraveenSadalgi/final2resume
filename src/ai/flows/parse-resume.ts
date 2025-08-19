@@ -66,7 +66,7 @@ const ParsedResumeOutputSchema = z.object({
       })
     )
     .describe('A list of personal or academic projects.'),
-  achievements: z.array(z.string()).optional().describe('A list of key achievements or awards, rewritten to be concise and impactful.'),
+  achievements: z.array(z.string()).optional().describe('A list of key achievements, awards, or other sections, rewritten to be concise and impactful.'),
 });
 
 // Define the input for our flow
@@ -95,26 +95,26 @@ const prompt = ai.definePrompt({
   model: googleAI.model('gemini-2.0-flash'),
   input: {schema: ParseResumeInputSchema},
   output: {schema: ParsedResumeOutputSchema},
-  prompt: `You are an expert resume analyst and writer. Your task is to parse the provided resume file, extract structured information, and simultaneously improve the content.
+  prompt: `You are an expert resume analyst and writer. Your task is to parse the provided resume file, extract all structured information, and simultaneously improve the content of every section. Do not discard any sections.
 
   **Instructions:**
-  1.  **Parse the Resume:** Analyze the resume file provided as a data URI.
-  2.  **Extract Structured Data:** Identify and extract the following sections:
+  1.  **Parse ALL Sections:** Analyze the resume file. Extract every section you find, including standard sections (Contact Info, Summary, Experience, etc.) and any other sections like "Awards", "Publications", "Certifications", or "Achievements".
+  2.  **Extract Structured Data:** Identify and extract the following:
       *   Contact Information (name, email, phone, location, GitHub, LinkedIn).
       *   Professional Summary.
       *   Work Experience (role, company, dates, description).
       *   Education (school, degree, dates).
       *   Skills.
       *   Personal Projects.
-      *   **Achievements / Awards**: Look for a section with achievements or awards. If it exists, extract it.
-  3.  **Improve Content:** As you extract the data, improve it:
+      *   **Achievements / Other Sections**: Group any additional sections like "Awards", "Honors", "Publications", or "Certifications" into the 'achievements' field. Extract the content from these sections.
+  3.  **Improve ALL Content:** As you extract the data, improve it.
       *   **Summary:** Rewrite the professional summary to be more concise and impactful.
       *   **Experience:** Rephrase experience descriptions into strong, achievement-oriented bullet points. Start each bullet with an action verb.
       *   **Projects:** Make project descriptions more professional and results-focused.
-      *   **Skills:** Extract all listed skills and suggest 3-5 additional relevant skills.
-      *   **Achievements**: If an achievements section is found, rewrite each point to be a crisp, short, and effective sentence.
+      *   **Skills:** Extract all listed skills and suggest 3-5 additional relevant skills based on the content.
+      *   **Achievements/Other:** For any other section found, rewrite each point to be a crisp, short, and effective sentence. Do not remove them.
   4.  **Assign IDs:** For each entry in experience, education, and projects, generate a unique string ID (e.g., "exp1", "edu1").
-  5.  **Format Output:** Return the extracted and improved data in the specified JSON format. If a section is not found, return an empty string or an empty array for that field.
+  5.  **Format Output:** Return all extracted and improved data in the specified JSON format. If a section is not found, return an empty string or an empty array for that field, but ensure all information from the original resume is captured and improved in some field.
 
   **Resume File:**
   {{media url=resumeFile}}
