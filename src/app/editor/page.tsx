@@ -55,6 +55,7 @@ export default function EditorPage() {
                 setResumeData(JSON.parse(savedData));
             } catch (error) {
                 console.error("Failed to parse resume data from localStorage", error);
+                setResumeData(classicTemplate); // fallback to default
             }
         }
     }
