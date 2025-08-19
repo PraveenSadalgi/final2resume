@@ -300,7 +300,7 @@ export default function EditorPage() {
                 onGenerateProject={handleGenerateProjectDescription}
                 onGenerateWorkProjectDescription={handleGenerateWorkProjectDescription}
                 onSuggestSkills={suggestSkills}
-                loadingStates={{...loadingStates, speech: false}}
+                loadingStates={loadingStates}
                 onAddWorkProject={addWorkProject}
                 onRemoveWorkProject={removeWorkProject}
                 onWorkProjectChange={handleWorkProjectChange}
@@ -336,3 +336,5 @@ export default function EditorPage() {
     </>
   );
 }
+
+    

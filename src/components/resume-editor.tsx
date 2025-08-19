@@ -51,7 +51,6 @@ interface ResumeEditorProps {
     skills: boolean;
     project: string | null;
     workProject: string | null;
-    speech: boolean;
   };
   onAddWorkProject: (experienceIndex: number) => void;
   onRemoveWorkProject: (experienceIndex: number, projectIndex: number) => void;
