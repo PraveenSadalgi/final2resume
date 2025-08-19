@@ -7,12 +7,6 @@ import {
   Share2,
 } from "lucide-react";
 import type { ResumeData } from "@/lib/types";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "./ui/dropdown-menu";
 import Link from "next/link";
 
 interface ControlsProps {
@@ -51,21 +45,10 @@ export default function Controls({ resumeData }: ControlsProps) {
           <Button variant="ghost" size="icon" onClick={handleShare} aria-label="Share">
             <Share2 className="h-4 w-4" />
           </Button>
-
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button>
-                <Download className="h-4 w-4 mr-2" />
-                Export
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="end">
-              <DropdownMenuItem onClick={handlePrint}>
-                Download PDF
-              </DropdownMenuItem>
-              <DropdownMenuItem disabled>Download DOCX (coming soon)</DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
+           <Button onClick={handlePrint}>
+              <Download className="h-4 w-4 mr-2" />
+              Download PDF
+            </Button>
         </div>
       </div>
     </div>
