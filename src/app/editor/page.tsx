@@ -39,7 +39,9 @@ export default function EditorPage() {
     const templateData = localStorage.getItem("selectedTemplate");
     if (templateData && templateQuery) {
       try {
-        setResumeData(JSON.parse(templateData));
+        const parsedData = JSON.parse(templateData);
+        setResumeData(parsedData);
+        localStorage.setItem("resumeDataForCoverLetter", JSON.stringify(parsedData));
         // Clear the item from localStorage after using it
         localStorage.removeItem("selectedTemplate");
         // Update URL to remove query param
@@ -47,8 +49,24 @@ export default function EditorPage() {
       } catch (error) {
         console.error("Failed to parse template data from localStorage", error);
       }
+    } else {
+        const savedData = localStorage.getItem("resumeDataForCoverLetter");
+        if (savedData) {
+            try {
+                setResumeData(JSON.parse(savedData));
+            } catch (error) {
+                console.error("Failed to parse resume data from localStorage", error);
+            }
+        }
     }
   }, [router, templateQuery]);
+
+  useEffect(() => {
+    if (isClient) {
+      localStorage.setItem("resumeDataForCoverLetter", JSON.stringify(resumeData));
+      localStorage.setItem("resumeDataForJobs", JSON.stringify(resumeData));
+    }
+  }, [resumeData, isClient]);
 
   const { toast } = useToast();
 

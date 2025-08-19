@@ -55,8 +55,11 @@ export default function CoverLetterPage() {
         setResumeData(parsedData);
       } catch (error) {
         console.error("Failed to parse resume data from localStorage", error);
+        toast({ title: "Error", description: "Could not load resume data. Please create a resume first.", variant: "destructive" });
         setResumeData(null);
       }
+    } else {
+        toast({ title: "No Resume Data", description: "Please create a resume first to generate a cover letter.", variant: "destructive" });
     }
 
     const templateData = localStorage.getItem("selectedCoverLetterTemplate");
@@ -69,7 +72,7 @@ export default function CoverLetterPage() {
             console.error("Failed to parse template data from localStorage", error);
         }
     }
-  }, [router, templateQuery]);
+  }, [router, templateQuery, toast]);
 
   const handleCoverLetterChange = (
     field: keyof CoverLetterData,
@@ -186,3 +189,5 @@ export default function CoverLetterPage() {
     </>
   );
 }
+
+    

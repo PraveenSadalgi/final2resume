@@ -5,7 +5,6 @@ import { FileText, LayoutTemplate, MailCheck, Briefcase, PencilRuler, Home } fro
 import { Button } from "./ui/button";
 import Link from "next/link";
 import { usePathname } from 'next/navigation';
-import type { ResumeData } from "@/lib/types";
 import { cn } from "@/lib/utils";
 import {
   DropdownMenu,
@@ -16,29 +15,28 @@ import {
   DropdownMenuTrigger,
 } from "./ui/dropdown-menu";
 
-interface HeaderProps {
-  resumeData?: ResumeData;
-}
-
-export function Header({ resumeData }: HeaderProps) {
+export function Header() {
   const pathname = usePathname();
-
-  const handleStorage = (key: string) => {
-    if (typeof window !== "undefined" && resumeData) {
-      localStorage.setItem(key, JSON.stringify(resumeData));
-    }
-  };
 
   const mainLinks = [
     { href: '/', label: 'Home', icon: Home },
     { href: '/editor', label: 'Create Resume', icon: PencilRuler },
-    { href: '/job-recommendations', label: 'Find Jobs', icon: Briefcase, storageKey: 'resumeDataForJobs' },
+    { href: '/job-recommendations', label: 'Find Jobs', icon: Briefcase },
+    { href: '/cover-letter', label: 'Cover Letter', icon: MailCheck },
   ];
 
   const templatesLinks = [
      { href: '/templates', label: 'Resume Templates' },
      { href: '/cover-letter/templates', label: 'Cover Letter Templates' },
   ];
+
+  const getLinkClass = (href: string, isTemplateLink = false) => {
+    const isActive = isTemplateLink ? pathname.includes(href) : pathname === href;
+    return cn(
+        "transition-colors duration-200",
+        isActive ? "text-primary bg-primary/10" : "text-muted-foreground hover:text-primary hover:bg-primary/10"
+    );
+  };
 
   return (
     <header className="no-print sticky top-0 z-50 bg-background/80 backdrop-blur-sm border-b">
@@ -54,11 +52,7 @@ export function Header({ resumeData }: HeaderProps) {
                 key={link.href}
                 asChild
                 variant="ghost"
-                className={cn(
-                    "transition-colors duration-200",
-                    pathname === link.href ? "text-primary bg-primary/10" : "text-muted-foreground hover:text-primary"
-                )}
-                onClick={() => link.storageKey && handleStorage(link.storageKey)}
+                className={getLinkClass(link.href)}
               >
               <Link href={link.href} className="flex items-center gap-2 px-3 py-2 text-sm font-medium">
                   <link.icon className="h-4 w-4" />
@@ -70,10 +64,7 @@ export function Header({ resumeData }: HeaderProps) {
                 <DropdownMenuTrigger asChild>
                     <Button
                         variant="ghost"
-                        className={cn(
-                            "transition-colors duration-200",
-                            pathname.includes('/templates') ? "text-primary bg-primary/10" : "text-muted-foreground hover:text-primary"
-                        )}
+                        className={getLinkClass('/templates', true)}
                     >
                          <LayoutTemplate className="h-4 w-4" />
                          <span className="hidden md:inline-block ml-2">Templates</span>
@@ -91,23 +82,10 @@ export function Header({ resumeData }: HeaderProps) {
                     ))}
                 </DropdownMenuContent>
             </DropdownMenu>
-
-            <Button
-                asChild
-                variant="ghost"
-                className={cn(
-                    "transition-colors duration-200",
-                    pathname === '/cover-letter' ? "text-primary bg-primary/10" : "text-muted-foreground hover:text-primary"
-                )}
-                onClick={() => handleStorage('resumeDataForCoverLetter')}
-            >
-                <Link href='/cover-letter' className="flex items-center gap-2 px-3 py-2 text-sm font-medium">
-                    <MailCheck className="h-4 w-4" />
-                    <span className="hidden md:inline-block">Cover Letter</span>
-                </Link>
-            </Button>
         </nav>
       </div>
     </header>
   );
 }
+
+    
