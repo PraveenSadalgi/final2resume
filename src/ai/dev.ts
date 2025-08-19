@@ -9,4 +9,6 @@ import '@/ai/flows/generate-project-description';
 import '@/ai/flows/generate-work-project-description';
 import '@/ai/flows/generate-cover-letter';
 import '@/ai/flows/improve-resume';
+import '@/ai/flows/parse-resume';
+
 
