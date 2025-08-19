@@ -1,7 +1,7 @@
 
 "use client";
 
-import { useState, useEffect, useMemo } from "react";
+import { useState, useEffect, useMemo, useRef } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { generateCoverLetter } from "@/ai/flows/generate-cover-letter";
 import CoverLetterForm from "@/components/cover-letter-form";
@@ -44,6 +44,7 @@ export default function CoverLetterPage() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const templateQuery = searchParams.get('template');
+  const previewRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     setIsClient(true);
@@ -155,6 +156,7 @@ export default function CoverLetterPage() {
                         activeSpeechField={activeSpeechField}
                         setActiveSpeechField={setActiveSpeechField}
                         selectedTemplate={selectedTemplate}
+                        previewRef={previewRef}
                     />
                 ) : (
                     <div className="text-center py-12">
@@ -175,7 +177,7 @@ export default function CoverLetterPage() {
                 transition={{ duration: 0.5, ease: 'easeOut' }}
                 className="w-full max-w-2xl"
                 >
-                <div className="transform scale-[0.8] origin-top">
+                <div ref={previewRef} className="transform scale-[0.8] origin-top">
                     {CoverLetterPreview}
                 </div>
             </motion.div>

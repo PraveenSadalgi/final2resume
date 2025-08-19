@@ -1,6 +1,7 @@
 
 "use client";
 
+import { useRef } from "react";
 import { Button } from "./ui/button";
 import { Label } from "./ui/label";
 import { Textarea } from "./ui/textarea";
@@ -25,6 +26,7 @@ interface CoverLetterFormProps {
   activeSpeechField: string | null;
   setActiveSpeechField: (field: string | null) => void;
   selectedTemplate: CoverLetterTemplate;
+  previewRef: React.RefObject<HTMLDivElement>;
 }
 
 export default function CoverLetterForm({
@@ -34,28 +36,48 @@ export default function CoverLetterForm({
   onGenerateCoverLetter,
   activeSpeechField,
   setActiveSpeechField,
-  selectedTemplate
+  selectedTemplate,
+  previewRef,
 }: CoverLetterFormProps) {
   
   const handleDownloadDocx = () => {
     // This is a placeholder for the DOCX download functionality.
-    // In a real application, you would use a library like docx or a server-side
-    // process to generate the file.
     alert("DOCX download coming soon!");
   };
 
   const handleDownloadPdf = () => {
-    const { generatedLetter } = coverLetterData;
+    const previewElement = previewRef.current;
+    if (!previewElement) {
+        console.error("Preview element not found");
+        return;
+    }
+
     const printWindow = window.open('', '_blank');
-    
     if (printWindow) {
-      printWindow.document.write('<html><head><title>Cover Letter</title>');
-      printWindow.document.write('<style>body { font-family: sans-serif; line-height: 1.5; white-space: pre-wrap; }</style>');
-      printWindow.document.write('</head><body>');
-      printWindow.document.write(generatedLetter.replace(/\n/g, '<br>'));
-      printWindow.document.write('</body></html>');
-      printWindow.document.close();
-      printWindow.print();
+        const styles = Array.from(document.styleSheets)
+            .map(s => {
+                try {
+                    return Array.from(s.cssRules).map(r => r.cssText).join('\n');
+                } catch (e) {
+                    return '';
+                }
+            })
+            .join('\n');
+
+        printWindow.document.write('<html><head><title>Cover Letter</title>');
+        printWindow.document.write(`<style>${styles}</style>`);
+        printWindow.document.write('</head><body style="margin: 0; padding: 0;">');
+        // Use a wrapper to constrain the size for printing
+        printWindow.document.write('<div style="width: 8.5in; height: 11in; overflow: hidden;">');
+        printWindow.document.write(previewElement.innerHTML);
+        printWindow.document.write('</div>');
+        printWindow.document.write('</body></html>');
+        printWindow.document.close();
+
+        setTimeout(() => { // Timeout to ensure content is loaded
+            printWindow.print();
+            printWindow.close();
+        }, 500);
     }
   };
 
