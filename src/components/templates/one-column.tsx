@@ -13,6 +13,7 @@ import {
   MapPin,
   FolderKanban,
   FolderGit2,
+  Award,
 } from "lucide-react";
 import { Badge } from "../ui/badge";
 
@@ -33,6 +34,7 @@ export default function OneColumnTemplate({ resumeData }: TemplateProps) {
     education,
     skills,
     projects,
+    achievements,
   } = resumeData;
 
   const Section = ({
@@ -108,19 +110,32 @@ export default function OneColumnTemplate({ resumeData }: TemplateProps) {
         ))}
       </Section>
 
-      <Section title="Projects" Icon={FolderKanban}>
-        {projects.map((proj) => (
-          <div key={proj.id} className="mb-4 last:mb-0">
-            <h3 className="font-bold text-base">{proj.name}</h3>
-            <div
-              className="text-xs prose prose-sm max-w-none text-gray-600"
-              style={{ whiteSpace: "pre-wrap" }}
-            >
-              {proj.description}
+      {projects && projects.length > 0 && (
+        <Section title="Projects" Icon={FolderKanban}>
+          {projects.map((proj) => (
+            <div key={proj.id} className="mb-4 last:mb-0">
+              <h3 className="font-bold text-base">{proj.name}</h3>
+              <div
+                className="text-xs prose prose-sm max-w-none text-gray-600"
+                style={{ whiteSpace: "pre-wrap" }}
+              >
+                {proj.description}
+              </div>
             </div>
+          ))}
+        </Section>
+      )}
+
+      {achievements && achievements.length > 0 && (
+        <Section title="Achievements" Icon={Award}>
+          <div
+            className="text-xs prose prose-sm max-w-none text-gray-600 space-y-1"
+            style={{ whiteSpace: "pre-wrap" }}
+          >
+            {achievements.map((ach, i) => <p key={i}>{ach}</p>)}
           </div>
-        ))}
-      </Section>
+        </Section>
+      )}
 
       <Section title="Education" Icon={GraduationCap}>
         {education.map((edu) => (

@@ -13,6 +13,7 @@ import {
   MapPin,
   FolderKanban,
   FolderGit2,
+  Award
 } from "lucide-react";
 import { Badge } from "../ui/badge";
 
@@ -33,6 +34,7 @@ export default function TechnicalTemplate({ resumeData }: TemplateProps) {
     education,
     skills,
     projects,
+    achievements,
   } = resumeData;
 
   const Section = ({
@@ -125,7 +127,7 @@ export default function TechnicalTemplate({ resumeData }: TemplateProps) {
         ))}
       </Section>
       
-      {projects.length > 0 && (
+      {projects && projects.length > 0 && (
         <Section title="Personal Projects">
             {projects.map((proj) => (
             <div key={proj.id} className="mb-3 last:mb-0">
@@ -138,6 +140,17 @@ export default function TechnicalTemplate({ resumeData }: TemplateProps) {
                 </div>
             </div>
             ))}
+        </Section>
+      )}
+
+      {achievements && achievements.length > 0 && (
+        <Section title="Achievements">
+            <div
+                className="text-xs prose prose-sm max-w-none text-gray-600 space-y-1"
+                style={{ whiteSpace: "pre-wrap" }}
+            >
+                {achievements.map((ach, i) => <p key={i}>{ach}</p>)}
+            </div>
         </Section>
       )}
 

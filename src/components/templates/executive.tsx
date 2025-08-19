@@ -9,6 +9,7 @@ import {
   Linkedin,
   MapPin,
   FolderGit2,
+  Award,
 } from "lucide-react";
 
 interface TemplateProps {
@@ -28,6 +29,7 @@ export default function ExecutiveTemplate({ resumeData }: TemplateProps) {
     education,
     skills,
     projects,
+    achievements,
   } = resumeData;
 
   const Section = ({
@@ -105,7 +107,7 @@ export default function ExecutiveTemplate({ resumeData }: TemplateProps) {
                 ))}
             </Section>
 
-             {projects.length > 0 && (
+             {projects && projects.length > 0 && (
                  <Section title="Key Projects">
                     {projects.map((proj) => (
                         <div key={proj.id} className="mb-4 last:mb-0 relative">
@@ -117,6 +119,17 @@ export default function ExecutiveTemplate({ resumeData }: TemplateProps) {
                             >
                             {proj.description}
                             </div>
+                        </div>
+                    ))}
+                </Section>
+            )}
+
+            {achievements && achievements.length > 0 && (
+                <Section title="Awards & Achievements">
+                    {achievements.map((ach, i) => (
+                        <div key={i} className="mb-4 last:mb-0 relative">
+                             <div className="absolute -left-[19.5px] top-1 h-2 w-2 rounded-full bg-primary"></div>
+                             <p className="text-xs text-gray-700">{ach.replace(/•\s/g, '')}</p>
                         </div>
                     ))}
                 </Section>

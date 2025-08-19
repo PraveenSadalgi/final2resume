@@ -47,6 +47,10 @@ export const classicTemplate: ResumeData = {
       description: "• Developed a full-stack web application using Next.js and Genkit to help users create professional resumes with AI-powered suggestions.",
     },
   ],
+  achievements: [
+    "• Won the company-wide hackathon in 2022.",
+    "• Published a technical article on a popular online magazine."
+  ],
 };
 
 export const professionalTemplate: ResumeData = {
@@ -101,6 +105,7 @@ export const modernTemplate: ResumeData = {
       description: "• Designed and built a personal portfolio website from scratch to showcase my work, featuring a clean design and smooth animations.",
     },
   ],
+  achievements: [],
 };
 
 export const creativeTemplate: ResumeData = {
@@ -145,6 +150,7 @@ export const creativeTemplate: ResumeData = {
       description: "• Developed a 2D platformer game using the Godot engine, handling both programming and art.",
     },
   ],
+  achievements: [],
 };
 
 
@@ -185,6 +191,7 @@ export const minimalistTemplate: ResumeData = {
       description: "• Contributed to an open-source distributed database project, implementing a new feature for snapshot isolation.",
     },
   ],
+  achievements: [],
 };
 
 export const technicalTemplate: ResumeData = {
@@ -227,6 +234,7 @@ export const technicalTemplate: ResumeData = {
   ],
   skills: ["Kubernetes", "Terraform", "Ansible", "Prometheus", "Grafana", "CI/CD", "AWS", "GCP", "Python", "Bash"],
   projects: [],
+  achievements: [],
 };
 
 export const executiveTemplate: ResumeData = {
@@ -275,6 +283,7 @@ export const executiveTemplate: ResumeData = {
   ],
   skills: ["Strategic Planning", "Product Management", "Team Leadership", "Budgeting & P&L", "Agile Methodologies", "SaaS", "Cloud Architecture", "Go-to-Market Strategy"],
   projects: [],
+  achievements: [],
 };
 
 

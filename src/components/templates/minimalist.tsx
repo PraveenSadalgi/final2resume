@@ -5,6 +5,7 @@ import type { ResumeData } from "@/lib/types";
 import {
   FolderKanban,
   FolderGit2,
+  Award
 } from "lucide-react";
 
 interface TemplateProps {
@@ -24,6 +25,7 @@ export default function MinimalistTemplate({ resumeData }: TemplateProps) {
     education,
     skills,
     projects,
+    achievements,
   } = resumeData;
 
   const Section = ({
@@ -125,19 +127,32 @@ export default function MinimalistTemplate({ resumeData }: TemplateProps) {
                 </ul>
             </Section>
             
-            <Section title="Projects">
-                {projects.map((proj) => (
-                <div key={proj.id} className="mb-4 last:mb-0">
-                    <h3 className="font-normal text-sm">{proj.name}</h3>
-                    <div
-                    className="text-xs prose prose-sm max-w-none text-gray-600"
-                    style={{ whiteSpace: "pre-wrap" }}
-                    >
-                    {proj.description}
+            {projects && projects.length > 0 && (
+                <Section title="Projects">
+                    {projects.map((proj) => (
+                    <div key={proj.id} className="mb-4 last:mb-0">
+                        <h3 className="font-normal text-sm">{proj.name}</h3>
+                        <div
+                        className="text-xs prose prose-sm max-w-none text-gray-600"
+                        style={{ whiteSpace: "pre-wrap" }}
+                        >
+                        {proj.description}
+                        </div>
                     </div>
-                </div>
-                ))}
-            </Section>
+                    ))}
+                </Section>
+            )}
+
+            {achievements && achievements.length > 0 && (
+                <Section title="Achievements">
+                     <div
+                        className="text-xs prose prose-sm max-w-none text-gray-600 space-y-1"
+                        style={{ whiteSpace: "pre-wrap" }}
+                    >
+                         {achievements.map((ach, i) => <p key={i}>{ach}</p>)}
+                    </div>
+                </Section>
+            )}
         </div>
       </div>
     </div>

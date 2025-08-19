@@ -13,7 +13,8 @@ import {
   MapPin,
   UserCircle,
   FolderKanban,
-  FolderGit2
+  FolderGit2,
+  Award,
 } from "lucide-react";
 
 interface TemplateProps {
@@ -33,6 +34,7 @@ export default function CreativeTemplate({ resumeData }: TemplateProps) {
     education,
     skills,
     projects,
+    achievements,
   } = resumeData;
 
   const SectionTitle = ({ title }: { title: string }) => (
@@ -136,22 +138,36 @@ export default function CreativeTemplate({ resumeData }: TemplateProps) {
           </div>
         </section>
 
-         <section className="mb-6">
-          <SectionTitle title="Projects" />
-           <div className="space-y-3">
-            {projects.map(proj => (
-                <div key={proj.id}>
-                    <h3 className="font-bold text-base">{proj.name}</h3>
-                    <div
-                        className="text-xs prose prose-sm max-w-none text-gray-500"
-                        style={{ whiteSpace: "pre-wrap" }}
-                        >
-                        {proj.description}
-                    </div>
-                </div>
-            ))}
-           </div>
-        </section>
+         {projects && projects.length > 0 && (
+          <section className="mb-6">
+            <SectionTitle title="Projects" />
+            <div className="space-y-3">
+              {projects.map(proj => (
+                  <div key={proj.id}>
+                      <h3 className="font-bold text-base">{proj.name}</h3>
+                      <div
+                          className="text-xs prose prose-sm max-w-none text-gray-500"
+                          style={{ whiteSpace: "pre-wrap" }}
+                          >
+                          {proj.description}
+                      </div>
+                  </div>
+              ))}
+            </div>
+          </section>
+         )}
+
+        {achievements && achievements.length > 0 && (
+          <section className="mb-6">
+            <SectionTitle title="Achievements" />
+            <div
+              className="text-xs prose prose-sm max-w-none text-gray-500 space-y-1"
+              style={{ whiteSpace: "pre-wrap" }}
+            >
+              {achievements.map((ach, i) => <p key={i}>{ach}</p>)}
+            </div>
+          </section>
+        )}
 
         <section>
           <SectionTitle title="Education" />

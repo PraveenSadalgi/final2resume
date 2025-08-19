@@ -59,6 +59,7 @@ export interface ResumeData {
   education: Education[];
   skills: string[];
   projects: Project[];
+  achievements?: string[];
 }
 
 // AI Flow Types

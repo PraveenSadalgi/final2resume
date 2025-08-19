@@ -13,6 +13,7 @@ import {
   MapPin,
   FolderKanban,
   FolderGit2,
+  Award,
 } from "lucide-react";
 import { Badge } from "../ui/badge";
 
@@ -33,6 +34,7 @@ export default function ModernTemplate({ resumeData }: TemplateProps) {
     education,
     skills,
     projects,
+    achievements,
   } = resumeData;
 
   const Section = ({
@@ -127,19 +129,34 @@ export default function ModernTemplate({ resumeData }: TemplateProps) {
                 </div>
             </Section>
 
-            <Section title="Projects">
-                {projects.map((proj) => (
-                <div key={proj.id} className="mb-4 last:mb-0">
-                    <h3 className="font-semibold text-sm">{proj.name}</h3>
-                    <div
-                    className="text-xs prose prose-sm max-w-none text-gray-600"
-                    style={{ whiteSpace: "pre-wrap" }}
-                    >
-                    {proj.description}
+            {projects && projects.length > 0 && (
+              <Section title="Projects">
+                  {projects.map((proj) => (
+                  <div key={proj.id} className="mb-4 last:mb-0">
+                      <h3 className="font-semibold text-sm">{proj.name}</h3>
+                      <div
+                      className="text-xs prose prose-sm max-w-none text-gray-600"
+                      style={{ whiteSpace: "pre-wrap" }}
+                      >
+                      {proj.description}
+                      </div>
+                  </div>
+                  ))}
+              </Section>
+            )}
+
+            {achievements && achievements.length > 0 && (
+                <Section title="Achievements">
+                    <div className="text-xs prose prose-sm max-w-none text-gray-600 space-y-1">
+                        {achievements.map((ach, i) => (
+                            <p key={i} className="flex items-start">
+                                <Award className="h-3 w-3 mr-2 mt-0.5 shrink-0 text-primary/80" />
+                                <span>{ach.replace(/•\s/g, '')}</span>
+                            </p>
+                        ))}
                     </div>
-                </div>
-                ))}
-            </Section>
+                </Section>
+            )}
             
             <Section title="Education">
                 {education.map((edu) => (

@@ -66,6 +66,7 @@ const ParsedResumeOutputSchema = z.object({
       })
     )
     .describe('A list of personal or academic projects.'),
+  achievements: z.array(z.string()).optional().describe('A list of key achievements or awards, rewritten to be concise and impactful.'),
 });
 
 // Define the input for our flow
@@ -105,11 +106,13 @@ const prompt = ai.definePrompt({
       *   Education (school, degree, dates).
       *   Skills.
       *   Personal Projects.
+      *   **Achievements / Awards**: Look for a section with achievements or awards. If it exists, extract it.
   3.  **Improve Content:** As you extract the data, improve it:
       *   **Summary:** Rewrite the professional summary to be more concise and impactful.
       *   **Experience:** Rephrase experience descriptions into strong, achievement-oriented bullet points. Start each bullet with an action verb.
       *   **Projects:** Make project descriptions more professional and results-focused.
       *   **Skills:** Extract all listed skills and suggest 3-5 additional relevant skills.
+      *   **Achievements**: If an achievements section is found, rewrite each point to be a crisp, short, and effective sentence.
   4.  **Assign IDs:** For each entry in experience, education, and projects, generate a unique string ID (e.g., "exp1", "edu1").
   5.  **Format Output:** Return the extracted and improved data in the specified JSON format. If a section is not found, return an empty string or an empty array for that field.
 
