@@ -7,7 +7,7 @@ import { Label } from "./ui/label";
 import type { ResumeData } from "@/lib/types";
 import { SpeechRecognitionButton } from "./speech-recognition-button";
 import { Button } from "./ui/button";
-import { UploadCloud, UserCircle } from "lucide-react";
+import { UploadCloud, UserCircle, X } from "lucide-react";
 
 interface PersonalDetailsFormProps {
   resumeData: ResumeData;
@@ -60,6 +60,10 @@ export default function PersonalDetailsForm({
     }
   };
 
+  const handleRemoveImage = () => {
+    setResumeData({ ...resumeData, imageUrl: undefined });
+  };
+
 
   return (
     <div className="space-y-4">
@@ -81,10 +85,18 @@ export default function PersonalDetailsForm({
                 accept="image/png, image/jpeg"
                 onChange={handleFileChange}
             />
-            <Button variant="outline" size="sm" onClick={handleImageUploadClick}>
-                <UploadCloud className="h-4 w-4 mr-2" />
-                Upload Image
-            </Button>
+            <div className="flex items-center gap-2">
+              <Button variant="outline" size="sm" onClick={handleImageUploadClick}>
+                  <UploadCloud className="h-4 w-4 mr-2" />
+                  Upload Image
+              </Button>
+              {resumeData.imageUrl && (
+                <Button variant="ghost" size="sm" onClick={handleRemoveImage} className="text-destructive hover:text-destructive">
+                  <X className="h-4 w-4 mr-2" />
+                  Remove
+                </Button>
+              )}
+            </div>
         </div>
     </div>
       <div className="space-y-2">
