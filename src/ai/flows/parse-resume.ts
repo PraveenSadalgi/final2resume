@@ -9,18 +9,19 @@
 import {ai} from '@/ai/genkit';
 import {googleAI} from '@genkit-ai/googleai';
 import {z} from 'zod';
-import type {ResumeData} from '@/lib/types';
+import type {ResumeData, Template} from '@/lib/types';
 import {classicTemplate} from '@/lib/mock-data';
 
 // Define the structured output we want from the AI.
 const ParsedResumeOutputSchema = z.object({
+  template: z.custom<Template>().describe('The detected template of the resume (e.g., "one-column", "two-column"). Analyze the layout to determine this.'),
   name: z.string().describe('The full name of the individual.'),
   email: z.string().describe('The email address.'),
   phone: z.string().describe('The phone number.'),
   location: z.string().describe('The city and state, e.g., "San Francisco, CA".'),
   github: z.string().optional().describe('The GitHub profile URL.'),
   linkedin: z.string().optional().describe('The LinkedIn profile URL.'),
-  imageUrl: z.string().optional().describe("The URL of the user's profile picture, if present in the document."),
+  imageUrl: z.string().optional().describe("The URL of the user's profile picture, if present in the document. This should be a data URI."),
   summary: z
     .string()
     .describe('An improved, professional summary based on the resume content.'),
@@ -99,24 +100,25 @@ const prompt = ai.definePrompt({
   prompt: `You are an expert resume analyst and writer. Your task is to parse the provided resume file (which could be an image or a document), extract all structured information, and simultaneously improve the content of every section. Do not discard any sections.
 
   **Instructions:**
-  1.  **Parse ALL Sections:** Analyze the resume file. Extract every section you find, including standard sections (Contact Info, Summary, Experience, etc.) and any other sections like "Awards", "Publications", "Certifications", or "Achievements".
-  2.  **Extract Structured Data:** Identify and extract the following:
+  1.  **Determine Template:** Analyze the overall layout of the resume. Based on its structure, determine if it is a 'one-column', 'two-column', 'modern', 'creative', or other simple layout. Set the 'template' field accordingly.
+  2.  **Parse ALL Sections:** Analyze the resume file. Extract every section you find, including standard sections (Contact Info, Summary, Experience, etc.) and any other sections like "Awards", "Publications", "Certifications", or "Achievements".
+  3.  **Extract Structured Data:** Identify and extract the following:
       *   Contact Information (name, email, phone, location, GitHub, LinkedIn).
-      *   **Image**: If there is a profile picture in the resume, extract it and set its URL in the 'imageUrl' field.
+      *   **Image**: If there is a profile picture in the resume, extract it and return it as a data URI in the 'imageUrl' field.
       *   Professional Summary.
       *   Work Experience (role, company, dates, description).
       *   Education (school, degree, dates).
       *   Skills.
       *   Personal Projects.
       *   **Achievements / Other Sections**: Group any additional sections like "Awards", "Honors", "Publications", or "Certifications" into the 'achievements' field. Extract the content from these sections.
-  3.  **Improve ALL Content:** As you extract the data, improve it.
+  4.  **Improve ALL Content:** As you extract the data, improve it.
       *   **Summary:** Rewrite the professional summary to be more concise and impactful.
       *   **Experience:** Rephrase experience descriptions into strong, achievement-oriented bullet points. Start each bullet with an action verb.
       *   **Projects:** Make project descriptions more professional and results-focused.
       *   **Skills:** Extract all listed skills and suggest 3-5 additional relevant skills based on the content.
       *   **Achievements/Other:** For any other section found, rewrite each point to be a crisp, short, and effective sentence. Do not remove them.
-  4.  **Assign IDs:** For each entry in experience, education, and projects, generate a unique string ID (e.g., "exp1", "edu1").
-  5.  **Format Output:** Return all extracted and improved data in the specified JSON format. If a section is not found, return an empty string or an empty array for that field, but ensure all information from the original resume is captured and improved in some field.
+  5.  **Assign IDs:** For each entry in experience, education, and projects, generate a unique string ID (e.g., "exp1", "edu1").
+  6.  **Format Output:** Return all extracted and improved data in the specified JSON format. If a section is not found, return an empty string or an empty array for that field, but ensure all information from the original resume is captured and improved in some field.
 
   **Resume File:**
   {{media url=resumeFile}}
