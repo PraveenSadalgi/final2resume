@@ -17,7 +17,7 @@ export async function generateExperience(input: GenerateExperienceInput) {
 
 const prompt = ai.definePrompt({
   name: 'generateExperiencePrompt',
-  model: googleAI.model('gemini-pro'),
+  model: googleAI.model('gemini-1.5-flash'),
   input: {schema: GenerateExperienceInputSchema},
   output: {schema: GenerateExperienceOutputSchema},
   prompt: `You are an expert resume writer. Your task is to rewrite and enhance the provided resume experience description to be more professional, achievement-oriented, and impactful. Use strong action verbs and quantify results where possible.
