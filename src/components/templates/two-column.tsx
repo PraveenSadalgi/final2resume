@@ -89,10 +89,12 @@ export default function TwoColumnTemplate({ resumeData }: TemplateProps) {
       {/* Sidebar */}
       <aside className="w-1/3 bg-primary text-white p-6 flex flex-col">
         <div className="text-center mb-8">
-            {imageUrl && (
+            {imageUrl ? (
               <div className="w-24 h-24 rounded-full bg-muted mx-auto mb-4 border-2 border-white">
                 <img src={imageUrl} alt={name} className="rounded-full w-full h-full object-cover" />
               </div>
+            ) : (
+              <div className="w-24 h-24 rounded-full bg-primary-foreground/20 mx-auto mb-4 border-2 border-white/50"></div>
             )}
             <h1 className="text-3xl font-bold text-white leading-tight">{name}</h1>
             {experience[0] && <p className="text-lg text-white/80">{experience[0].role}</p>}

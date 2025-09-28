@@ -59,7 +59,11 @@ export default function CreativeTemplate({ resumeData }: TemplateProps) {
       <aside className="w-[280px] bg-neutral-50 text-gray-700 p-6 flex flex-col">
         <div className="text-center mb-8">
           <div className="w-32 h-32 rounded-full bg-primary/10 mx-auto flex items-center justify-center mb-4">
-             <img src={imageUrl || `https://placehold.co/128x128.png`} alt={name} data-ai-hint="profile picture" className="rounded-full w-full h-full object-cover" />
+             {imageUrl ? (
+                <img src={imageUrl} alt={name} className="rounded-full w-full h-full object-cover" />
+             ) : (
+                <div className="w-full h-full rounded-full bg-primary/10"></div>
+             )}
           </div>
           <h1 className="text-3xl font-bold text-primary leading-tight">{name}</h1>
           {experience[0] && <p className="text-md text-gray-600 mt-1">{experience[0].role}</p>}
