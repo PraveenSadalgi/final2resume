@@ -1,20 +1,26 @@
 
 "use client";
 
+import { useRef } from "react";
 import { Input } from "./ui/input";
 import { Label } from "./ui/label";
 import type { ResumeData } from "@/lib/types";
 import { SpeechRecognitionButton } from "./speech-recognition-button";
+import { Button } from "./ui/button";
+import { UploadCloud } from "lucide-react";
 
 interface PersonalDetailsFormProps {
   resumeData: ResumeData;
+  setResumeData: (data: ResumeData) => void;
   onFieldChange: (field: keyof ResumeData, value: string) => void;
 }
 
 export default function PersonalDetailsForm({
   resumeData,
+  setResumeData,
   onFieldChange,
 }: PersonalDetailsFormProps) {
+  const fileInputRef = useRef<HTMLInputElement>(null);
   const fields: (keyof ResumeData)[] = ["name", "email", "phone", "location", "github", "linkedin"];
 
   const handleSpeechResult = (field: keyof ResumeData, transcript: string) => {
@@ -40,8 +46,48 @@ export default function PersonalDetailsForm({
     return `Say your ${field}. ${examples[field as keyof typeof examples] || ''}`;
   };
 
+  const handleImageUploadClick = () => {
+    fileInputRef.current?.click();
+  };
+
+  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = (loadEvent) => {
+        setResumeData({ ...resumeData, imageUrl: loadEvent.target?.result as string });
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
+
   return (
     <div className="space-y-4">
+      <div className="flex items-center gap-4">
+        <div className="w-24 h-24 rounded-full bg-muted flex-shrink-0 border-2 border-dashed flex items-center justify-center">
+            {resumeData.imageUrl ? (
+                <img src={resumeData.imageUrl} alt="User" className="rounded-full w-full h-full object-cover" />
+            ) : (
+                <span className="text-xs text-muted-foreground text-center">No Image</span>
+            )}
+        </div>
+        <div className="flex-grow">
+            <Label>Profile Photo</Label>
+            <p className="text-xs text-muted-foreground mb-2">Upload a professional headshot.</p>
+            <input
+                type="file"
+                ref={fileInputRef}
+                className="hidden"
+                accept="image/png, image/jpeg"
+                onChange={handleFileChange}
+            />
+            <Button variant="outline" size="sm" onClick={handleImageUploadClick}>
+                <UploadCloud className="h-4 w-4 mr-2" />
+                Upload Image
+            </Button>
+        </div>
+    </div>
       <div className="space-y-2">
         <Label htmlFor="name">Full Name</Label>
         <div className="relative">

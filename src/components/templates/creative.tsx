@@ -15,6 +15,8 @@ import {
   FolderKanban,
   FolderGit2,
   Award,
+  Link,
+  Github,
 } from "lucide-react";
 
 interface TemplateProps {
@@ -35,6 +37,7 @@ export default function CreativeTemplate({ resumeData }: TemplateProps) {
     skills,
     projects,
     achievements,
+    imageUrl,
   } = resumeData;
 
   const SectionTitle = ({ title }: { title: string }) => (
@@ -56,7 +59,7 @@ export default function CreativeTemplate({ resumeData }: TemplateProps) {
       <aside className="w-[280px] bg-neutral-50 text-gray-700 p-6 flex flex-col">
         <div className="text-center mb-8">
           <div className="w-32 h-32 rounded-full bg-primary/10 mx-auto flex items-center justify-center mb-4">
-             <img src={`https://placehold.co/128x128.png`} alt={name} data-ai-hint="profile picture" className="rounded-full" />
+             <img src={imageUrl || `https://placehold.co/128x128.png`} alt={name} data-ai-hint="profile picture" className="rounded-full w-full h-full object-cover" />
           </div>
           <h1 className="text-3xl font-bold text-primary leading-tight">{name}</h1>
           {experience[0] && <p className="text-md text-gray-600 mt-1">{experience[0].role}</p>}
@@ -144,7 +147,19 @@ export default function CreativeTemplate({ resumeData }: TemplateProps) {
             <div className="space-y-3">
               {projects.map(proj => (
                   <div key={proj.id}>
-                      <h3 className="font-bold text-base">{proj.name}</h3>
+                    <div className="flex items-center gap-x-3">
+                        <h3 className="font-bold text-base">{proj.name}</h3>
+                        {proj.liveLink && (
+                            <a href={ensureProtocol(proj.liveLink)} target="_blank" rel="noopener noreferrer" className="text-primary hover:underline">
+                                <Link size={14} />
+                            </a>
+                        )}
+                        {proj.githubLink && (
+                            <a href={ensureProtocol(proj.githubLink)} target="_blank" rel="noopener noreferrer" className="text-primary hover:underline">
+                                <Github size={14} />
+                            </a>
+                        )}
+                    </div>
                       <div
                           className="text-xs prose prose-sm max-w-none text-gray-500"
                           style={{ whiteSpace: "pre-wrap" }}

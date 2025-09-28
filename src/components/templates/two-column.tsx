@@ -14,6 +14,8 @@ import {
   FolderKanban,
   FolderGit2,
   Award,
+  Link,
+  Github,
 } from "lucide-react";
 import { Badge } from "../ui/badge";
 
@@ -35,6 +37,7 @@ export default function TwoColumnTemplate({ resumeData }: TemplateProps) {
     skills,
     projects,
     achievements,
+    imageUrl,
   } = resumeData;
 
   const SidebarSection = ({
@@ -86,6 +89,11 @@ export default function TwoColumnTemplate({ resumeData }: TemplateProps) {
       {/* Sidebar */}
       <aside className="w-1/3 bg-primary text-white p-6 flex flex-col">
         <div className="text-center mb-8">
+            {imageUrl && (
+              <div className="w-24 h-24 rounded-full bg-muted mx-auto mb-4 border-2 border-white">
+                <img src={imageUrl} alt={name} className="rounded-full w-full h-full object-cover" />
+              </div>
+            )}
             <h1 className="text-3xl font-bold text-white leading-tight">{name}</h1>
             {experience[0] && <p className="text-lg text-white/80">{experience[0].role}</p>}
         </div>
@@ -166,7 +174,19 @@ export default function TwoColumnTemplate({ resumeData }: TemplateProps) {
           <MainSection title="Projects" Icon={FolderKanban}>
               {projects.map(proj => (
                   <div key={proj.id} className="mb-4 last:mb-0">
-                      <h3 className="font-bold text-base">{proj.name}</h3>
+                      <div className="flex items-center gap-x-3">
+                        <h3 className="font-bold text-base">{proj.name}</h3>
+                        {proj.liveLink && (
+                            <a href={ensureProtocol(proj.liveLink)} target="_blank" rel="noopener noreferrer" className="text-primary hover:underline">
+                                <Link size={14} />
+                            </a>
+                        )}
+                        {proj.githubLink && (
+                            <a href={ensureProtocol(proj.githubLink)} target="_blank" rel="noopener noreferrer" className="text-primary hover:underline">
+                                <Github size={14} />
+                            </a>
+                        )}
+                      </div>
                       <div
                           className="text-xs prose prose-sm max-w-none text-gray-600"
                           style={{ whiteSpace: "pre-wrap" }}

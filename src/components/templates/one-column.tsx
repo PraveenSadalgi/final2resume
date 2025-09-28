@@ -14,6 +14,8 @@ import {
   FolderKanban,
   FolderGit2,
   Award,
+  Link,
+  Github,
 } from "lucide-react";
 import { Badge } from "../ui/badge";
 
@@ -114,7 +116,19 @@ export default function OneColumnTemplate({ resumeData }: TemplateProps) {
         <Section title="Projects" Icon={FolderKanban}>
           {projects.map((proj) => (
             <div key={proj.id} className="mb-4 last:mb-0">
-              <h3 className="font-bold text-base">{proj.name}</h3>
+                <div className="flex items-center gap-x-3">
+                    <h3 className="font-bold text-base">{proj.name}</h3>
+                    {proj.liveLink && (
+                        <a href={ensureProtocol(proj.liveLink)} target="_blank" rel="noopener noreferrer" className="text-primary hover:underline">
+                            <Link size={14} />
+                        </a>
+                    )}
+                    {proj.githubLink && (
+                         <a href={ensureProtocol(proj.githubLink)} target="_blank" rel="noopener noreferrer" className="text-primary hover:underline">
+                            <Github size={14} />
+                        </a>
+                    )}
+                </div>
               <div
                 className="text-xs prose prose-sm max-w-none text-gray-600"
                 style={{ whiteSpace: "pre-wrap" }}

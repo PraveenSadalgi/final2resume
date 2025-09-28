@@ -28,6 +28,8 @@ export interface Project {
   id: string;
   name: string;
   description: string;
+  liveLink?: string;
+  githubLink?: string;
 }
 
 export interface CoverLetterData {
@@ -60,6 +62,7 @@ export interface ResumeData {
   skills: string[];
   projects: Project[];
   achievements?: string[];
+  imageUrl?: string;
 }
 
 // AI Flow Types

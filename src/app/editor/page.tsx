@@ -41,7 +41,6 @@ export default function EditorPage() {
       try {
         const parsedData = JSON.parse(templateData);
         setResumeData(parsedData);
-        localStorage.setItem("resumeDataForCoverLetter", JSON.stringify(parsedData));
         // Clear the item from localStorage after using it
         localStorage.removeItem("selectedTemplate");
         // Update URL to remove query param
@@ -50,7 +49,7 @@ export default function EditorPage() {
         console.error("Failed to parse template data from localStorage", error);
       }
     } else {
-        const savedData = localStorage.getItem("resumeDataForCoverLetter");
+        const savedData = localStorage.getItem("resumeData");
         if (savedData) {
             try {
                 setResumeData(JSON.parse(savedData));
@@ -64,6 +63,7 @@ export default function EditorPage() {
 
   useEffect(() => {
     if (isClient) {
+      localStorage.setItem("resumeData", JSON.stringify(resumeData));
       localStorage.setItem("resumeDataForCoverLetter", JSON.stringify(resumeData));
       localStorage.setItem("resumeDataForJobs", JSON.stringify(resumeData));
     }

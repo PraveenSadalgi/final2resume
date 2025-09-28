@@ -20,6 +20,7 @@ const ParsedResumeOutputSchema = z.object({
   location: z.string().describe('The city and state, e.g., "San Francisco, CA".'),
   github: z.string().optional().describe('The GitHub profile URL.'),
   linkedin: z.string().optional().describe('The LinkedIn profile URL.'),
+  imageUrl: z.string().optional().describe("The URL of the user's profile picture, if present in the document."),
   summary: z
     .string()
     .describe('An improved, professional summary based on the resume content.'),
@@ -95,12 +96,13 @@ const prompt = ai.definePrompt({
   model: googleAI.model('gemini-2.0-flash'),
   input: {schema: ParseResumeInputSchema},
   output: {schema: ParsedResumeOutputSchema},
-  prompt: `You are an expert resume analyst and writer. Your task is to parse the provided resume file, extract all structured information, and simultaneously improve the content of every section. Do not discard any sections.
+  prompt: `You are an expert resume analyst and writer. Your task is to parse the provided resume file (which could be an image or a document), extract all structured information, and simultaneously improve the content of every section. Do not discard any sections.
 
   **Instructions:**
   1.  **Parse ALL Sections:** Analyze the resume file. Extract every section you find, including standard sections (Contact Info, Summary, Experience, etc.) and any other sections like "Awards", "Publications", "Certifications", or "Achievements".
   2.  **Extract Structured Data:** Identify and extract the following:
       *   Contact Information (name, email, phone, location, GitHub, LinkedIn).
+      *   **Image**: If there is a profile picture in the resume, extract it and set its URL in the 'imageUrl' field.
       *   Professional Summary.
       *   Work Experience (role, company, dates, description).
       *   Education (school, degree, dates).

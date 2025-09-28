@@ -48,6 +48,26 @@ export default function ProjectsForm({
                 placeholder="e.g., Awesome Project"
               />
             </div>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+               <div className="space-y-2">
+                <Label htmlFor={`project-live-${proj.id}`}>Live Link</Label>
+                <Input
+                  id={`project-live-${proj.id}`}
+                  value={proj.liveLink || ''}
+                  onChange={(e) => onNestedFieldChange("projects", index, "liveLink", e.target.value)}
+                  placeholder="e.g., my-project.com"
+                />
+              </div>
+               <div className="space-y-2">
+                <Label htmlFor={`project-github-${proj.id}`}>GitHub Link</Label>
+                <Input
+                  id={`project-github-${proj.id}`}
+                  value={proj.githubLink || ''}
+                  onChange={(e) => onNestedFieldChange("projects", index, "githubLink", e.target.value)}
+                  placeholder="e.g., github.com/user/repo"
+                />
+              </div>
+            </div>
             <div className="space-y-2">
               <Label
                 htmlFor={`project-description-${proj.id}`}

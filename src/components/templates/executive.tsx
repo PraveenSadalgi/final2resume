@@ -10,6 +10,8 @@ import {
   MapPin,
   FolderGit2,
   Award,
+  Link,
+  Github,
 } from "lucide-react";
 
 interface TemplateProps {
@@ -112,7 +114,19 @@ export default function ExecutiveTemplate({ resumeData }: TemplateProps) {
                     {projects.map((proj) => (
                         <div key={proj.id} className="mb-4 last:mb-0 relative">
                             <div className="absolute -left-[19.5px] top-1 h-2 w-2 rounded-full bg-primary"></div>
-                            <h3 className="font-bold text-sm">{proj.name}</h3>
+                             <div className="flex items-center gap-x-2">
+                                <h3 className="font-bold text-sm">{proj.name}</h3>
+                                {proj.liveLink && (
+                                    <a href={ensureProtocol(proj.liveLink)} target="_blank" rel="noopener noreferrer" className="text-primary/80 hover:underline">
+                                        <Link size={12} />
+                                    </a>
+                                )}
+                                {proj.githubLink && (
+                                    <a href={ensureProtocol(proj.githubLink)} target="_blank" rel="noopener noreferrer" className="text-primary/80 hover:underline">
+                                        <Github size={12} />
+                                    </a>
+                                )}
+                            </div>
                             <div
                             className="text-xs prose prose-sm max-w-none text-gray-700"
                             style={{ whiteSpace: "pre-wrap" }}

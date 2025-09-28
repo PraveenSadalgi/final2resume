@@ -5,7 +5,9 @@ import type { ResumeData } from "@/lib/types";
 import {
   FolderKanban,
   FolderGit2,
-  Award
+  Award,
+  Link,
+  Github
 } from "lucide-react";
 
 interface TemplateProps {
@@ -131,7 +133,19 @@ export default function MinimalistTemplate({ resumeData }: TemplateProps) {
                 <Section title="Projects">
                     {projects.map((proj) => (
                     <div key={proj.id} className="mb-4 last:mb-0">
-                        <h3 className="font-normal text-sm">{proj.name}</h3>
+                        <div className="flex items-center gap-x-2">
+                           <h3 className="font-normal text-sm">{proj.name}</h3>
+                           {proj.liveLink && (
+                                <a href={ensureProtocol(proj.liveLink)} target="_blank" rel="noopener noreferrer" className="text-gray-500 hover:text-primary">
+                                    <Link size={12} />
+                                </a>
+                            )}
+                            {proj.githubLink && (
+                                <a href={ensureProtocol(proj.githubLink)} target="_blank" rel="noopener noreferrer" className="text-gray-500 hover:text-primary">
+                                    <Github size={12} />
+                                </a>
+                            )}
+                        </div>
                         <div
                         className="text-xs prose prose-sm max-w-none text-gray-600"
                         style={{ whiteSpace: "pre-wrap" }}

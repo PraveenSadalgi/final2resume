@@ -91,6 +91,7 @@ export default function ResumeEditor({
       Icon: User,
       Component: PersonalDetailsForm,
       props: { 
+        setResumeData,
         onFieldChange, 
       },
     },

@@ -14,6 +14,8 @@ import {
   FolderKanban,
   FolderGit2,
   Award,
+  Link,
+  Github,
 } from "lucide-react";
 import { Badge } from "../ui/badge";
 
@@ -133,7 +135,19 @@ export default function ModernTemplate({ resumeData }: TemplateProps) {
               <Section title="Projects">
                   {projects.map((proj) => (
                   <div key={proj.id} className="mb-4 last:mb-0">
-                      <h3 className="font-semibold text-sm">{proj.name}</h3>
+                      <div className="flex items-center gap-x-2">
+                        <h3 className="font-semibold text-sm">{proj.name}</h3>
+                        {proj.liveLink && (
+                            <a href={ensureProtocol(proj.liveLink)} target="_blank" rel="noopener noreferrer" className="text-primary hover:underline">
+                                <Link size={12} />
+                            </a>
+                        )}
+                        {proj.githubLink && (
+                            <a href={ensureProtocol(proj.githubLink)} target="_blank" rel="noopener noreferrer" className="text-primary hover:underline">
+                                <Github size={12} />
+                            </a>
+                        )}
+                    </div>
                       <div
                       className="text-xs prose prose-sm max-w-none text-gray-600"
                       style={{ whiteSpace: "pre-wrap" }}
