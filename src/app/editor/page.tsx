@@ -61,7 +61,7 @@ export default function EditorPage() {
                 console.error("Failed to parse imported resume data", error);
             }
         } else {
-            // Handle switching to a new template
+            // Handle switching to a new template by merging with existing data
             dataToLoad = { ...dataToLoad, template: templateQuery as Template };
         }
         
