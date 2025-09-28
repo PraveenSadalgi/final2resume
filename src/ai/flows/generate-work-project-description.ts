@@ -16,7 +16,7 @@ export async function generateWorkProjectDescription(input: GenerateWorkProjectD
 
 const prompt = ai.definePrompt({
   name: 'generateWorkProjectDescriptionPrompt',
-  model: googleAI.model('gemini-1.5-flash'),
+  model: googleAI.model('gemini-pro'),
   input: {schema: GenerateWorkProjectDescriptionInputSchema},
   output: {schema: GenerateWorkProjectDescriptionOutputSchema},
   prompt: `You are an expert resume writer. Based on the project name, the user's role, and the description, generate a more attractive and professional description for a resume's work experience section. Focus on highlighting the key achievements and technologies used. Keep it concise and impactful.
