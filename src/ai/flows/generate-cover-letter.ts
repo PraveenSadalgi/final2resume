@@ -16,7 +16,7 @@ export async function generateCoverLetter(input: GenerateCoverLetterInput) {
 
 const prompt = ai.definePrompt({
   name: 'generateCoverLetterPrompt',
-  model: googleAI.model('gemini-2.0-flash'),
+  model: googleAI.model('gemini-1.5-flash'),
   input: {schema: GenerateCoverLetterInputSchema},
   output: {schema: GenerateCoverLetterOutputSchema},
   prompt: `You are an expert career coach and resume writer. Your task is to generate a personalized and compelling cover letter for a user based on their resume, a specific job description, and a chosen template structure.

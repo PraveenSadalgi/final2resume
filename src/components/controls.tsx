@@ -1,10 +1,12 @@
 
 "use client";
 
+import { useState } from "react";
 import { Button } from "./ui/button";
 import {
   Download,
   Share2,
+  Wand2
 } from "lucide-react";
 import type { ResumeData } from "@/lib/types";
 import Link from "next/link";
@@ -16,6 +18,7 @@ interface ControlsProps {
 }
 
 export default function Controls({ resumeData, setResumeData }: ControlsProps) {
+  const [isReviewOpen, setIsReviewOpen] = useState(false);
   
   const handlePrint = () => {
     if (typeof window !== "undefined") {
@@ -41,6 +44,10 @@ export default function Controls({ resumeData, setResumeData }: ControlsProps) {
               <h2 className="text-lg font-semibold">Resume Editor</h2>
           </div>
           <div className="flex items-center gap-2">
+            <Button variant="outline" onClick={() => setIsReviewOpen(true)}>
+              <Wand2 className="h-4 w-4 mr-2" />
+              AI Review
+            </Button>
             <Button variant="outline" asChild>
               <Link href="/templates">
                   Templates
@@ -56,6 +63,12 @@ export default function Controls({ resumeData, setResumeData }: ControlsProps) {
           </div>
         </div>
       </div>
+      <AiReviewDialog 
+        isOpen={isReviewOpen}
+        onClose={() => setIsReviewOpen(false)}
+        resumeData={resumeData}
+        setResumeData={setResumeData}
+      />
     </>
   );
 }

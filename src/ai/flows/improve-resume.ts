@@ -16,7 +16,7 @@ export async function improveResume(input: ImproveResumeInput) {
 
 const prompt = ai.definePrompt({
   name: 'improveResumePrompt',
-  model: googleAI.model('gemini-2.0-flash'),
+  model: googleAI.model('gemini-1.5-flash'),
   input: {schema: ImproveResumeInputSchema},
   output: {schema: ImproveResumeOutputSchema},
   prompt: `You are an expert resume writer and career coach. Your task is to analyze the provided resume data and generate specific, actionable improvements for each section.
