@@ -170,7 +170,7 @@ export default function ResumeEditor({
 
   return (
     <div className="h-full flex flex-col">
-      <Controls resumeData={resumeData} setResumeData={setResumeData} />
+      <Controls resumeData={resumeData} />
       <ScrollArea className="flex-1">
         <Accordion type="multiple" defaultValue={["personal"]} className="p-4">
           {sections.map(({ value, title, Icon, Component, props }) => (
