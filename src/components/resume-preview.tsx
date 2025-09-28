@@ -9,6 +9,7 @@ import CreativeTemplate from "./templates/creative";
 import MinimalistTemplate from "./templates/minimalist";
 import TechnicalTemplate from "./templates/technical";
 import ExecutiveTemplate from "./templates/executive";
+import OnyxTemplate from "./templates/onyx";
 
 interface ResumePreviewProps {
   resumeData: ResumeData;
@@ -23,6 +24,7 @@ const templateComponents = {
   'minimalist': MinimalistTemplate,
   'technical': TechnicalTemplate,
   'executive': ExecutiveTemplate,
+  'onyx': OnyxTemplate,
 };
 
 export default function ResumePreview({

@@ -46,7 +46,7 @@ export interface CoverLetterTemplate {
     component: string;
 }
 
-export type Template = 'one-column' | 'two-column' | 'modern' | 'creative' | 'minimalist' | 'technical' | 'executive';
+export type Template = 'one-column' | 'two-column' | 'modern' | 'creative' | 'minimalist' | 'technical' | 'executive' | 'onyx';
 
 export interface ResumeData {
   template: Template;

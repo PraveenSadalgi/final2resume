@@ -286,6 +286,12 @@ export const executiveTemplate: ResumeData = {
   achievements: [],
 };
 
+export const onyxTemplate: ResumeData = {
+  ...classicTemplate,
+  template: "onyx",
+  summary: "Dedicated full-stack web developer, with hands-on experience in web development. I have completed an internship and worked on multiple full-stack projects, honing my problem-solving skills. As a final-year BCA student, I am eager to expand my knowledge and contribute to innovative solutions."
+};
+
 
 export const allTemplates: ResumeData[] = [
   classicTemplate,
@@ -295,6 +301,7 @@ export const allTemplates: ResumeData[] = [
   minimalistTemplate,
   technicalTemplate,
   executiveTemplate,
+  onyxTemplate,
 ];
 
 export const templateDetails: Record<Template, { name: string; description: string }> = {
@@ -305,6 +312,7 @@ export const templateDetails: Record<Template, { name: string; description: stri
     'minimalist': { name: 'Minimalist', description: 'A simple, elegant, and content-focused template that projects confidence and clarity.' },
     'technical': { name: 'Technical', description: 'A clean, structured, and ATS-friendly format perfect for technical and engineering roles.' },
     'executive': { name: 'Executive', description: 'A sophisticated and authoritative design for senior-level and leadership positions.' },
+    'onyx': { name: 'Onyx', description: 'A sharp, professional template with a prominent header for your name and photo.' },
 };
 
 // Cover Letter Templates
