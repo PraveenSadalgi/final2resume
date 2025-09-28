@@ -16,7 +16,7 @@ export async function suggestRelevantSkills(input: SuggestRelevantSkillsInput) {
 
 const prompt = ai.definePrompt({
   name: 'suggestRelevantSkillsPrompt',
-  model: googleAI.model('gemini-1.5-flash'),
+  model: googleAI.model('gemini-pro'),
   input: {schema: SuggestRelevantSkillsInputSchema},
   output: {schema: SuggestRelevantSkillsOutputSchema},
   prompt: `You are an AI resume assistant that suggests relevant skills based on the user's profession and chosen roles.

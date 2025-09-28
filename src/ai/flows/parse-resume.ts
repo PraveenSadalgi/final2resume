@@ -94,7 +94,7 @@ export async function parseResume(input: ParseResumeInput): Promise<ResumeData> 
 
 const prompt = ai.definePrompt({
   name: 'parseResumePrompt',
-  model: googleAI.model('gemini-1.5-flash'),
+  model: googleAI.model('gemini-pro'),
   input: {schema: ParseResumeInputSchema},
   output: {schema: ParsedResumeOutputSchema},
   prompt: `You are an expert resume analyst and writer. Your task is to parse the provided resume file (which could be an image or a document), extract all structured information, and simultaneously improve the content of every section. Do not discard any sections.
