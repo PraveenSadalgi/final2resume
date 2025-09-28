@@ -1,6 +1,7 @@
 import {genkit} from 'genkit';
 import {googleAI} from '@genkit-ai/googleai';
+import {config} from '@/lib/config';
 
 export const ai = genkit({
-  plugins: [googleAI({apiKey: process.env.NEXT_PUBLIC_GOOGLE_API_KEY})],
+  plugins: [googleAI({apiKey: config.googleApiKey})],
 });
