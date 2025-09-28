@@ -17,7 +17,6 @@ import {
 import { useRef, useState } from "react";
 import { useToast } from "@/hooks/use-toast";
 import { parseResume } from "@/ai/flows/parse-resume";
-import { classicTemplate } from "@/lib/mock-data";
 import { useRouter } from "next/navigation";
 import LoadingSpinner from "./ui/loading-spinner";
 
@@ -67,7 +66,8 @@ export function Header() {
         const dataUri = reader.result as string;
         try {
            const parsedData = await parseResume({ resumeFile: dataUri });
-           localStorage.setItem("selectedTemplate", JSON.stringify(parsedData));
+           // Save to a temporary key for the editor to pick up
+           localStorage.setItem("importedResumeData", JSON.stringify(parsedData));
            router.push(`/editor?template=imported`);
            toast({ title: "Success!", description: "Your resume has been imported and improved." });
         } catch (aiError) {

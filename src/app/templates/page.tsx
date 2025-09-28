@@ -13,9 +13,9 @@ import { motion } from "framer-motion";
 export default function TemplatesPage() {
   const router = useRouter();
 
-  const handleUseTemplate = (templateData: ResumeData) => {
-    localStorage.setItem("selectedTemplate", JSON.stringify(templateData));
-    router.push(`/editor?template=${templateData.template}`);
+  const handleUseTemplate = (template: ResumeData) => {
+    // Just navigate to the editor with the template name in the query
+    router.push(`/editor?template=${template.template}`);
   };
 
   return (

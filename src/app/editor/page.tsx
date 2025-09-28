@@ -12,8 +12,8 @@ import { suggestRelevantSkills } from "@/ai/flows/suggest-skills";
 import ResumeEditor from "@/components/resume-editor";
 import ResumePreview from "@/components/resume-preview";
 import { useToast } from "@/hooks/use-toast";
-import type { Education, Experience, Project, ResumeData, WorkProject } from "@/lib/types";
-import { classicTemplate } from "@/lib/mock-data";
+import type { Education, Experience, Project, ResumeData, Template, WorkProject } from "@/lib/types";
+import { classicTemplate, allTemplates } from "@/lib/mock-data";
 
 // Helper to generate unique IDs on the client
 const generateUniqueId = () => `id-${Date.now()}-${Math.random().toString(36).substring(2, 9)}`;
@@ -36,29 +36,41 @@ export default function EditorPage() {
 
   useEffect(() => {
     setIsClient(true);
-    const templateData = localStorage.getItem("selectedTemplate");
-    if (templateData && templateQuery) {
-      try {
-        const parsedData = JSON.parse(templateData);
-        setResumeData(parsedData);
-        // Clear the item from localStorage after using it
-        localStorage.removeItem("selectedTemplate");
-        // Update URL to remove query param
-        router.replace('/editor', { scroll: false });
-      } catch (error) {
-        console.error("Failed to parse template data from localStorage", error);
-      }
-    } else {
-        const savedData = localStorage.getItem("resumeData");
-        if (savedData) {
-            try {
-                setResumeData(JSON.parse(savedData));
-            } catch (error) {
-                console.error("Failed to parse resume data from localStorage", error);
-                setResumeData(classicTemplate); // fallback to default
-            }
+    let dataToLoad = classicTemplate;
+
+    // Try to load saved data from localStorage first
+    const savedData = localStorage.getItem("resumeData");
+    if (savedData) {
+        try {
+            dataToLoad = JSON.parse(savedData);
+        } catch (error) {
+            console.error("Failed to parse resume data from localStorage", error);
         }
     }
+    
+    // Check if a new template is being applied from the URL query
+    if (templateQuery) {
+        const importedData = localStorage.getItem("importedResumeData");
+        
+        if (templateQuery === 'imported' && importedData) {
+            // Handle newly imported resume
+             try {
+                dataToLoad = JSON.parse(importedData);
+                localStorage.removeItem("importedResumeData");
+            } catch (error) {
+                console.error("Failed to parse imported resume data", error);
+            }
+        } else {
+            // Handle switching to a new template
+            dataToLoad = { ...dataToLoad, template: templateQuery as Template };
+        }
+        
+        // Clean up the URL
+        router.replace('/editor', { scroll: false });
+    }
+    
+    setResumeData(dataToLoad);
+
   }, [router, templateQuery]);
 
   useEffect(() => {

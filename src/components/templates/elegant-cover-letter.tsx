@@ -29,7 +29,7 @@ export default function ElegantCoverLetter({ resumeData, coverLetterText }: Temp
     <div className="bg-[#F8F5F1] text-[#5C5C5C] font-serif text-[10pt] leading-relaxed w-full aspect-[8.5/11] p-10 flex flex-col rounded-lg">
       <header className="flex items-start justify-between pb-8">
         <div className="flex items-center gap-6">
-          <div className="w-28 h-28 rounded-full bg-gray-200 flex-shrink-0 flex items-center justify-center">
+          <div className="w-28 h-28 rounded-full bg-gray-200 flex-shrink-0 flex items-center justify-center overflow-hidden">
              {imageUrl ? (
                 <img src={imageUrl} alt={name} className="rounded-full w-full h-full object-cover" />
              ) : (

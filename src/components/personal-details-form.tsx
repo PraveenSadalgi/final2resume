@@ -7,7 +7,7 @@ import { Label } from "./ui/label";
 import type { ResumeData } from "@/lib/types";
 import { SpeechRecognitionButton } from "./speech-recognition-button";
 import { Button } from "./ui/button";
-import { UploadCloud } from "lucide-react";
+import { UploadCloud, UserCircle } from "lucide-react";
 
 interface PersonalDetailsFormProps {
   resumeData: ResumeData;
@@ -21,7 +21,6 @@ export default function PersonalDetailsForm({
   onFieldChange,
 }: PersonalDetailsFormProps) {
   const fileInputRef = useRef<HTMLInputElement>(null);
-  const fields: (keyof ResumeData)[] = ["name", "email", "phone", "location", "github", "linkedin"];
 
   const handleSpeechResult = (field: keyof ResumeData, transcript: string) => {
     let formattedTranscript = transcript;
@@ -69,7 +68,7 @@ export default function PersonalDetailsForm({
             {resumeData.imageUrl ? (
                 <img src={resumeData.imageUrl} alt="User" className="rounded-full w-full h-full object-cover" />
             ) : (
-                <span className="text-xs text-muted-foreground text-center">No Image</span>
+                <UserCircle className="w-12 h-12 text-muted-foreground" />
             )}
         </div>
         <div className="flex-grow">

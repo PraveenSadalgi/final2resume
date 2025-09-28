@@ -90,7 +90,7 @@ export default function TwoColumnTemplate({ resumeData }: TemplateProps) {
       {/* Sidebar */}
       <aside className="w-1/3 bg-primary text-white p-6 flex flex-col">
         <div className="text-center mb-8">
-            <div className="w-24 h-24 rounded-full bg-muted mx-auto mb-4 border-2 border-white flex items-center justify-center">
+            <div className="w-24 h-24 rounded-full bg-muted mx-auto mb-4 border-2 border-white flex items-center justify-center overflow-hidden">
                 {imageUrl ? (
                     <img src={imageUrl} alt={name} className="rounded-full w-full h-full object-cover" />
                 ) : (

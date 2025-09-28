@@ -58,7 +58,7 @@ export default function CreativeTemplate({ resumeData }: TemplateProps) {
       {/* Sidebar */}
       <aside className="w-[280px] bg-neutral-50 text-gray-700 p-6 flex flex-col">
         <div className="text-center mb-8">
-          <div className="w-32 h-32 rounded-full bg-primary/10 mx-auto flex items-center justify-center mb-4">
+          <div className="w-32 h-32 rounded-full bg-primary/10 mx-auto flex items-center justify-center mb-4 overflow-hidden">
              {imageUrl ? (
                 <img src={imageUrl} alt={name} className="rounded-full w-full h-full object-cover" />
              ) : (
