@@ -2,7 +2,7 @@
 "use client";
 
 import type { ResumeData } from "@/lib/types";
-import { Mail, Phone, Globe, MapPin } from "lucide-react";
+import { Mail, Phone, Globe, MapPin, UserCircle } from "lucide-react";
 
 interface TemplateProps {
   resumeData: ResumeData | null;
@@ -10,7 +10,7 @@ interface TemplateProps {
 }
 
 export default function CorporateCoverLetter({ resumeData, coverLetterText }: TemplateProps) {
-  const { name, location, email, phone, github, experience } = resumeData || {};
+  const { name, location, email, phone, github, experience, imageUrl } = resumeData || {};
   const role = experience?.[0]?.role || "Professional";
 
   const currentDate = new Date().toLocaleDateString('en-US', {
@@ -40,8 +40,12 @@ export default function CorporateCoverLetter({ resumeData, coverLetterText }: Te
                     <h1 className="text-4xl font-bold text-primary">{name || 'Your Name'}</h1>
                     <p className="text-lg text-gray-600 mt-1">{role}</p>
                 </div>
-                 <div className="w-24 h-24 rounded-full bg-muted flex-shrink-0 border-4 border-white shadow-lg">
-                   <img src={`https://placehold.co/96x96.png`} alt={name} data-ai-hint="profile picture" className="rounded-full w-full h-full object-cover" />
+                 <div className="w-24 h-24 rounded-full bg-muted flex-shrink-0 border-4 border-white shadow-lg flex items-center justify-center">
+                    {imageUrl ? (
+                        <img src={imageUrl} alt={name} className="rounded-full w-full h-full object-cover" />
+                    ) : (
+                        <UserCircle className="w-16 h-16 text-primary/30" />
+                    )}
                 </div>
             </div>
             

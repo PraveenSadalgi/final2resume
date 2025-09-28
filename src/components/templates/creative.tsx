@@ -62,7 +62,9 @@ export default function CreativeTemplate({ resumeData }: TemplateProps) {
              {imageUrl ? (
                 <img src={imageUrl} alt={name} className="rounded-full w-full h-full object-cover" />
              ) : (
-                <div className="w-full h-full rounded-full bg-primary/10"></div>
+                <div className="w-full h-full rounded-full bg-primary/10 flex items-center justify-center">
+                  <UserCircle className="w-16 h-16 text-primary/30" />
+                </div>
              )}
           </div>
           <h1 className="text-3xl font-bold text-primary leading-tight">{name}</h1>

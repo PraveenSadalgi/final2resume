@@ -16,6 +16,7 @@ import {
   Award,
   Link,
   Github,
+  UserCircle,
 } from "lucide-react";
 import { Badge } from "../ui/badge";
 
@@ -89,13 +90,15 @@ export default function TwoColumnTemplate({ resumeData }: TemplateProps) {
       {/* Sidebar */}
       <aside className="w-1/3 bg-primary text-white p-6 flex flex-col">
         <div className="text-center mb-8">
-            {imageUrl ? (
-              <div className="w-24 h-24 rounded-full bg-muted mx-auto mb-4 border-2 border-white">
-                <img src={imageUrl} alt={name} className="rounded-full w-full h-full object-cover" />
-              </div>
-            ) : (
-              <div className="w-24 h-24 rounded-full bg-primary-foreground/20 mx-auto mb-4 border-2 border-white/50"></div>
-            )}
+            <div className="w-24 h-24 rounded-full bg-muted mx-auto mb-4 border-2 border-white flex items-center justify-center">
+                {imageUrl ? (
+                    <img src={imageUrl} alt={name} className="rounded-full w-full h-full object-cover" />
+                ) : (
+                  <div className="w-full h-full rounded-full bg-primary-foreground/20 flex items-center justify-center">
+                    <UserCircle className="w-12 h-12 text-white/50" />
+                  </div>
+                )}
+            </div>
             <h1 className="text-3xl font-bold text-white leading-tight">{name}</h1>
             {experience[0] && <p className="text-lg text-white/80">{experience[0].role}</p>}
         </div>

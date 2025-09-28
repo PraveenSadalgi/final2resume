@@ -2,7 +2,7 @@
 "use client";
 
 import type { ResumeData } from "@/lib/types";
-import { Mail, Phone, Globe, MapPin } from "lucide-react";
+import { Mail, Phone, Globe, MapPin, UserCircle } from "lucide-react";
 
 interface TemplateProps {
   resumeData: ResumeData | null;
@@ -10,7 +10,7 @@ interface TemplateProps {
 }
 
 export default function ElegantCoverLetter({ resumeData, coverLetterText }: TemplateProps) {
-  const { name, email, phone, location, github, experience } = resumeData || {};
+  const { name, email, phone, location, github, experience, imageUrl } = resumeData || {};
   const role = experience?.[0]?.role || "Marketing Manager";
 
   const currentDate = new Date().toLocaleDateString('en-US', {
@@ -29,8 +29,12 @@ export default function ElegantCoverLetter({ resumeData, coverLetterText }: Temp
     <div className="bg-[#F8F5F1] text-[#5C5C5C] font-serif text-[10pt] leading-relaxed w-full aspect-[8.5/11] p-10 flex flex-col rounded-lg">
       <header className="flex items-start justify-between pb-8">
         <div className="flex items-center gap-6">
-          <div className="w-28 h-28 rounded-full bg-gray-200 flex-shrink-0">
-             <img src={`https://placehold.co/112x112.png`} alt={name} data-ai-hint="profile picture" className="rounded-full w-full h-full object-cover" />
+          <div className="w-28 h-28 rounded-full bg-gray-200 flex-shrink-0 flex items-center justify-center">
+             {imageUrl ? (
+                <img src={imageUrl} alt={name} className="rounded-full w-full h-full object-cover" />
+             ) : (
+                <UserCircle className="w-20 h-20 text-primary/30" />
+             )}
           </div>
           <div>
             <h1 className="text-5xl font-extrabold text-[#2C2C2C] tracking-tight">{name || 'Henrietta Mitchell'}</h1>
